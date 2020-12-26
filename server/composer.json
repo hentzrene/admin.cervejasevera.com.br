@@ -1,0 +1,31 @@
+{
+  "name": "mrx/mrx",
+  "description": "mrx",
+  "minimum-stability": "alpha",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Everton",
+      "email": "everton@andrade.mat.br",
+      "role": "Developer"
+    }
+  ],
+  "config": {
+    "vendor-dir": "Resource"
+  },
+  "autoload": {
+    "psr-4": {
+      "\\": "Resource/"
+    },
+    "files": [
+      "Config.php",
+      "Logger.php"
+    ]
+  },
+  "require": {
+    "coffeecode/router": "1.0.7",
+    "phpmailer/phpmailer": "^6.1",
+    "intervention/image": "^2.5",
+    "league/flysystem": "^2.0"
+  }
+}
