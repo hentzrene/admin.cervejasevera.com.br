@@ -59,7 +59,10 @@ class Table
   public static function getAllToPublic(string $module): array
   {
     $module = addslashes($module);
+    $page = Req::get('page') ? (int) Req::get('page') : 1;
+    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : 100;
     $publicFields = ModuleField::getAllPublics($module);
+    array_unshift($publicFields, 'id');
     $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
     $fields = [];
 
@@ -77,6 +80,8 @@ class Table
     $q = Conn::table("mod_$module")
       ::select($fields)
       ::where('active', 1)
+      ::orderBy('id', 'DESC')
+      ::limit($itemsPerPage, ($page - 1) * $itemsPerPage)
       ::send();
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];

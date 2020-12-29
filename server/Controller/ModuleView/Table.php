@@ -4,7 +4,6 @@ namespace Controller\ModuleView;
 
 use Model\Response;
 use Model\ModuleView\Table as ModelTable;
-use Model\Request as Req;
 
 class Table
 {
@@ -23,9 +22,6 @@ class Table
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
-
       Response::rawBody(ModelTable::getAllToPublic($module));
     } else {
       Response::rawBody(ModelTable::getAll($module));

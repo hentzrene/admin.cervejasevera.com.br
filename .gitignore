@@ -1,5 +1,6 @@
 .DS_Store
 /server/Resource
+/server/composer.lock
 /dist
 /css
 /fonts
