@@ -8,6 +8,66 @@ use Config\Table;
 class ModuleField
 {
   /**
+   * Obter campo.
+   *
+   * @param integer $id
+   * @param array $fields
+   * @return void
+   */
+  public static function get(int $id, ?array $fields = null)
+  {
+    $q = Conn::table(Table::MODULES_FIELDS)
+      ::select($fields)
+      ::where('id', $id)
+      ::send();
+
+    return $q ? $q->fetch_row() : null;
+  }
+
+  /**
+   * Obter campos públicos.
+   *
+   * @param string $key
+   * @return array
+   */
+  public static function getAllPublics(string $key): array
+  {
+    $q = Conn::table(Table::VW_MODULES_FIELDS)
+      ::select(['`key`'])
+      ::where('modules_key', "'$key'")
+      ::and('private', 0)
+      ::send();
+
+    if (!$q) {
+      return [];
+    }
+
+    return array_merge(...$q->fetch_all(MYSQLI_NUM));
+  }
+
+  /**
+   * Obter todos os campos.
+   *
+   * @param string $key
+   * @return array
+   */
+  public static function getAll(string $key): array
+  {
+    $q = Conn::table(Table::VW_MODULES_FIELDS)
+      ::select([
+        'id',
+        'name',
+        '`key`',
+        'type_id' => 'typeId',
+        'type_key' => 'typeKey'
+      ])
+      ::where('modules_key', "'$key'")
+      ::send();
+
+    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+  }
+
+  /**
    * Adicionar campo ao módulo.
    *
    * @param object $data
@@ -29,21 +89,21 @@ class ModuleField
       )
       ::send();
 
-    $sqlType = Conn::table(Table::MODULES_FIELDS_TYPES)
-      ::select(['sql_type'])
-      ::where('id', $type)
-      ::send()
-      ->fetch_row()[0];
-
-    $moduleKey = Conn::table(Table::MODULES)
-      ::select(['`key`'])
-      ::where('id', $moduleId)
-      ::send()
-      ->fetch_row()[0];
+    $sqlType = ModuleFieldType::get($type, ['sql_type'])[0];
+    $moduleKey = Module::getKeyById($moduleId);
 
     $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
 
     if ($unique) $sql .= " UNIQUE";
+
+
+    if ($type === 4) { // Se o tipo do campo for Categoria.
+      $sql .= ", ADD CONSTRAINT mod_{$moduleKey}_$key
+      FOREIGN KEY ($key) REFERENCES categories(id)";
+    } else if ($type === 12) { // Se o tipo do campo for Secretarias.
+      $sql .= ", ADD CONSTRAINT mod_{$moduleKey}_$key
+      FOREIGN KEY ($key) REFERENCES mod_secretariats(id)";
+    }
 
     Conn::query($sql);
 
@@ -77,25 +137,9 @@ class ModuleField
   public static function setTypeId(int $id, int $value): bool
   {
     $value = addslashes($value);
-
-    [$moduleId, $key] = Conn::table(Table::MODULES_FIELDS)
-      ::select(['modules_id', '`key`'])
-      ::where('id', $id)
-      ::send()
-      ->fetch_row();
-
-    $sqlType = Conn::table(Table::MODULES_FIELDS_TYPES)
-      ::select(['sql_type'])
-      ::where('id', $value)
-      ::send()
-      ->fetch_row()[0];
-
-    $moduleKey = Conn::table(Table::MODULES)
-      ::select(['`key`'])
-      ::where('id', $moduleId)
-      ::send()
-      ->fetch_row()[0];
-
+    [$moduleId, $key] = self::get($id, ['modules_id', '`key`']);
+    $sqlType = ModuleFieldType::get($value, ['sql_type'])[0];
+    $moduleKey = Module::getKeyById($moduleId);;
 
     $q1 = Conn::table(Table::MODULES_FIELDS)
       ::update(["modules_fields_types_id" => $value])
@@ -115,17 +159,15 @@ class ModuleField
    */
   public static function remove(int $id): bool
   {
-    [$moduleId, $key] = Conn::table(Table::MODULES_FIELDS)
-      ::select(['modules_id', '`key`'])
-      ::where('id', $id)
-      ::send()
-      ->fetch_row();
+    [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id']);
+    $moduleKey = Module::getKeyById($moduleId);;
 
-    $moduleKey = Conn::table(Table::MODULES)
-      ::select(['`key`'])
-      ::where('id', $moduleId)
-      ::send()
-      ->fetch_row()[0];
+    if ($typeId === 4 || $typeId  === 12) {
+      Conn::query(
+        "ALTER TABLE mod_$moduleKey
+        DROP FOREIGN KEY mod_{$moduleKey}_$key;"
+      );
+    }
 
     $q1 = Conn::query("ALTER TABLE mod_$moduleKey DROP COLUMN $key");
 

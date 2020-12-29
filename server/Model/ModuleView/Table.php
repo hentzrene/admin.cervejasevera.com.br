@@ -5,6 +5,7 @@ namespace Model\ModuleView;
 use Config\Table as ConfigTable;
 use Model\Conn;
 use Model\Module;
+use Model\ModuleField;
 use Model\Request as Req;
 
 class Table
@@ -54,7 +55,7 @@ class Table
   public static function getAllToPublic(string $module): array
   {
     $module = addslashes($module);
-    $publicFields = Module::getPublicFields($module);
+    $publicFields = ModuleField::getAllPublics($module);
     $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
     $fields = [];
 

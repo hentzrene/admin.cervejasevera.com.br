@@ -38,11 +38,11 @@ $router->put('/modules/{moduleId}/icon', 'Module:setIcon');
 $router->put('/modules/{moduleId}/view-options', 'Module:setViewOptions');
 $router->delete('/modules/{moduleId}', 'Module:remove');
 
-$router->get('/modules-basic', 'Module:getAllBasicInfo');
+$router->get('/modules-basic', 'Module:getBasicOfAll');
 
-$router->get('/modules-fields-types', 'Module:getFieldsTypes');
+$router->get('/modules-fields-types', 'ModuleFieldType:getAll');
 
-$router->get('/modules-views', 'Module:getViews');
+$router->get('/modules-views', 'ModuleView:getAll');
 
 $router->post('/modules-fields', 'ModuleField:add');
 $router->put('/modules-fields/{moduleFieldId}/name', 'ModuleField:setName');

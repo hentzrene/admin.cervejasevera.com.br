@@ -41,7 +41,7 @@ class Module
     $module = $q->fetch_object();
     $module->viewOptions = json_decode($module->viewOptions);
 
-    $module->fields = self::getAllFields($module->key);
+    $module->fields = ModuleField::getAll($module->key);
 
     return $module;
   }
@@ -56,16 +56,28 @@ class Module
   {
     $key = addslashes($key);
 
-    $q = Conn::table(Table::VW_MODULES)
+    $q = Conn::table(Table::MODULES)
       ::select(['id'])
       ::where("`key`", "'$key'")
       ::send();
 
-    if (!$q) {
-      return null;
-    }
+    return !$q ? null : (int) $q->fetch_row()[0];
+  }
 
-    return (int) $q->fetch_row()[0];
+  /**
+   * Obter chave pelo id.
+   *
+   * @param int $id
+   * @return string|null
+   */
+  public static function getKeyById(int $id): ?string
+  {
+    $q = Conn::table(Table::MODULES)
+      ::select(['`key`'])
+      ::where("id", $id)
+      ::send();
+
+    return !$q ? null : $q->fetch_row()[0];
   }
 
   /**
@@ -107,7 +119,7 @@ class Module
    *
    * @return array
    */
-  public static function getAllBasicInfo(): array
+  public static function getBasicOfAll(): array
   {
     $q = Conn::table(Table::MODULES)
       ::select([
@@ -120,76 +132,6 @@ class Module
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
   }
-
-  /**
-   * Obter campos públicos.
-   *
-   * @param string $key
-   * @return array
-   */
-  public static function getPublicFields(string $key): array
-  {
-    $q = Conn::table(Table::VW_MODULES_FIELDS)
-      ::select(['`key`'])
-      ::where('modules_key', "'$key'")
-      ::and('private', 0)
-      ::send();
-
-    if (!$q) {
-      return [];
-    }
-
-    return array_merge(...$q->fetch_all(MYSQLI_NUM));
-  }
-
-  /**
-   * Obter todos os campos.
-   *
-   * @param string $key
-   * @return array
-   */
-  private static function getAllFields(string $key): array
-  {
-    $q = Conn::table(Table::VW_MODULES_FIELDS)
-      ::select(['id', 'name', '`key`', 'type_id' => 'typeId', 'type_key' => 'typeKey'])
-      ::where('modules_key', "'$key'")
-      ::send();
-
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
-  }
-
-
-  /**
-   * Obter todos os tipos de campos.
-   *
-   * @return array
-   */
-  public static function getFieldsTypes(): array
-  {
-    $q = Conn::table(Table::MODULES_FIELDS_TYPES)
-      ::select(['id', 'name', '`key`'])
-      ::where('active', 1)
-      ::orderBy('name', 'ASC')
-      ::send();
-
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
-  }
-
-  /**
-   * Obter todos os tipos de views.
-   *
-   * @return array
-   */
-  public static function getViews(): array
-  {
-    $q = Conn::table(Table::MODULES_VIEWS)
-      ::select(['id', 'name', '`key`'])
-      ::orderBy('name', 'ASC')
-      ::send();
-
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
-  }
-
 
   /**
    * Adicionar módulo.
@@ -240,11 +182,7 @@ class Module
 
     $info = ["id INT NOT NULL AUTO_INCREMENT"];
     foreach ($data->fields as $f) {
-      $sqlType = Conn::table(Table::MODULES_FIELDS_TYPES)
-        ::select(['sql_type'])
-        ::where('id', $f->type)
-        ::send()
-        ->fetch_row()[0];
+      $sqlType = ModuleFieldType::get($f->type, ['sql_type'])[0];;
 
       $key = addslashes($f->key);
       $r = "`$key` $sqlType DEFAULT NULL";

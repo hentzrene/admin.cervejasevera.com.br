@@ -31,13 +31,13 @@ class Module
     Response::send();
   }
 
-  public function getAllBasicInfo()
+  public function getBasicOfAll()
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ModelModule::getAllBasicInfo());
+      Response::rawBody(ModelModule::getBasicOfAll());
     }
     Response::send();
   }
@@ -52,28 +52,6 @@ class Module
 
     ModelModule::add(Req::getAll());
     $this->getAll();
-  }
-
-  public function getFieldsTypes()
-  {
-    if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
-    } else {
-      Response::rawBody(ModelModule::getFieldsTypes());
-    }
-    Response::send();
-  }
-
-  public function getViews()
-  {
-    if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
-    } else {
-      Response::rawBody(ModelModule::getViews());
-    }
-    Response::send();
   }
 
   public function setName($d)

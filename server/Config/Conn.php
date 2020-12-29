@@ -6,9 +6,9 @@ class Conn
 {
   const HOST = 'localhost';
 
-  const USER = 'mrxdev_painel';
+  const USER = 'novaubir_2020';
 
-  const PASSWORD = '+}gR9ZrcF.)6kZg;,Y';
+  const PASSWORD = 'i,^DlMw?r+_9JN1[kK';
 
-  const DATABASE = 'mrxdev_painel';
+  const DATABASE = 'novaubir_2020';
 }

@@ -1,6 +1,15 @@
 .DS_Store
 /server/Resource
 /dist
+/css
+/fonts
+/img
+/js
+/index.html
+/manifest.json
+/browserconfig.xml
+/upload
+/rest.http
 
 # local env files
 .env.local
