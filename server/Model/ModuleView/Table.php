@@ -38,12 +38,16 @@ class Table
   {
     $module = addslashes($module);
     $fields = Req::get('fields') ? explode(',', Req::get('fields')) : "*";
+    $page = Req::get('page') ? (int) Req::get('page') : 1;
+    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : 100;
 
     $q = Conn::table("mod_$module")
       ::select($fields)
+      ::orderBy('id', 'DESC')
+      ::limit($itemsPerPage, ($page - 1) * $itemsPerPage)
       ::send();
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    return !$q ? [] : $q->fetch_all(MYSQLI_ASSOC);
   }
 
   /**
@@ -76,6 +80,20 @@ class Table
       ::send();
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+  }
+
+
+  /**
+   * Obter a quantidade de itens.
+   *
+   * @param string $module
+   * @return integer
+   */
+  public static function getTotalItems(string $module): int
+  {
+    $module = addslashes($module);
+
+    return (int) Conn::query("SELECT COUNT(id) FROM mod_$module")->fetch_row()[0];
   }
 
   /**

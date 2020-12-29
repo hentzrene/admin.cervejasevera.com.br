@@ -4,6 +4,7 @@ namespace Model;
 
 use Model\Conn;
 use Config\Table;
+use Model\ModuleView\Table as ModuleViewTable;
 
 class Module
 {
@@ -42,6 +43,10 @@ class Module
     $module->viewOptions = json_decode($module->viewOptions);
 
     $module->fields = ModuleField::getAll($module->key);
+
+    if ($module->viewKey === 'table') {
+      $module->totalItems = ModuleViewTable::getTotalItems($module->key);
+    }
 
     return $module;
   }
