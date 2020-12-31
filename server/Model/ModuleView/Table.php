@@ -133,6 +133,7 @@ class Table
     }, (array) $data);
 
     $module = addslashes($module);
+    $data['alteredAt'] = "CURRENT_TIMESTAMP()";
 
 
     Conn::table("mod_$module")
