@@ -22,7 +22,7 @@ class Table
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(ModelTable::getAllToPublic($module));
+      Response::rawBody(ModelTable::getAll($module, true));
     } else {
       Response::rawBody(ModelTable::getAll($module));
     }

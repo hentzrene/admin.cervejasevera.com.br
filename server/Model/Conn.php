@@ -211,6 +211,8 @@ class Conn
   public static function and(string $column, string $value, $op = '='): ?Object
   {
     if (!Conn::$table || !Conn::$sql || !Conn::$where) {
+      var_dump(Conn::$sql);
+      die();
       return null;
     }
 

@@ -34,57 +34,81 @@ class Table
    * @param string $module
    * @return array
    */
-  public static function getAll(string $module): array
+  public static function getAll(string $module, bool $onlyPublic = false)
   {
     $module = addslashes($module);
-    $fields = Req::get('fields') ? explode(',', Req::get('fields')) : "*";
-    $page = Req::get('page') ? (int) Req::get('page') : 1;
-    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : 100;
-
-    $q = Conn::table("mod_$module")
-      ::select($fields)
-      ::orderBy('id', 'DESC')
-      ::limit($itemsPerPage, ($page - 1) * $itemsPerPage)
-      ::send();
-
-    return !$q ? [] : $q->fetch_all(MYSQLI_ASSOC);
-  }
-
-  /**
-   * Obter todos os itens públicos.
-   *
-   * @param string $module
-   * @return array
-   */
-  public static function getAllToPublic(string $module): array
-  {
-    $module = addslashes($module);
-    $page = Req::get('page') ? (int) Req::get('page') : 1;
-    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : 100;
-    $publicFields = ModuleField::getAllPublics($module);
-    array_unshift($publicFields, 'id');
-    $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
     $fields = [];
+    $page = Req::get('page') ? (int) Req::get('page') : 1;
+    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : PHP_INT_MAX;
+    $offset = ($page - 1) * $itemsPerPage;
+    $search = Req::get('search') ? addslashes(Req::get('search')) : null;
+    $returnTotalItems = (int) Req::get('returnTotalItems');
+    $list = null;
+    $totalItems = null;
 
-
-    if ($requestedFields) {
-      foreach ($requestedFields as $field) {
-        if (in_array($field, $publicFields)) {
-          $fields[] = $field;
-        }
-      }
+    if (!$onlyPublic) {
+      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
     } else {
-      $fields = $publicFields;
+      $publicFields = ModuleField::getAllPublics($module);
+      array_unshift($publicFields, 'id');
+      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
+
+      if ($requestedFields) {
+        foreach ($requestedFields as $field) {
+          if (in_array($field, $publicFields)) {
+            $fields[] = $field;
+          }
+        }
+      } else {
+        $fields = $publicFields;
+      }
     }
 
-    $q = Conn::table("mod_$module")
-      ::select($fields)
-      ::where('active', 1)
-      ::orderBy('id', 'DESC')
-      ::limit($itemsPerPage, ($page - 1) * $itemsPerPage)
-      ::send();
+    if ($search) {
+      $tableHeaders = Module::getViewOptionsByKey($module)->listHeaders;
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+      $inStr =  'INSTR(CONCAT(' . implode(',', $tableHeaders) . "), '$search')";
+
+      $list = Conn::table("mod_$module")
+        ::select($fields)
+        ::where($inStr, 0, '>');
+
+      if ($onlyPublic) $list = $list::and('active', 1);
+
+      $list = $list::orderBy('id', 'DESC')
+        ::limit($itemsPerPage, $offset)
+        ::send();
+
+      if ($returnTotalItems) {
+        $totalItems = Conn::query(
+          "SELECT COUNT(*)
+          FROM mod_$module
+          WHERE $inStr > 0 " .
+            $onlyPublic ? "AND active = 1 " : "" .
+            "ORDER BY id DESC"
+        )->fetch_row()[0];
+      }
+    } else {
+      $list = Conn::table("mod_$module")
+        ::select($fields);
+
+      if ($onlyPublic) $list = $list::where('active', 1);
+
+      $list = $list::orderBy('id', 'DESC')
+        ::limit($itemsPerPage, $offset)
+        ::send();
+
+      if ($returnTotalItems) {
+        $totalItems = self::getTotalItems($module, $onlyPublic);
+      }
+    }
+
+    $list = !$list ? [] : $list->fetch_all(MYSQLI_ASSOC);
+
+    return !$returnTotalItems ? $list : (object) [
+      'totalItems' => $totalItems,
+      'list' => $list
+    ];
   }
 
 
@@ -94,11 +118,14 @@ class Table
    * @param string $module
    * @return integer
    */
-  public static function getTotalItems(string $module): int
+  public static function getTotalItems(string $module, bool $onlyPublic = false): int
   {
     $module = addslashes($module);
+    $sql = "SELECT COUNT(id) FROM mod_$module";
 
-    return (int) Conn::query("SELECT COUNT(id) FROM mod_$module")->fetch_row()[0];
+    if ($onlyPublic) $sql .= " WHERE active = 1";
+
+    return (int) Conn::query($sql)->fetch_row()[0];
   }
 
   /**

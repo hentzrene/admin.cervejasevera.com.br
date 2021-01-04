@@ -4,7 +4,6 @@ namespace Model;
 
 use Model\Conn;
 use Config\Table;
-use Model\ModuleView\Table as ModuleViewTable;
 
 class Module
 {
@@ -44,10 +43,6 @@ class Module
 
     $module->fields = ModuleField::getAll($module->key);
 
-    if ($module->viewKey === 'table') {
-      $module->totalItems = ModuleViewTable::getTotalItems($module->key);
-    }
-
     return $module;
   }
 
@@ -83,6 +78,24 @@ class Module
       ::send();
 
     return !$q ? null : $q->fetch_row()[0];
+  }
+
+  /**
+   * Obter opções da view pelo id.
+   *
+   * @param string $key
+   * @return object|null
+   */
+  public static function getViewOptionsByKey(string $key): ?object
+  {
+    $key = addslashes($key);
+
+    $q = Conn::table(Table::MODULES)
+      ::select(['view_options'])
+      ::where("`key`", "'$key'")
+      ::send();
+
+    return !$q ? null : json_decode($q->fetch_row()[0]);
   }
 
   /**
