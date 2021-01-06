@@ -2,10 +2,6 @@
 
 namespace Controller;
 
-use \Config\Meta as ConfigMeta;
-use \Model\Content;
-
-
 class Meta
 {
   public function index()

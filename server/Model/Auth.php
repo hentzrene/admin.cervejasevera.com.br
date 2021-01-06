@@ -3,8 +3,8 @@
 namespace Model;
 
 use Model\Conn;
-use Config\Table;
-use Config\Output;
+use Enum\Table;
+use Enum\Output;
 use Logger;
 
 class Auth

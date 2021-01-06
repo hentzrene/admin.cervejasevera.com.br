@@ -4,28 +4,32 @@ namespace Model;
 
 use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\Exception;
-use \Config\Email as ConfigEmail;
 
 class Email
 {
+  private static function getConfig(): object
+  {
+    return (object) [];
+  }
+
   private static function send(string $subject, string $message, string $recipient, ?array $file = null)
   {
     $mail = new PHPMailer(true);
-
+    $config = self::getConfig();
     try {
       // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
       // $mail->Debugoutput = 'html';
 
       $mail->isSMTP();
-      $mail->Host = ConfigEmail::HOST;
+      $mail->Host = $config->host;
       $mail->SMTPAuth = true;
       $mail->SMTPSecure = 'ssl';
-      $mail->Username = ConfigEmail::USER;
-      $mail->Password = ConfigEmail::PASSWORD;
+      $mail->Username = $config->user;
+      $mail->Password = $config->password;
       $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-      $mail->Port = ConfigEmail::SMTP_PORT;
+      $mail->Port = $config->smtpPort;
 
-      $mail->setFrom(ConfigEmail::USER, ConfigEmail::NAME);
+      $mail->setFrom($config->user, $config->name);
       $mail->addAddress($recipient, $recipient);
 
       $mail->isHTML(true);
@@ -55,7 +59,7 @@ class Email
     $title = "Aprovar criação de conta!";
     $message = "$name $email";
 
-    self::send($title, $message, ConfigEmail::RECIPIENT);
+    self::send($title, $message, self::getConfig()->recipient);
   }
 
   public static function sendRecoverPassword(string $email)

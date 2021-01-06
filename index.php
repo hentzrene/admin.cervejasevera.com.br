@@ -3,19 +3,27 @@
 use Model\Auth;
 use Model\Request;
 
-require __DIR__ . '/server/Resource/autoload.php';
+// $DBConfigured = file_exists(__DIR__ . './server/DB.php');
+$DBConfigured = false;
 
-$token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
-define('TOKEN', $token);
-
-if (TOKEN) {
-  $checkIn = Auth::checkIn(TOKEN);
-
-  define('ON', (bool) $checkIn);
-  define('ACCOUNT_ID', $checkIn);
+if ($DBConfigured) {
+  require __DIR__ . '/setup/Resource/autoload.php';
+  die("Ok");
 } else {
-  define('ON', false);
-  define('ACCOUNT_ID', 0);
-}
+  require __DIR__ . '/server/Resource/autoload.php';
 
-require __DIR__ . '/server/Routers.php';
+  $token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
+  define('TOKEN', $token);
+
+  if (TOKEN) {
+    $checkIn = Auth::checkIn(TOKEN);
+
+    define('ON', (bool) $checkIn);
+    define('ACCOUNT_ID', $checkIn);
+  } else {
+    define('ON', false);
+    define('ACCOUNT_ID', 0);
+  }
+
+  require __DIR__ . '/server/Routers.php';
+}

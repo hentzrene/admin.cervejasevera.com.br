@@ -2,7 +2,7 @@
 
 namespace Controller;
 
-use Config\Output;
+use Enum\Output;
 use Model\Account;
 use Model\Response;
 use Model\Auth as ModelAuth;

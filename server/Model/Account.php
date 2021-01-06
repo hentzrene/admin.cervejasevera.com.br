@@ -2,11 +2,9 @@
 
 namespace Model;
 
-use Intervention\Image\ImageManager as Img;
 use Model\Conn;
-use Config\Table;
-use Config\Output;
-use Config\Path;
+use Enum\Table;
+use Enum\Output;
 use Logger;
 
 class Account

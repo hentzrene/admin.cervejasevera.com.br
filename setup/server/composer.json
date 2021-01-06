@@ -1,5 +1,5 @@
 {
-  "name": "mrx/mrx-admin-main",
+  "name": "mrx/mrx-admin-setup",
   "description": "mrx",
   "minimum-stability": "alpha",
   "license": "proprietary",
@@ -18,14 +18,10 @@
       "\\": "Resource/"
     },
     "files": [
-      "Config.php",
-      "Logger.php"
+      "Config.php"
     ]
   },
   "require": {
-    "coffeecode/router": "1.0.7",
-    "phpmailer/phpmailer": "^6.1",
-    "intervention/image": "^2.5",
-    "league/flysystem": "^2.0"
+    "coffeecode/router": "1.0.7"
   }
 }

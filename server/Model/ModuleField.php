@@ -3,7 +3,7 @@
 namespace Model;
 
 use Model\Conn;
-use Config\Table;
+use Enum\Table;
 
 class ModuleField
 {

@@ -2,7 +2,6 @@
 
 namespace Model;
 
-use \Config\Conn as ConfigConn;
 use Exception;
 
 class Conn
@@ -17,7 +16,7 @@ class Conn
 
   public static function init(): void
   {
-    Conn::$conn = new \Mysqli(ConfigConn::HOST, ConfigConn::USER, ConfigConn::PASSWORD, ConfigConn::DATABASE);
+    Conn::$conn = new \Mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
     Conn::$conn->set_charset('utf8');
 
     register_shutdown_function(

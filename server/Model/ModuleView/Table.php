@@ -2,7 +2,7 @@
 
 namespace Model\ModuleView;
 
-use Config\Table as ConfigTable;
+use Enum\Table as EnumTable;
 use Model\Conn;
 use Model\Module;
 use Model\ModuleField;
@@ -218,7 +218,7 @@ class Table
       rmdir($dir);
     }
 
-    $q1 = Conn::table(ConfigTable::IMAGES)
+    $q1 = Conn::table(EnumTable::IMAGES)
       ::deleteWhere('item_id', $id)
       ::send();
 
