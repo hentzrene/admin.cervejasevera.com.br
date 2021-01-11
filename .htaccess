@@ -1,6 +1,6 @@
 RewriteEngine On
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteCond %{HTTPS} off
@@ -8,6 +8,12 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # ENVIRONMENT VARIABLES
 RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteCond %{REQUEST_URI} ^/setup(/.*)?
+RewriteRule ^ - [E=APP:setup]
+RewriteCond %{REQUEST_URI} ^/admin(/.*)?
+RewriteRule ^ - [E=APP:admin]
+RewriteCond %{REQUEST_URI} ^/rest(/.*)?
+RewriteRule ^ - [E=APP:rest]
 
 RewriteRule ^admin$ /admin/index.php [L,R=301]
 

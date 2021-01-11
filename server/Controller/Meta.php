@@ -4,12 +4,12 @@ namespace Controller;
 
 class Meta
 {
-  public function index()
+  public function setup()
   {
     require __DIR__ . '/../Vue.php';
   }
 
-  public function home()
+  public function admin()
   {
     require __DIR__ . '/../Vue.php';
   }

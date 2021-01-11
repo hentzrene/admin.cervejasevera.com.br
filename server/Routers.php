@@ -3,10 +3,15 @@ $router = new CoffeeCode\Router\Router(ROOT);
 
 $router->namespace('Controller');
 
-##### PAGES #####
-$router->get("/", 'Meta:home');
-$router->get("/{module}", 'Meta:home');
-$router->get("/{module}/{sub}", 'Meta:home');
+##### SETUP #####
+$router->group('setup');
+$router->get("/", 'Meta:setup');
+
+##### ADMIN #####
+$router->group('admin');
+$router->get("/", 'Meta:admin');
+$router->get("/{module}", 'Meta:admin');
+$router->get("/{module}/{sub}", 'Meta:admin');
 
 ##### REST #####
 $router->group('rest');

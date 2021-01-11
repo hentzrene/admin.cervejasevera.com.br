@@ -2,8 +2,6 @@
 /server/Resource
 /server/composer.lock
 /server/DB.php
-/setup/Resource
-/setup/composer.lock
 /dist
 /css
 /fonts
@@ -14,7 +12,6 @@
 /browserconfig.xml
 /upload
 /rest.http
-/composer.lock
 # local env files
 .env.local
 .env.*.local
