@@ -3,19 +3,15 @@ $router = new CoffeeCode\Router\Router(ROOT);
 
 $router->namespace('Controller');
 
-##### SETUP #####
-$router->group('setup');
-$router->get("/", 'Meta:setup');
-
 ##### ADMIN #####
-$router->group('admin');
-$router->get("/", 'Meta:admin');
-$router->get("/{module}", 'Meta:admin');
-$router->get("/{module}/{sub}", 'Meta:admin');
+if (APP === 'admin') {
+  $router->group('admin');
+  $router->get("/", 'Meta:admin');
+  $router->get("/{module}", 'Meta:admin');
+  $router->get("/{module}/{sub}", 'Meta:admin');
+}
 
-##### REST #####
 $router->group('rest');
-
 ### MODULES ROUTES ###
 $router->get('/{module}', 'Module:route');
 $router->get('/{module}/{moduleItem}', 'Module:route');
@@ -67,6 +63,15 @@ $router->get('/modules-categories/{itemId}', 'ModuleCategory:getAll');
 $router->post('/modules-categories', 'ModuleCategory:add');
 $router->put('/modules-categories/{categoryId}/title', 'ModuleCategory:setTitle');
 $router->delete('/modules-categories/{categoryId}', 'ModuleCategory:remove');
+
+##### SETUP #####
+if (!INSTALLED) {
+  $router->group('admin');
+  $router->get("/setup", 'Meta:setup');
+
+  $router->group('rest');
+  $router->post('/setup', 'Setup:exec');
+}
 
 ##### PROXY #####
 $router->group(null);

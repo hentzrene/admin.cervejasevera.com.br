@@ -22,33 +22,7 @@ header('Content-Type: application/javascript');
 //   return '/' . $s['img'];
 // }, $slidesDesktop);
 
-$items = [
-  "/img/bg.png",
-  "/img/logo-construtora.png",
-  "/img/logo-construtora-short.png",
-  "/img/logo-construtora-white.png",
-  "/img/logo-icf.png",
-  "/img/logo-icf-short.png",
-  "/img/logo-icf-white.png",
-  "/",
-  "/construtora",
-  "/construtora/quem-somos",
-  "/construtora/servicos",
-  "/construtora/galerias-de-obras",
-  "/construtora/fale-conosco",
-  "/construtora/trabalhe-conosco",
-  "/construtora/novidades",
-  "/construtora/videos",
-  "/icf",
-  "/icf/quem-somos",
-  "/icf/servicos",
-  "/icf/galerias-de-obras",
-  "/icf/fale-conosco",
-  "/icf/trabalhe-conosco",
-  "/icf/novidades",
-  "/icf/videos",
-  "/img/banner.png",
-];
+$items = [];
 
 // $items = array_merge($items, $slidesMobile, $slidesDesktop);
 ?>

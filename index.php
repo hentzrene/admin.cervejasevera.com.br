@@ -2,29 +2,24 @@
 
 use Model\Auth;
 use Model\Request;
-use Model\Response;
 
 define('APP', $_SERVER['REDIRECT_APP']);
+define('INSTALLED', file_exists(__DIR__ . '/server/DB.php'));
 
-// $DBConfigured = file_exists(__DIR__ . './server/DB.php');
-$DBConfigured = false;
+require __DIR__ . '/server/Resource/autoload.php';
 
-if (!$DBConfigured) {
-  if (APP === 'rest') {
-    Response::set('redirect', '/setup');
-    Response::send();
+if (!INSTALLED) {
+  if (APP === 'rest' && $_GET['route'] !== '/rest/setup') {
+    throw new Exception('Database not configured.');
   }
 
-  if (APP !== 'setup') {
-    header('Location: /setup');
+  if (APP !== 'rest' && APP !== 'setup' && $_GET['route'] !== '/setup') {
+    header('Location: /admin/setup');
     die(302);
   }
 }
 
-require __DIR__ . '/server/Resource/autoload.php';
-
 if (APP === 'admin') {
-
   $token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
   define('TOKEN', $token);
 

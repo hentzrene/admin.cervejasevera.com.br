@@ -12,6 +12,7 @@ ini_set('display_errors', 1);
 
 define('SYSTEM_ROOT', __DIR__ . '/..');
 define('ROOT', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
+define('BASE', ROOT . (APP === 'admin' || APP === 'setup' ? '/admin' : ''));
 define('URL', ROOT . $_SERVER['REQUEST_URI']);
 define('IP', $_SERVER['REMOTE_ADDR']);
 
@@ -45,18 +46,33 @@ set_exception_handler(function ($e) {
   Response::send();
 });
 
-$cssPath = __DIR__ . "/../css/";
+$cssPath = "";
+if (APP === 'admin' || APP === 'setup') {
+  $cssPath = __DIR__ . "/../admin/css/";
+} else {
+  $cssPath = __DIR__ . "/../css/";
+}
 $css = [];
 if (is_dir($cssPath)) {
   $cssDir = array_slice(scandir($cssPath), 2);
   foreach ($cssDir as $n => $v) {
-    $css[] = "/css/$v";
+    if (APP === 'admin' || APP === 'setup') {
+      $css[] = "/admin/css/$v";
+    } else {
+      $css[] = "/css/$v";
+    }
   }
 }
 
 define('STYLES', $css);
 
-$jsPath = __DIR__ . "/../js/";
+$jsPath = "";
+if (APP === 'admin' || APP === 'setup') {
+  $jsPath = __DIR__ . "/../admin/js/";
+} else {
+  $jsPath = __DIR__ . "/../js/";
+}
+
 $js = [];
 if (is_dir($jsPath)) {
   $jsDir = array_slice(scandir($jsPath), 2);
@@ -64,7 +80,11 @@ if (is_dir($jsPath)) {
     if (preg_match('/\.map$/', $v)) {
       continue;
     }
-    $js[] = "/js/$v";
+    if (APP === 'admin' || APP === 'setup') {
+      $js[] = "/admin/js/$v";
+    } else {
+      $js[] = "/js/$v";
+    }
   }
 }
 

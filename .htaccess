@@ -8,10 +8,10 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # ENVIRONMENT VARIABLES
 RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-RewriteCond %{REQUEST_URI} ^/setup(/.*)?
-RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/admin(/.*)?
 RewriteRule ^ - [E=APP:admin]
+RewriteCond %{REQUEST_URI} ^/admin/setup/?
+RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/rest(/.*)?
 RewriteRule ^ - [E=APP:rest]
 

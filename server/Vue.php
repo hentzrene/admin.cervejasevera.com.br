@@ -12,6 +12,7 @@ use \Model\Meta;
   <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
   <meta name=viewport content="width=device-width,initial-scale=1">
   <title><?= Meta::getTitle(); ?></title>
+  <base href="https://promocao.mrxweb.com.br/admin/">
   <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
   <script src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
   <?php
@@ -49,6 +50,11 @@ use \Model\Meta;
 </head>
 
 <body>
+  <script id="config" type="application/json">
+    {
+      "installed": <?= INSTALLED ? 'true' : 'false' ?>
+    }
+  </script>
   <div id=app></div>
   <?php foreach (array_reverse(SCRIPTS) as $file) : ?>
     <script src=<?= $file ?>></script>
