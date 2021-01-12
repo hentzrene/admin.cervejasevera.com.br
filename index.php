@@ -17,21 +17,21 @@ if (!INSTALLED) {
     header('Location: /admin/setup');
     die(302);
   }
+} else {
+  require __DIR__ . '/server/DB.php';
 }
 
-if (APP === 'admin') {
-  $token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
-  define('TOKEN', $token);
+$token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
+define('TOKEN', $token);
 
-  if (TOKEN) {
-    $checkIn = Auth::checkIn(TOKEN);
+if (TOKEN) {
+  $checkIn = Auth::checkIn(TOKEN);
 
-    define('ON', (bool) $checkIn);
-    define('ACCOUNT_ID', $checkIn);
-  } else {
-    define('ON', false);
-    define('ACCOUNT_ID', 0);
-  }
+  define('ON', (bool) $checkIn);
+  define('ACCOUNT_ID', $checkIn);
+} else {
+  define('ON', false);
+  define('ACCOUNT_ID', 0);
 }
 
 require __DIR__ . '/server/Routers.php';
