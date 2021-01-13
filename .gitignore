@@ -12,6 +12,9 @@
 /browserconfig.xml
 /upload
 /rest.http
+/.vue/dist
+/.vue/package-lock.json
+/.vue/node_modules
 # local env files
 .env.local
 .env.*.local

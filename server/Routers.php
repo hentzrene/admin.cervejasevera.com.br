@@ -3,12 +3,21 @@ $router = new CoffeeCode\Router\Router(ROOT);
 
 $router->namespace('Controller');
 
+$requireVue = function () {
+  define('SHARE_TAG_NAME', 'Painel de Administração - MRX Websites');
+  define('SHARE_TAG_TITLE', 'Painel de Administração - MRX Websites');
+  define('SHARE_TAG_DESCRIPTION', '');
+  define('SHARE_TAG_KEYWORDS', '');
+  define('SHARE_TAG_IMAGE', '');
+  require __DIR__ . '/Vue.php';
+};
+
 ##### ADMIN #####
 if (APP === 'admin') {
   $router->group('admin');
-  $router->get("/", 'Meta:admin');
-  $router->get("/{module}", 'Meta:admin');
-  $router->get("/{module}/{sub}", 'Meta:admin');
+  $router->get("/", $requireVue);
+  $router->get("/{module}", $requireVue);
+  $router->get("/{module}/{sub}", $requireVue);
 }
 
 $router->group('rest');
@@ -67,7 +76,7 @@ $router->delete('/modules-categories/{categoryId}', 'ModuleCategory:remove');
 ##### SETUP #####
 if (!INSTALLED) {
   $router->group('admin');
-  $router->get("/setup", 'Meta:setup');
+  $router->get("/setup", $requireVue);
 
   $router->group('rest');
   $router->post('/setup', 'Setup:exec');
@@ -80,6 +89,24 @@ if (PROXY) {
     require __DIR__ . '/Proxy.php';
   });
 }
+
+##### SHARE TAGS #####
+if (file_exists(__DIR__ . '/../share-tags.php')) {
+  require __DIR__ . '/../share-tags.php';
+
+  foreach (SHARE_TAGS as $path => $tags) {
+    $router->get($path, function () use ($tags, $requireVue) {
+      define('SHARE_TAG_NAME', $tags['name']);
+      define('SHARE_TAG_TITLE', $tags['title']);
+      define('SHARE_TAG_DESCRIPTION', $tags['description']);
+      define('SHARE_TAG_KEYWORDS', $tags['keywords']);
+      define('SHARE_TAG_IMAGE', $tags['image']);
+
+      require __DIR__ . '/Vue.php';
+    });
+  }
+}
+
 
 $router->dispatch();
 

@@ -21,7 +21,10 @@ if (!INSTALLED) {
   require __DIR__ . '/server/DB.php';
 }
 
-$token = $_SERVER['HTTP_AUTHORIZATION'] ? $_SERVER['HTTP_AUTHORIZATION'] : Request::get('AUTH_TOKEN');
+$token = $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+  ? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+  : Request::get('AUTH_TOKEN');
+
 define('TOKEN', $token);
 
 if (TOKEN) {

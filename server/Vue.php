@@ -17,7 +17,9 @@ use \Model\Meta;
   <script src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
   <?php
   include 'Icons.php';
-  include 'Share.php';
+  if (file_exists(__DIR__ . '/../share-tags.php')) {
+    include 'Share.php';
+  }
   ?>
 
   <!-- ##### PROXY ##### -->
