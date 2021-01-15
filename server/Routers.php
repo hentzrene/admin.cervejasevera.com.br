@@ -92,6 +92,7 @@ if (PROXY) {
 
 ##### SHARE TAGS #####
 if (file_exists(__DIR__ . '/../share-tags.php')) {
+  define('SHARE_TAGS_DEFINEDS', true);
   require __DIR__ . '/../share-tags.php';
 
   foreach (SHARE_TAGS as $path => $tags) {

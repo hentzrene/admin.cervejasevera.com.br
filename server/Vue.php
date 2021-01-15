@@ -1,7 +1,3 @@
-<?php
-
-use \Model\Meta;
-?>
 <!DOCTYPE html>
 <html lang=pt-BR>
 
@@ -11,15 +7,17 @@ use \Model\Meta;
   <meta http-equiv='content-language' content='pt-br'>
   <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
   <meta name=viewport content="width=device-width,initial-scale=1">
-  <title><?= Meta::getTitle(); ?></title>
+  <?php if (SHARE_TAGS_DEFINEDS) : ?>
+    <title><?= SHARE_TAG_TITLE ?></title>
+  <?php else : ?>
+    <title></title>
+  <?php endif; ?>
   <base href="https://promocao.mrxweb.com.br/admin/">
   <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
   <script src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
   <?php
   include 'Icons.php';
-  if (file_exists(__DIR__ . '/../share-tags.php')) {
-    include 'Share.php';
-  }
+  if (SHARE_TAGS_DEFINEDS) include __DIR__ . '/Share.php';
   ?>
 
   <!-- ##### PROXY ##### -->
