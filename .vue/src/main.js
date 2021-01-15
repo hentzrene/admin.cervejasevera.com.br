@@ -10,9 +10,12 @@ import "./plugins/vue-grid";
 
 Vue.use(CKEditor);
 
-const server = process.env.production
-  ? location.origin
-  : "https://www.promocao.mrxweb.com.br";
+console.log(require.context("./../../modules", false).keys());
+
+const server =
+  process.env.NODE_ENV === "development"
+    ? process.env.VUE_APP_SERVER
+    : location.origin;
 const config = JSON.parse(document.getElementById("config").textContent);
 
 Vue.config.productionTip = false;
@@ -35,3 +38,5 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
+
+console.log(process.env);
