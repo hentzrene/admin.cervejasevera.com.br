@@ -46,10 +46,10 @@ v-dialog(
         :value="id"
       )
         v-img.view-field-item.rounded-sm(
+          v-ripple,
           @click="toggle",
           :class="active ? 'active cyan' : 'grey'",
-          :src="files + path",
-          v-ripple,
+          :src="files.replace('/admin', '') + path",
           contain
         )
           v-overlay(v-if="path === highlightedImage", absolute, opacity="0.2")
