@@ -15,6 +15,12 @@ RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/rest(/.*)?
 RewriteRule ^ - [E=APP:rest]
 
+
+RewriteCond %{SCRIPT_FILENAME} -f
+RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$
+RewriteCond %{QUERY_STRING} resize=1
+RewriteRule ^(.*)$ image-resizer.php [L,QSA]
+
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 

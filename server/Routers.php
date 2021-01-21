@@ -69,9 +69,11 @@ $router->put('/modules-files/{fileId}/title', 'ModuleFile:setTitle');
 $router->delete('/modules-files/{fileId}', 'ModuleFile:remove');
 
 $router->get('/modules-categories/{itemId}', 'ModuleCategory:getAll');
-$router->post('/modules-categories', 'ModuleCategory:add');
 $router->put('/modules-categories/{categoryId}/title', 'ModuleCategory:setTitle');
 $router->delete('/modules-categories/{categoryId}', 'ModuleCategory:remove');
+
+##### EMAIL #####
+$router->post('/email/contact-us', 'Email:contactUs');
 
 ##### SETUP #####
 if (!INSTALLED) {
