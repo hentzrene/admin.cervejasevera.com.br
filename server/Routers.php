@@ -4,8 +4,8 @@ $router = new CoffeeCode\Router\Router(ROOT);
 $router->namespace('Controller');
 
 $requireVue = function () {
-  define('SHARE_TAG_NAME', 'Painel de Administração - MRX Websites');
-  define('SHARE_TAG_TITLE', 'Painel de Administração - MRX Websites');
+  define('SHARE_TAG_NAME', 'Painel de Administração - MRX Web Sites');
+  define('SHARE_TAG_TITLE', 'Painel de Administração - MRX Web Sites');
   define('SHARE_TAG_DESCRIPTION', '');
   define('SHARE_TAG_KEYWORDS', '');
   define('SHARE_TAG_IMAGE', '');
@@ -98,7 +98,7 @@ if (file_exists(__DIR__ . '/../share-tags.php')) {
   require __DIR__ . '/../share-tags.php';
 
   foreach (SHARE_TAGS as $path => $tags) {
-    $router->get($path, function () use ($tags, $requireVue) {
+    $router->get($path, function () use ($tags) {
       define('SHARE_TAG_NAME', $tags['name']);
       define('SHARE_TAG_TITLE', $tags['title']);
       define('SHARE_TAG_DESCRIPTION', $tags['description']);
