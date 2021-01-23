@@ -15,13 +15,18 @@ RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/rest(/.*)?
 RewriteRule ^ - [E=APP:rest]
 
+RewriteCond %{SCRIPT_FILENAME} -f
+RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$
+RewriteCond %{QUERY_STRING} resize=1
+RewriteRule ^(.*)$ image-resizer.php [L,QSA]
+
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 
 Options All -Indexes
 DirectoryIndex index.php
 
-SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080)$" origin_is=$0 
+SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080|192.168.1.107:8081)$" origin_is=$0 
 Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
 Header set Access-Control-Allow-Methods "OPTIONS,GET,HEAD,POST,PUT,DELETE"
 Header append Access-Control-Allow-Headers "Authorization,Content-Type,X-PINGOTHER"

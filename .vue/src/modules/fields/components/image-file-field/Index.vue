@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(row-end=4, col-end=2, col-end-sm=1)
+grid-item.mb-2(row-end=4, col-end=2, col-end-sm=1)
   .grey--text.text--lighten-1.font-weight-bold.text-caption.d-flex.align-center.mb-1
     span {{ label }}
     v-btn.ml-1(icon, x-small)
@@ -7,7 +7,7 @@ grid-item(row-end=4, col-end=2, col-end-sm=1)
   tooltip(:tip="label", top)
     v-img.cursor-pointer.grey.d-flex.align-center.rounded-lg(
       @click="dialog = true",
-      :src="files + value",
+      :src="files.replace('/admin', '') + value",
       :aspect-ratio="19 / 9",
       v-ripple,
       contain

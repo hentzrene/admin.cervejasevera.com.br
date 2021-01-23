@@ -10,8 +10,6 @@ import "./plugins/vue-grid";
 
 Vue.use(CKEditor);
 
-console.log(require.context("./../../modules", false).keys());
-
 const server =
   process.env.NODE_ENV === "development"
     ? process.env.VUE_APP_SERVER
@@ -38,5 +36,3 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
-
-console.log(process.env);

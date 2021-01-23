@@ -79,7 +79,7 @@ export default {
       this.dialog = true;
 
       return new Promise((resolve, reject) => {
-        this.$once("confirme", () => {
+        this.$once("confirm", () => {
           this.dialog = false;
           resolve();
         });
