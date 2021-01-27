@@ -12,6 +12,10 @@ $requireVue = function () {
   require __DIR__ . '/Vue.php';
 };
 
+$router->get('/{page}', function () {
+  header('Location: /');
+});
+
 ##### ADMIN #####
 if (APP === 'admin') {
   $router->group('admin');
@@ -103,7 +107,6 @@ if (file_exists(__DIR__ . '/../share-tags.php')) {
     });
   }
 }
-
 
 $router->dispatch();
 
