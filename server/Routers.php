@@ -84,13 +84,7 @@ if (!INSTALLED) {
   $router->post('/setup', 'Setup:exec');
 }
 
-##### PROXY #####
 $router->group(null);
-if (PROXY) {
-  $router->get(PROXY, function () {
-    require __DIR__ . '/Proxy.php';
-  });
-}
 
 ##### SHARE TAGS #####
 if (file_exists(__DIR__ . '/../share-tags.php')) {

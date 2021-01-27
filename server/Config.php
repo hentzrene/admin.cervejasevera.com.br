@@ -93,6 +93,6 @@ if (!IMAGE_RESIZER_PROCESS) {
 
   define('SCRIPTS', $js);
 
-  define('PROXY', '/proxy');
+  define('PROXY', '/proxy.js');
   // define('PROXY', null);
 }

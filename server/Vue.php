@@ -13,29 +13,31 @@
   <?php else : ?>
     <title></title>
   <?php endif; ?>
-  <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-  <script src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="preconnect" href="https://connect.facebook.net">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+
+  <link rel="preload" href="/img/top.png" as="image">
+  <link rel="preload" href="/img/footer.png" as="image">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <script async src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
   <?php
   include 'Icons.php';
   if (SHARE_TAGS_DEFINEDS) include __DIR__ . '/Share.php';
   ?>
 
+
   <!-- ##### PROXY ##### -->
   <?php if (PROXY) : ?>
-    <script>
-      (() => {
-        document.addEventListener('DOMContentLoaded', e => {
-          if ('serviceWorker' in navigator)
-            navigator.serviceWorker.register('<?= PROXY ?>')
-            .catch((e) => {
-              alert('Erro no processamento. Tente recarregar a página ou usar o navegador Google Chorme.')
-              document.documentElement.innerHTML = ''
-            })
+    <script async>
+      if ('serviceWorker' in window.navigator)
+        window.navigator.serviceWorker.register('<?= PROXY ?>')
+        .catch((e) => {
+          console.log('Erro no processamento. Tente recarregar a página ou usar o navegador Google Chorme.')
         })
-      })()
     </script>
   <?php endif; ?>
-
 
   <!-- Global site tag (gtag.js) - Google Ads: 966320982 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-966320982"></script>
@@ -64,12 +66,38 @@
     gtag('config', 'UA-51916696-1');
   </script>
 
+  <!-- Facebook Pixel Code -->
+  <script>
+    ! function(f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function() {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '509937639200650');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=509937639200650&ev=PageView&noscript=1" /></noscript>
+  <!-- End Facebook Pixel Code -->
+
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "url": "http://www.mrxweb.com",
-      "logo": "http://www.mrxweb.com/img/logo.svg"
+      "url": "http://www.mrxweb.com.br",
+      "logo": "http://www.mrxweb.com.br/img/logo.svg"
     }
   </script>
 
