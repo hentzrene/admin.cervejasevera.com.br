@@ -54,14 +54,11 @@ export default {
   },
   computed: {
     nav() {
-      return [
-        { text: "Início", to: "/", icon: "fas fa-home" },
-        ...this.modules.map(({ name, key, icon }) => ({
-          text: name,
-          to: "/admin/" + key,
-          icon,
-        })),
-      ];
+      return this.modules.map(({ name, key, icon }) => ({
+        text: name,
+        to: "/admin/" + key,
+        icon,
+      }));
     },
     modules() {
       return this.$rest("modules").list;

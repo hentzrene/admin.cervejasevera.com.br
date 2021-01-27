@@ -40,7 +40,6 @@ import { edit as editComponents } from "./views";
 import { required } from "@/components/forms/rules";
 
 export default {
-  name: "ModuleItem",
   data: () => ({
     rules: {
       required,
@@ -56,7 +55,7 @@ export default {
       return this.$rest("modules").list;
     },
     moduleId() {
-      return this.$route.params.sub;
+      return this.$route.params.module;
     },
     module() {
       return this.modules.find(({ id }) => id == this.moduleId);

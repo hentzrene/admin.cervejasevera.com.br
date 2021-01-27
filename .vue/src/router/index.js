@@ -3,6 +3,9 @@ import VueRouter from "vue-router";
 import Login from "@/components/pages/auth/Login";
 import Home from "@/components/pages/Home";
 import Setup from "@/components/pages/Setup";
+import ModuleList from "@/components/pages/modules/List.vue";
+import ModuleAdd from "@/components/pages/modules/Add.vue";
+import ModuleEdit from "@/components/pages/modules/Edit.vue";
 import Error404 from "@/components/pages/Error404.vue";
 import Module from "@/modules/Index.vue";
 
@@ -19,6 +22,21 @@ const routes = [
     name,
     path: "/admin",
     component: Home
+  },
+  {
+    name: "Módulos",
+    path: `/admin/modules`,
+    component: ModuleList
+  },
+  {
+    name: "Adicionar módulo",
+    path: `/admin/modules/adicionar`,
+    component: ModuleAdd
+  },
+  {
+    name: "Alterar módulo",
+    path: `/admin/modules/:module`,
+    component: ModuleEdit
   },
   {
     name: `Instalar - ${name}`,

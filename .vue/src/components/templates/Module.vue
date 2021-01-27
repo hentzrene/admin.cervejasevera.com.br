@@ -47,8 +47,10 @@ export default {
     },
     prev() {
       const path = this.$route.path;
+
       return (
-        /^\/admin\/[^/]+\/.+/.test(path) && path.replace(/\/admin\/[^/]+$/, "")
+        /^\/admin\/[^/]+\/.+/.test(path) &&
+        path.replace(/(\/admin\/[^/]+)(.*)$/, "$1")
       );
     },
   },

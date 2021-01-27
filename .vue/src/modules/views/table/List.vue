@@ -142,7 +142,7 @@ export default {
             state.list = list;
           },
         })
-        .catch(() => this.$router.push("/admin"))
+        .catch(() => this.$router.replace("/admin"))
         .finally(() => (this.loading = false));
     },
     add() {

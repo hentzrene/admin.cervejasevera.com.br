@@ -52,7 +52,6 @@ import ToolbarButton from "@/components/buttons/Toolbar";
 import ModuleTemplate from "@/components/templates/Module";
 
 export default {
-  name: "ModuleList",
   data: () => ({
     loading: false,
     headers: [

@@ -62,7 +62,7 @@ export default {
   created() {
     this.$rest(this.data.key)
       .get({ id: this.itemId })
-      .catch(() => this.$router.push("/admin/" + this.data.key));
+      .catch(() => this.$router.replace("/admin/" + this.data.key));
   },
   components: {
     ModuleTemplate,
