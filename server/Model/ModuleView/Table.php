@@ -84,7 +84,7 @@ class Table
           "SELECT COUNT(*)
           FROM mod_$module
           WHERE $inStr > 0 " .
-            $onlyPublic ? "AND active = 1 " : "" .
+            ($onlyPublic ? "AND active = 1 " : "") .
             "ORDER BY id DESC"
         )->fetch_row()[0];
       }
