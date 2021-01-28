@@ -60,4 +60,9 @@ class Logger
 
     self::log($msg, __DIR__ . "/Logs/account.log");
   }
+
+  public static function pagSeguro($msg)
+  {
+    self::log($msg, __DIR__ . "/Logs/pagseguro.log");
+  }
 }
