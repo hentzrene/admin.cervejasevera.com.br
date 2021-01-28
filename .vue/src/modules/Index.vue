@@ -11,7 +11,7 @@ div
 </template>
 
 <script>
-import { views, components } from "./views";
+import { views, components } from "@/modules/views";
 import pathToRegexp from "path-to-regexp";
 
 export default {

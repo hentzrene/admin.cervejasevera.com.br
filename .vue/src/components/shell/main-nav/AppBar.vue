@@ -23,6 +23,18 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           p.caption.mt-1 {{ user.email }}
           v-divider
           v-btn.text-none(
+            v-if="user.type == 1",
+            to="/admin/modules",
+            color="white",
+            depressed,
+            text,
+            block,
+            tile
+          )
+            v-icon(left) fas fa-cogs
+            span Módulos
+          v-divider
+          v-btn.text-none(
             @click="logout",
             :loading="loading",
             color="white",

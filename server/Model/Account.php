@@ -17,7 +17,7 @@ class Account
   public static function get(int $id): object
   {
     $q = Conn::table(Table::ACCOUNTS)
-      ::select(['id', 'name', 'email'])
+      ::select(['id', 'name', 'email', 'accounts_types_id' => 'type'])
       ::where('id', $id)
       ::send();
 

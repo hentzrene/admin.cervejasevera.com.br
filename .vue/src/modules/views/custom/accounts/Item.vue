@@ -87,7 +87,7 @@ export default {
       .then(({ permissions }) => {
         this.permissions = permissions;
       })
-      .catch(() => this.$router.push("/admin/accounts"));
+      .catch(() => this.$router.replace("/admin/accounts"));
   },
   components: {
     ModuleTemplate,
