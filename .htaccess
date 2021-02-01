@@ -1,4 +1,5 @@
 RewriteEngine On
+Require ip 177.155.215.222
 RewriteCond %{HTTP_HOST} !^www\. [NC]
 RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
