@@ -2,8 +2,8 @@
 
 namespace Controller;
 
-use Model\Request as Req;
-use Model\Response;
+use Model\Utility\Request as Req;
+use Model\Utility\Response;
 use Model\Setup as ModelSetup;
 
 class Setup

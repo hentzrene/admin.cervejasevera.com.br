@@ -1,7 +1,7 @@
 <?php
 
-use Model\Auth;
-use Model\Request;
+use Model\Account\Auth;
+use Model\Utility\Request;
 
 define('APP', $_SERVER['REDIRECT_APP']);
 define('INSTALLED', file_exists(__DIR__ . '/server/DB.php'));

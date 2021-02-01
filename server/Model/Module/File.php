@@ -1,13 +1,13 @@
 <?php
 
-namespace Model;
+namespace Model\Module;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter as Local;
 
-class ModuleFile
+class File
 {
   /**
    * Obter todas os arquivos.

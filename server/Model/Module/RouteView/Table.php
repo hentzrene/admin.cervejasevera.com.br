@@ -1,12 +1,12 @@
 <?php
 
-namespace Model\ModuleView;
+namespace Model\Module\RouteView;
 
 use Enum\Table as EnumTable;
-use Model\Conn;
-use Model\Module;
-use Model\ModuleField;
-use Model\Request as Req;
+use Model\Utility\Conn;
+use Model\Module\Module;
+use Model\Module\Field;
+use Model\Utility\Request as Req;
 
 class Table
 {
@@ -49,7 +49,7 @@ class Table
     if (!$onlyPublic) {
       $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
     } else {
-      $publicFields = ModuleField::getAllPublics($module);
+      $publicFields = Field::getAllPublics($module);
       array_unshift($publicFields, 'id');
       $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
 
@@ -171,30 +171,34 @@ class Table
     return true;
   }
 
-
-
   /**
-   * Mudar status de ativo do item.
+   * Atualizar propiedade do item.
    *
    * @param string $module
    * @param integer $id
-   * @param boolean $value
+   * @param string $prop
+   * @param string $value
    * @return void
    */
-  public static function toggleActive(string $module, int $id, bool $value)
+  public static function setProp(string $module, int $id, string $prop, string $value)
   {
+    if ($prop === 'active') {
+      $value = (int) $value;
+    } else {
+      $value = addslashes($value);
+    }
+
     $module = addslashes($module);
+
     Conn::table("mod_$module")
       ::update([
-        'active' => (int) $value
+        $prop => $value
       ])
       ::where('id', $id)
       ::send();
 
     return true;
   }
-
-
 
   /**
    * Remover item.

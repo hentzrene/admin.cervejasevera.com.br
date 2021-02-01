@@ -10,9 +10,6 @@ $requireVue = function () {
   require __DIR__ . '/Vue.php';
 };
 
-$router->namespace('Controller');
-
-$router->group('rest');
 require __DIR__ . '/Routers/Modules.php';
 require __DIR__ . '/Routers/System.php';
 require __DIR__ . '/Routers/Email.php';
@@ -22,6 +19,7 @@ $router->group(null);
 $router->get('/{page}', function () {
   header('Location: /');
 });
+
 require __DIR__ . '/Routers/Admin.php';
 require __DIR__ . '/Routers/Share.php';
 

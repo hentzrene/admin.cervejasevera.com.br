@@ -1,8 +1,8 @@
 <?php
 
-namespace Model;
+namespace Model\Account;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
 use Enum\Output;
 use Logger;

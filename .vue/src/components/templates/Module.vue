@@ -54,6 +54,9 @@ export default {
       );
     },
   },
+  beforeCreate() {
+    this.$rest("modules").get({ keepCache: true });
+  },
   components: {
     ToolbarButton,
   },

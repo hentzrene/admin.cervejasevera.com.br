@@ -1,6 +1,6 @@
 <?php
 
-use  Model\Response;
+use  Model\Utility\Response;
 
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Cuiaba');
@@ -93,6 +93,6 @@ if (!IMAGE_RESIZER_PROCESS) {
 
   define('SCRIPTS', $js);
 
-  define('PROXY', '/proxy.js');
-  // define('PROXY', null);
+  // define('PROXY', '/proxy.js');
+  define('PROXY', null);
 }

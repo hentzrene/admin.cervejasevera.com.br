@@ -13,7 +13,10 @@ const createURL = (group, { id, prop, params }) => {
 };
 
 const actions = {
-  get: async ({ state, commit }, { id, params, save = true }) => {
+  get: async (
+    { state, commit },
+    { id, params, save = true, keepCache = false, cacheItemKey = "id" }
+  ) => {
     if (id) commit("refreshItem", id);
 
     const url = createURL(state.group, { id, params });
@@ -23,8 +26,8 @@ const actions = {
     if (data) {
       if (save && typeof save === "function")
         commit("function", state => save(state, data));
-      else if (id) commit("updateItem", { id, data });
-      else commit("updateList", data);
+      else if (id) commit("updateItem", { id, data, keepCache, cacheItemKey });
+      else commit("updateList", { data, keepCache, cacheItemKey });
     }
 
     return data;

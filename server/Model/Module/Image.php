@@ -1,12 +1,12 @@
 <?php
 
-namespace Model;
+namespace Model\Module;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
 use Intervention\Image\ImageManager as Img;
 
-class ModuleImage
+class Image
 {
   /**
    * Obter todas as imagens.

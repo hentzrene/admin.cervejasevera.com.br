@@ -1,7 +1,7 @@
 <template lang="pug">
 module-template(:title="`Alterar módulo \"${module.name}\"`")
   v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
-    v-form(ref="form")
+    v-form.pt-4(ref="form")
       v-row
         v-col.py-0(cols=12, sm=6, md=12, lg=3)
           v-text-field(
@@ -58,7 +58,7 @@ export default {
       return this.$route.params.module;
     },
     module() {
-      return this.modules.find(({ id }) => id == this.moduleId);
+      return this.modules.find(({ id }) => id == this.moduleId) || {};
     },
   },
   methods: {
@@ -82,9 +82,6 @@ export default {
     this.$rest("modules")
       .get({ id: this.moduleId })
       .finally(() => (this.loaded = true));
-  },
-  beforeCreate() {
-    this.$rest("modules").get();
   },
   components: {
     ModuleTemplate,

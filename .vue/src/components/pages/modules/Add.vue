@@ -1,7 +1,7 @@
 <template lang="pug">
 module-template(title="Adicionar módulo")
   v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
-    v-form(ref="form")
+    v-form.pt-4(ref="form")
       v-row
         v-col.py-0(cols=12, sm=6, md=12, lg=3)
           v-text-field(

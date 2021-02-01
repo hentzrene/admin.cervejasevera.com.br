@@ -1,13 +1,13 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\Module;
-use Model\Response;
-use Model\ModuleFile as ModelModuleFile;
-use Model\Request as Req;
+use Model\Module\Module;
+use Model\Utility\Response;
+use Model\Module\File as ModelFile;
+use Model\Utility\Request as Req;
 
-class ModuleFile
+class File
 {
   public function getAll($d)
   {
@@ -16,7 +16,7 @@ class ModuleFile
       Response::status(401);
     } else {
       Response::rawBody(
-        ModelModuleFile::getAll(
+        ModelFile::getAll(
           (int) Req::get('fieldId'),
           (int) $d['itemId']
         )
@@ -33,7 +33,7 @@ class ModuleFile
       Response::status(401);
     } else {
       Response::rawBody(
-        ModelModuleFile::add(
+        ModelFile::add(
           (int) Req::get('moduleId'),
           (int) Req::get('fieldId'),
           (int) Req::get('itemId'),
@@ -52,7 +52,7 @@ class ModuleFile
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      if (ModelModuleFile::setTitle((int) $d['fileId'], Req::get('value'))) {
+      if (ModelFile::setTitle((int) $d['fileId'], Req::get('value'))) {
         Response::set('status', 'success');
         Response::set('success', 'Título alterado.');
       }
@@ -67,7 +67,7 @@ class ModuleFile
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleFile::remove((int) $d['fileId']);
+      ModelFile::remove((int) $d['fileId']);
       Response::set('status', 'success');
     }
     Response::send();

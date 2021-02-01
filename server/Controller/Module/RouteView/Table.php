@@ -1,9 +1,9 @@
 <?php
 
-namespace Controller\ModuleView;
+namespace Controller\Module\RouteView;
 
-use Model\Response;
-use Model\ModuleView\Table as ModelTable;
+use Model\Module\RouteView\Table as RouteViewTable;
+use Model\Utility\Response;
 
 class Table
 {
@@ -13,7 +13,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ModelTable::get($module, $moduleItem));
+      Response::rawBody(RouteViewTable::get($module, $moduleItem));
     }
 
     Response::send();
@@ -22,9 +22,9 @@ class Table
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(ModelTable::getAll($module, true));
+      Response::rawBody(RouteViewTable::getAll($module, true));
     } else {
-      Response::rawBody(ModelTable::getAll($module));
+      Response::rawBody(RouteViewTable::getAll($module));
     }
 
     Response::send();
@@ -38,7 +38,7 @@ class Table
       Response::send();
     }
 
-    Response::set('id', ModelTable::add($module));
+    Response::set('id', RouteViewTable::add($module));
     Response::send();
   }
 
@@ -48,7 +48,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelTable::remove($module, $moduleItem);
+      RouteViewTable::remove($module, $moduleItem);
       Response::set('status', 'success');
     }
     Response::send();
@@ -60,7 +60,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelTable::update($module, $moduleItem, $data);
+      RouteViewTable::update($module, $moduleItem, $data);
       Response::set('status', 'success');
       Response::set('success', 'Item alterado com sucesso.');
     }
@@ -68,19 +68,15 @@ class Table
     Response::send();
   }
 
-  public static function toggleActive(string $module, int $moduleItem, bool $value)
+  public static function setProp(string $module, int $moduleItem, string $prop, string $value)
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelTable::toggleActive($module, $moduleItem, $value);
+      RouteViewTable::setProp($module, $moduleItem, $prop, $value);
       Response::set('status', 'success');
-      // if($value) {
-      //   Response::set('success', 'Item inativado com sucesso.');
-      // } else {
-      //   Response::set('success', 'Item ativa com sucesso.');
-      // }
+      Response::set('success', 'Propiedade alterada com sucesso.');
     }
 
     Response::send();

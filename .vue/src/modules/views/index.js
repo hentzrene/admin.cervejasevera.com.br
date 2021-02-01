@@ -20,12 +20,10 @@ require
       viewEditModuleComponents[view] = [];
     }
 
-    viewAddModuleComponents[view] = import(
-      `./components/${view}/_module/add/Index.vue`
-    );
-    viewEditModuleComponents[view] = import(
-      `./components/${view}/_module/edit/Index.vue`
-    );
+    viewAddModuleComponents[view] = () =>
+      import(`./components/${view}/_module/add/Index.vue`);
+    viewEditModuleComponents[view] = () =>
+      import(`./components/${view}/_module/edit/Index.vue`);
   });
 
 let components = [];

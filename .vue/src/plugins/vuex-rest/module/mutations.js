@@ -1,18 +1,27 @@
 const mutations = {
-  updateList: (state, data) => {
+  updateList: (state, { data, keepCache, cacheItemKey }) => {
     if (!Array.isArray(data)) {
       window.console.warn(
         "VuexRest: a mutação updateList deve ter um array como seu parâmetro de dados."
       );
       return;
     }
-    state.list = data;
+    if (keepCache && state.list.length) {
+      for (let item of data) {
+        if (state.list.find(v => v[cacheItemKey] == item[cacheItemKey]))
+          continue;
+
+        state.list.push(item);
+      }
+    } else {
+      state.list = data;
+    }
   },
   refreshItem: (state, id) => {
     const item = state.list.find(v => v.id == id);
     if (item) state.item = item;
   },
-  updateItem: (state, { id, data }) => {
+  updateItem: (state, { id, data, keepCache }) => {
     state.itemId = id;
     state.item = data;
 
@@ -21,7 +30,11 @@ const mutations = {
     if (!item) {
       state.list.push({ ...data, id });
     } else {
-      for (let prop in data) item[prop] = data[prop];
+      for (let prop in data) {
+        if (keepCache && item[prop]) continue;
+
+        item[prop] = data[prop];
+      }
     }
   },
   setProperty: (state, { id, prop, data }) => {

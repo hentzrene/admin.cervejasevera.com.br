@@ -1,11 +1,11 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\ModuleView as ModelModuleView;
-use Model\Response;
+use Model\Module\View as ModelView;
+use Model\Utility\Response;
 
-class ModuleView
+class View
 {
   public function getAll()
   {
@@ -13,7 +13,7 @@ class ModuleView
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ModelModuleView::getAll());
+      Response::rawBody(ModelView::getAll());
     }
     Response::send();
   }

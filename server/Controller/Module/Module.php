@@ -1,11 +1,10 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Controller\ModuleView\Table;
-use Model\Response;
-use Model\Module as ModelModule;
-use Model\Request as Req;
+use Model\Utility\Response;
+use Model\Module\Module as ModelModule;
+use Model\Utility\Request as Req;
 
 class Module
 {
@@ -106,40 +105,5 @@ class Module
       Response::set('status', 'success');
     }
     Response::send();
-  }
-
-  public static function route($d)
-  {
-    $module = $d['module'];
-    $viewKey = ModelModule::has($module);
-
-    if (!$viewKey) {
-      require __DIR__ . '/../Vue.php';
-      die();
-    }
-
-    $method = $_SERVER['REQUEST_METHOD'];
-    $moduleItem = $d['moduleItem'];
-    $prop = $d['prop'];
-
-    if ($viewKey === 'table') {
-      if ($method === 'GET') {
-        if ($moduleItem) {
-          Table::get($module, (int) $moduleItem);
-        } else {
-          Table::getAll($module);
-        }
-      } elseif ($method === 'POST') {
-        Table::add($module);
-      } elseif ($method === 'PUT') {
-        if ($prop === 'active') {
-          Table::toggleActive($module, (int) $moduleItem, (bool) (int) Req::get('value'));
-        } else {
-          Table::update($module, (int) $moduleItem, Req::getAll());
-        }
-      } elseif ($method === 'DELETE') {
-        Table::remove($module, (int) $moduleItem);
-      }
-    }
   }
 }

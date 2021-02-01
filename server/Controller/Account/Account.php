@@ -1,10 +1,10 @@
 <?php
 
-namespace Controller;
+namespace Controller\Account;
 
-use Model\Response;
-use Model\Account as ModelAccount;
-use Model\Request as Req;
+use Model\Utility\Response;
+use Model\Account\Account as ModelAccount;
+use Model\Utility\Request as Req;
 
 class Account
 {

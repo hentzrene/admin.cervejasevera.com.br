@@ -1,11 +1,11 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\Response;
-use Model\ModuleFieldType as ModelModuleFieldType;
+use Model\Utility\Response;
+use Model\Module\FieldType as ModelFieldType;
 
-class ModuleFieldType
+class FieldType
 {
   public function getAll()
   {
@@ -13,7 +13,7 @@ class ModuleFieldType
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ModelModuleFieldType::getAll());
+      Response::rawBody(ModelFieldType::getAll());
     }
     Response::send();
   }

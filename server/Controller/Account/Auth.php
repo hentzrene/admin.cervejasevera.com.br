@@ -1,12 +1,12 @@
 <?php
 
-namespace Controller;
+namespace Controller\Account;
 
 use Enum\Output;
-use Model\Account;
-use Model\Response;
-use Model\Auth as ModelAuth;
-use Model\Request as Req;
+use Model\Account\Account;
+use Model\Utility\Response;
+use Model\Account\Auth as ModelAuth;
+use Model\Utility\Request as Req;
 
 class Auth
 {

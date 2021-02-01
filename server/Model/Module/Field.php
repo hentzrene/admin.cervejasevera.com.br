@@ -1,11 +1,11 @@
 <?php
 
-namespace Model;
+namespace Model\Module;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
 
-class ModuleField
+class Field
 {
   /**
    * Obter campo.
@@ -89,7 +89,7 @@ class ModuleField
       )
       ::send();
 
-    $sqlType = ModuleFieldType::get($type, ['sql_type'])[0];
+    $sqlType = FieldType::get($type, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);
 
     $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
@@ -138,7 +138,7 @@ class ModuleField
   {
     $value = addslashes($value);
     [$moduleId, $key] = self::get($id, ['modules_id', '`key`']);
-    $sqlType = ModuleFieldType::get($value, ['sql_type'])[0];
+    $sqlType = FieldType::get($value, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);;
 
     $q1 = Conn::table(Table::MODULES_FIELDS)

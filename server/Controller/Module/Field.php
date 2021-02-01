@@ -1,13 +1,13 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\Module;
-use Model\Response;
-use Model\ModuleField as ModelModuleField;
-use Model\Request as Req;
+use Model\Module\Module;
+use Model\Utility\Response;
+use Model\Module\Field as ModelField;
+use Model\Utility\Request as Req;
 
-class ModuleField
+class Field
 {
   public function add()
   {
@@ -17,7 +17,7 @@ class ModuleField
       Response::send();
     }
 
-    ModelModuleField::add(Req::getAll(), (int) Req::get('moduleId'));
+    ModelField::add(Req::getAll(), (int) Req::get('moduleId'));
 
     Response::rawBody([]);
     Response::send();
@@ -29,7 +29,7 @@ class ModuleField
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleField::setName((int) $d['moduleFieldId'], Req::get('value'));
+      ModelField::setName((int) $d['FieldId'], Req::get('value'));
       Response::set('status', 'success');
       Response::set('success', 'Nome alterado com sucesso.');
     }
@@ -43,7 +43,7 @@ class ModuleField
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleField::setTypeId((int) $d['moduleFieldId'], (int) Req::get('value'));
+      ModelField::setTypeId((int) $d['FieldId'], (int) Req::get('value'));
       Response::set('status', 'success');
       Response::set('success', 'Tipo alterado com sucesso.');
     }
@@ -57,7 +57,7 @@ class ModuleField
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleField::remove((int) $d['moduleFieldId']);
+      ModelField::remove((int) $d['FieldId']);
       Response::set('status', 'success');
     }
     Response::send();

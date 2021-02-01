@@ -3,17 +3,17 @@ require __DIR__ . '/server/Resource/autoload.php';
 
 use Intervention\Image\ImageManager as Img;
 
+define('EXIF_IMAGE_TYPES_ALLOWEDS', [
+  '1' => 'image/gif',
+  '2' => 'image/jpeg',
+  '3' => 'image/png',
+  '6' => 'image/bmp',
+  '17' => 'image/ico'
+]);
+
 function setHeaderContentType(string $filePath): void
 {
-  $numberToContentTypeMap = [
-    '1' => 'image/gif',
-    '2' => 'image/jpeg',
-    '3' => 'image/png',
-    '6' => 'image/bmp',
-    '17' => 'image/ico'
-  ];
-
-  $contentType = $numberToContentTypeMap[exif_imagetype($filePath)] ?? null;
+  $contentType = EXIF_IMAGE_TYPES_ALLOWEDS[exif_imagetype($filePath)] ?? null;
 
   if ($contentType === null) {
     throw new Exception('Unable to determine content type of file.');

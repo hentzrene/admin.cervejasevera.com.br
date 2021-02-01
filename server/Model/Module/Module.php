@@ -1,9 +1,10 @@
 <?php
 
-namespace Model;
+namespace Model\Module;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
+use Model\Account\Account;
 
 class Module
 {
@@ -41,7 +42,7 @@ class Module
     $module = $q->fetch_object();
     $module->viewOptions = json_decode($module->viewOptions);
 
-    $module->fields = ModuleField::getAll($module->key);
+    $module->fields = Field::getAll($module->key);
 
     return $module;
   }
@@ -200,7 +201,7 @@ class Module
 
     $info = ["id INT NOT NULL AUTO_INCREMENT"];
     foreach ($data->fields as $f) {
-      $sqlType = ModuleFieldType::get($f->type, ['sql_type'])[0];;
+      $sqlType = FieldType::get($f->type, ['sql_type'])[0];;
 
       $key = addslashes($f->key);
       $r = "`$key` $sqlType DEFAULT NULL";

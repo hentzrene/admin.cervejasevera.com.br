@@ -1,4 +1,8 @@
 <?php
+$router->group('rest');
+
+$router->namespace('Controller\Account');
+
 $router->post('/auth/login', 'Auth:login');
 $router->post('/auth/logout', 'Auth:logout');
 $router->post('/auth/check-in', 'Auth:checkIn');
@@ -8,6 +12,8 @@ $router->get('/accounts/{accountId}', 'Account:get');
 $router->post('/accounts', 'Account:add');
 $router->put('/accounts/{accountId}', 'Account:update');
 $router->delete('/accounts/{accountId}', 'Account:remove');
+
+$router->namespace('Controller\Module');
 
 $router->get('/modules', 'Module:getAll');
 $router->get('/modules/{moduleId}', 'Module:get');
@@ -19,24 +25,24 @@ $router->delete('/modules/{moduleId}', 'Module:remove');
 
 $router->get('/modules-basic', 'Module:getBasicOfAll');
 
-$router->get('/modules-fields-types', 'ModuleFieldType:getAll');
+$router->get('/modules-fields-types', 'FieldType:getAll');
 
-$router->get('/modules-views', 'ModuleView:getAll');
+$router->get('/modules-views', 'View:getAll');
 
-$router->post('/modules-fields', 'ModuleField:add');
-$router->put('/modules-fields/{moduleFieldId}/name', 'ModuleField:setName');
-$router->put('/modules-fields/{moduleFieldId}/type-id', 'ModuleField:setTypeId');
-$router->delete('/modules-fields/{moduleFieldId}', 'ModuleField:remove');
+$router->post('/modules-fields', 'Field:add');
+$router->put('/modules-fields/{FieldId}/name', 'Field:setName');
+$router->put('/modules-fields/{FieldId}/type-id', 'Field:setTypeId');
+$router->delete('/modules-fields/{FieldId}', 'Field:remove');
 
-$router->get('/modules-images/{itemId}', 'ModuleImage:getAll');
-$router->post('/modules-images/image', 'ModuleImage:add');
-$router->delete('/modules-images/{imageId}', 'ModuleImage:remove');
+$router->get('/modules-images/{itemId}', 'Image:getAll');
+$router->post('/modules-images/image', 'Image:add');
+$router->delete('/modules-images/{imageId}', 'Image:remove');
 
-$router->get('/modules-files/{itemId}', 'ModuleFile:getAll');
-$router->post('/modules-files/file', 'ModuleFile:add');
-$router->put('/modules-files/{fileId}/title', 'ModuleFile:setTitle');
-$router->delete('/modules-files/{fileId}', 'ModuleFile:remove');
+$router->get('/modules-files/{itemId}', 'File:getAll');
+$router->post('/modules-files/file', 'File:add');
+$router->put('/modules-files/{fileId}/title', 'File:setTitle');
+$router->delete('/modules-files/{fileId}', 'File:remove');
 
-$router->get('/modules-categories/{itemId}', 'ModuleCategory:getAll');
-$router->put('/modules-categories/{categoryId}/title', 'ModuleCategory:setTitle');
-$router->delete('/modules-categories/{categoryId}', 'ModuleCategory:remove');
+$router->get('/modules-categories/{itemId}', 'Category:getAll');
+$router->put('/modules-categories/{categoryId}/title', 'Category:setTitle');
+$router->delete('/modules-categories/{categoryId}', 'Category:remove');

@@ -1,7 +1,9 @@
 <?php
-$router->get('/{module}', 'Module:route');
-$router->get('/{module}/{moduleItem}', 'Module:route');
-$router->post('/{module}', 'Module:route');
-$router->delete('/{module}/{moduleItem}', 'Module:route');
-$router->put('/{module}/{moduleItem}', 'Module:route');
-$router->put('/{module}/{moduleItem}/{prop}', 'Module:route');
+$router->namespace('Controller\Module');
+$router->group('rest');
+$router->get('/{module}', 'Route:getAll');
+$router->get('/{module}/{moduleItem}', 'Route:get');
+$router->post('/{module}', 'Route:add');
+$router->delete('/{module}/{moduleItem}', 'Route:remove');
+$router->put('/{module}/{moduleItem}', 'Route:update');
+$router->put('/{module}/{moduleItem}/{prop}', 'Route:setProp');

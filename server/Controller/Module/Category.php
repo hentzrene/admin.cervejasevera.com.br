@@ -1,13 +1,13 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\Module;
-use Model\Response;
-use Model\ModuleCategory as ModelModuleCategory;
-use Model\Request as Req;
+use Model\Module\Module;
+use Model\Utility\Response;
+use Model\Module\Category as ModelCategory;
+use Model\Utility\Request as Req;
 
-class ModuleCategory
+class Category
 {
   public function getAll()
   {
@@ -16,7 +16,7 @@ class ModuleCategory
       Response::status(401);
     } else {
       Response::rawBody(
-        ModelModuleCategory::getAll(
+        ModelCategory::getAll(
           (int) Req::get('fieldId'),
         )
       );
@@ -31,14 +31,14 @@ class ModuleCategory
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleCategory::add(
+      ModelCategory::add(
         (int) Req::get('moduleId'),
         (int) Req::get('fieldId'),
         Req::get('title')
       );
 
       Response::rawBody(
-        ModelModuleCategory::getAll(
+        ModelCategory::getAll(
           (int) Req::get('fieldId'),
         )
       );
@@ -53,7 +53,7 @@ class ModuleCategory
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      if (ModelModuleCategory::setTitle((int) $d['categoryId'], Req::get('value'))) {
+      if (ModelCategory::setTitle((int) $d['categoryId'], Req::get('value'))) {
         Response::set('status', 'success');
         Response::set('success', 'Categoria alterada.');
       }
@@ -68,7 +68,7 @@ class ModuleCategory
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleCategory::remove((int) $d['categoryId']);
+      ModelCategory::remove((int) $d['categoryId']);
       Response::set('status', 'success');
     }
     Response::send();

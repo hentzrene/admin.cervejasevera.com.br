@@ -1,13 +1,13 @@
 <?php
 
-namespace Controller;
+namespace Controller\Module;
 
-use Model\Module;
-use Model\Response;
-use Model\ModuleImage as ModelModuleImage;
-use Model\Request as Req;
+use Model\Module\Module;
+use Model\Utility\Response;
+use Model\Module\Image as ModelImage;
+use Model\Utility\Request as Req;
 
-class ModuleImage
+class Image
 {
   public function getAll($d)
   {
@@ -16,7 +16,7 @@ class ModuleImage
       Response::status(401);
     } else {
       Response::rawBody(
-        ModelModuleImage::getAll(
+        ModelImage::getAll(
           (int) Req::get('fieldId'),
           (int) $d['itemId']
         )
@@ -33,7 +33,7 @@ class ModuleImage
       Response::status(401);
     } else {
       Response::rawBody(
-        ModelModuleImage::add(
+        ModelImage::add(
           (int) Req::get('moduleId'),
           (int) Req::get('fieldId'),
           (int) Req::get('itemId'),
@@ -51,7 +51,7 @@ class ModuleImage
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModuleImage::remove((int) $d['imageId']);
+      ModelImage::remove((int) $d['imageId']);
       Response::set('status', 'success');
     }
     Response::send();

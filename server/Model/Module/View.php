@@ -1,11 +1,11 @@
 <?php
 
-namespace Model;
+namespace Model\Module;
 
-use Model\Conn;
+use Model\Utility\Conn;
 use Enum\Table;
 
-class ModuleView
+class View
 {
   /**
    * Obter todos os tipos de views.
