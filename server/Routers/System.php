@@ -1,4 +1,3 @@
-
 <?php
 $router->post('/auth/login', 'Auth:login');
 $router->post('/auth/logout', 'Auth:logout');

@@ -1,6 +1,6 @@
 RewriteEngine On
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+# RewriteCond %{HTTP_HOST} !^www\. [NC]
+# RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteCond %{HTTP:X-Forwarded-Proto} !https
 RewriteCond %{HTTPS} off
@@ -26,7 +26,7 @@ RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 Options All -Indexes
 DirectoryIndex index.php
 
-SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080|192.168.1.107:8081)$" origin_is=$0 
+SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080|192.168.1.107:8081|192.168.0.108:8080)$" origin_is=$0 
 Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
 Header set Access-Control-Allow-Methods "OPTIONS,GET,HEAD,POST,PUT,DELETE"
 Header append Access-Control-Allow-Headers "Authorization,Content-Type,X-PINGOTHER"

@@ -4,6 +4,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
     img.py-1(:src="`/admin/img/logo.svg`", height="100%", contain)
   v-spacer
   v-menu(
+    v-model="menu"
     :close-on-content-click="false",
     min-width="200px",
     rounded,
@@ -24,7 +25,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           v-divider
           v-btn.text-none(
             v-if="user.type == 1",
-            to="/admin/modules",
+            @click="(menu = false) && $router.push('/admin/modules')",
             color="white",
             depressed,
             text,
@@ -56,6 +57,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
 export default {
   data: () => ({
     loading: false,
+    menu: false
   }),
   computed: {
     sm() {
