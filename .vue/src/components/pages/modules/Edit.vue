@@ -36,7 +36,7 @@ module-template(:title="`Alterar módulo \"${module.name}\"`")
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import { edit as editComponents } from "./views";
+import { viewEditModuleComponents as editComponents } from "@/modules/views";
 import { required } from "@/components/forms/rules";
 
 export default {

@@ -22,7 +22,7 @@ module-template(
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import fieldsElements from "../../fields";
+import fieldsElements from "../../../fields";
 
 export default {
   name: "TableAdd",

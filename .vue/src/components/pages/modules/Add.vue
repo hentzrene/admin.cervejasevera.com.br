@@ -46,7 +46,7 @@ module-template(title="Adicionar módulo")
 <script>
 import ModuleTemplate from "@/components/templates/Module";
 import { required } from "@/components/forms/rules";
-import { add as addComponents } from "./views";
+import { viewAddModuleComponents as addComponents } from "@/modules/views";
 
 export default {
   name: "ModuleAdd",
