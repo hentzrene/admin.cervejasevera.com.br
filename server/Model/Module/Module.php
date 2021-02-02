@@ -82,7 +82,7 @@ class Module
   }
 
   /**
-   * Obter opções da view pelo id.
+   * Obter opções da view pela chave.
    *
    * @param string $key
    * @return object|null

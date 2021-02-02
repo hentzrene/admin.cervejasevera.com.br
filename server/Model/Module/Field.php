@@ -7,6 +7,21 @@ use Enum\Table;
 
 class Field
 {
+  const FIELDS_CLASSES = [
+    1 => 'Model\Module\Field\TinyText',
+    2 => 'Model\Module\Field\Email',
+    3 => 'Model\Module\Field\Password',
+    4 => 'Model\Module\Field\Category',
+    5 => 'Model\Module\Field\Date',
+    6 => 'Model\Module\Field\MediumText',
+    7 => 'Model\Module\Field\BigText',
+    8 => 'Model\Module\Field\ImageFile',
+    9 => 'Model\Module\Field\File',
+    10 => 'Model\Module\Field\Subcategory',
+    11 => 'Model\Module\Field\Url',
+    12 => 'Model\Module\Field\SwitchField',
+  ];
+
   /**
    * Obter campo.
    *
@@ -82,32 +97,30 @@ class Field
     $private = (int) $data->private;
     $type = (int) $data->type;
 
-    Conn::table(Table::MODULES_FIELDS)
+    $sqlType = FieldType::get($type, ['sql_type'])[0];
+    $moduleKey = Module::getKeyById($moduleId);
+
+    $q1 = null;
+
+    if (method_exists(self::FIELDS_CLASSES[$type], 'beforeAdd')) {
+      $q1 = call_user_func([self::FIELDS_CLASSES[$type], 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
+    } else {
+      $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
+
+      if ($unique) $sql .= " UNIQUE";
+
+      $q1 = Conn::query($sql);
+    }
+
+
+    $q2 = Conn::table(Table::MODULES_FIELDS)
       ::insert(
         ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
         [$moduleId, "'$name'", "'$key'", $unique, $private, $type]
       )
       ::send();
 
-    $sqlType = FieldType::get($type, ['sql_type'])[0];
-    $moduleKey = Module::getKeyById($moduleId);
-
-    $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
-
-    if ($unique) $sql .= " UNIQUE";
-
-
-    if ($type === 4) { // Se o tipo do campo for Categoria.
-      $sql .= ", ADD CONSTRAINT mod_{$moduleKey}_$key
-      FOREIGN KEY ($key) REFERENCES categories(id)";
-    } else if ($type === 12) { // Se o tipo do campo for Secretarias.
-      $sql .= ", ADD CONSTRAINT mod_{$moduleKey}_$key
-      FOREIGN KEY ($key) REFERENCES mod_secretariats(id)";
-    }
-
-    Conn::query($sql);
-
-    return true;
+    return $q1 && $q2;
   }
 
   /**
@@ -141,14 +154,33 @@ class Field
     $sqlType = FieldType::get($value, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);;
 
-    $q1 = Conn::table(Table::MODULES_FIELDS)
+    $q1 = null;
+    $q2 = null;
+    $hasBeforeSetTypeFrom = method_exists(self::FIELDS_CLASSES[$id], 'beforeSetTypeFrom');
+    $hasBeforeSetTypeTo = method_exists(self::FIELDS_CLASSES[$value], 'beforeSetTypeTo');
+
+    if (!$hasBeforeSetTypeFrom && !$hasBeforeSetTypeTo) {
+      $q1 = $q2 = Conn::query("ALTER TABLE mod_$moduleKey MODIFY $key $sqlType");
+    } else {
+      if ($hasBeforeSetTypeFrom) {
+        $q1 = call_user_func([self::FIELDS_CLASSES[$id], 'beforeSetTypeFrom'], $moduleKey, $id, $key);
+      } else {
+        $q1 = true;
+      }
+
+      if ($hasBeforeSetTypeTo) {
+        $q2 = call_user_func([self::FIELDS_CLASSES[$value], 'beforeSetTypeTo'], $moduleKey, $key, $sqlType);
+      } else {
+        $q2 = Conn::query("ALTER TABLE mod_$moduleKey MODIFY $key $sqlType");
+      }
+    }
+
+    $q3 = Conn::table(Table::MODULES_FIELDS)
       ::update(["modules_fields_types_id" => $value])
       ::where('id', $id)
       ::send();
 
-    $q2 = Conn::query("ALTER TABLE mod_$moduleKey MODIFY $key $sqlType");
-
-    return $q1 && $q2;
+    return $q1 && $q2 && $q3;
   }
 
   /**
@@ -160,21 +192,22 @@ class Field
   public static function remove(int $id): bool
   {
     [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id']);
-    $moduleKey = Module::getKeyById($moduleId);;
+    $moduleKey = Module::getKeyById($moduleId);
 
-    if ($typeId === 4 || $typeId  === 12) {
-      Conn::query(
-        "ALTER TABLE mod_$moduleKey
-        DROP FOREIGN KEY mod_{$moduleKey}_$key;"
-      );
+    $q1 = null;
+
+    if (method_exists(self::FIELDS_CLASSES[$typeId], 'beforeRemove')) {
+      $q1 = call_user_func([self::FIELDS_CLASSES[$typeId], 'beforeRemove'], $moduleKey, $key);
+    } else {
+      $q1 = true;
     }
 
-    $q1 = Conn::query("ALTER TABLE mod_$moduleKey DROP COLUMN $key");
+    $q2 = Conn::query("ALTER TABLE mod_$moduleKey DROP COLUMN $key");
 
-    $q2 = Conn::table(Table::MODULES_FIELDS)
+    $q3 = Conn::table(Table::MODULES_FIELDS)
       ::deleteWhere('id', $id)
       ::send();
 
-    return $q1 && $q2;
+    return $q1 && $q2 && $q3;
   }
 }

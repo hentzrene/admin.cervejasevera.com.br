@@ -1,6 +1,6 @@
 <?php
 
-namespace Model\Module\RouteView;
+namespace Model\Module\View;
 
 use Enum\Table as EnumTable;
 use Model\Utility\Conn;
@@ -180,7 +180,7 @@ class Table
    * @param string $value
    * @return void
    */
-  public static function setProp(string $module, int $id, string $prop, string $value)
+  public static function setProp(string $module, int $id, string $prop, string $value): bool
   {
     if ($prop === 'active') {
       $value = (int) $value;

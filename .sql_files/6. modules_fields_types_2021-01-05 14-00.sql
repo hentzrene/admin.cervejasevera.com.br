@@ -11,6 +11,5 @@ INSERT INTO `modules_fields_types` (`id`, `name`, `key`, `sql_type`, `active`) V
 	(9, 'Arquivo', 'file', 'VARCHAR(255)', 1),
 	(10, 'Subcategoria', 'subcategory', 'INT', 0),
 	(11, 'URL', 'url', 'VARCHAR(255)', 0),
-	(12, 'Secretarias', 'secretariats', 'INT', 1),
-	(13, 'Sim/Não', 'switch', 'INT(1)', 1);
+	(12, 'Sim/Não', 'switch', 'INT(1)', 1);
 /*!40000 ALTER TABLE `modules_fields_types` ENABLE KEYS */;

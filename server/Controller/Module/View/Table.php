@@ -1,8 +1,8 @@
 <?php
 
-namespace Controller\Module\RouteView;
+namespace Controller\Module\View;
 
-use Model\Module\RouteView\Table as RouteViewTable;
+use Model\Module\View\Table as ViewTable;
 use Model\Utility\Response;
 
 class Table
@@ -13,7 +13,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(RouteViewTable::get($module, $moduleItem));
+      Response::rawBody(ViewTable::get($module, $moduleItem));
     }
 
     Response::send();
@@ -22,9 +22,9 @@ class Table
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(RouteViewTable::getAll($module, true));
+      Response::rawBody(ViewTable::getAll($module, true));
     } else {
-      Response::rawBody(RouteViewTable::getAll($module));
+      Response::rawBody(ViewTable::getAll($module));
     }
 
     Response::send();
@@ -38,7 +38,7 @@ class Table
       Response::send();
     }
 
-    Response::set('id', RouteViewTable::add($module));
+    Response::set('id', ViewTable::add($module));
     Response::send();
   }
 
@@ -48,7 +48,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      RouteViewTable::remove($module, $moduleItem);
+      ViewTable::remove($module, $moduleItem);
       Response::set('status', 'success');
     }
     Response::send();
@@ -60,7 +60,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      RouteViewTable::update($module, $moduleItem, $data);
+      ViewTable::update($module, $moduleItem, $data);
       Response::set('status', 'success');
       Response::set('success', 'Item alterado com sucesso.');
     }
@@ -74,7 +74,7 @@ class Table
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      RouteViewTable::setProp($module, $moduleItem, $prop, $value);
+      ViewTable::setProp($module, $moduleItem, $prop, $value);
       Response::set('status', 'success');
       Response::set('success', 'Propiedade alterada com sucesso.');
     }

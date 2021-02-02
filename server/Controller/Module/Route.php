@@ -9,7 +9,7 @@ use Model\Utility\Response;
 class Route
 {
   const VIEWS_CLASSES = [
-    'table' => 'Controller\Module\RouteView\Table'
+    'table' => 'Controller\Module\View\Table'
   ];
 
   public function getAll($d)
@@ -19,7 +19,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'getAll'], $module);
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'getAll')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'getAll'], $module);
+    }
   }
 
   public function get($d)
@@ -29,7 +31,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'get'], $module, (int) $d['moduleItem']);
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'get')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'get'], $module, (int) $d['moduleItem']);
+    }
   }
 
   public function add($d)
@@ -39,7 +43,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'add'], $module);
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'add')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'add'], $module);
+    }
   }
 
   public function remove($d)
@@ -49,7 +55,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'remove'], $module, (int) $d['moduleItem']);
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'remove')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'remove'], $module, (int) $d['moduleItem']);
+    }
   }
 
   public function update($d)
@@ -59,7 +67,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'update'], $module, (int) $d['moduleItem'], Req::getAll());
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'update')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'update'], $module, (int) $d['moduleItem'], Req::getAll());
+    }
   }
 
   public function setProp($d)
@@ -69,6 +79,9 @@ class Route
 
     if (!$viewKey) Response::send();
 
-    call_user_func([self::VIEWS_CLASSES[$viewKey], 'setProp'], $module, (int) $d['moduleItem'], $d['prop'], Req::get('value'));
+
+    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'setProp')) {
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'setProp'], $module, (int) $d['moduleItem'], $d['prop'], Req::get('value'));
+    }
   }
 }
