@@ -6,6 +6,7 @@ use Enum\Table as EnumTable;
 use Model\Utility\Conn;
 use Model\Module\Module;
 use Model\Module\Field;
+use Model\Module\FieldType;
 use Model\Utility\Request as Req;
 
 class Table
@@ -231,5 +232,70 @@ class Table
       ::send();
 
     return $q1 && $q2;
+  }
+
+  /**
+   * Adicionar módulo.
+   *
+   * @param integer $id
+   * @param string $key
+   * @param array $fields
+   * @return boolean
+   */
+  public static function afterAddModule(int $id, string $key, array $fields): bool
+  {
+    Conn::table(EnumTable::MODULES_FIELDS)
+      ::insert(
+        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
+        array_map(function ($f) use ($id) {
+          $name = addslashes($f->name);
+          $key = addslashes($f->key);
+          $unique = (int) $f->unique;
+          $private = (int) $f->private;
+          $type = (int) $f->type;
+
+          return [
+            $id, "'$name'", "'$key'", $unique, $private, $type,
+          ];
+        }, $fields),
+        true
+      )
+      ::send();
+
+    $sql = "CREATE TABLE mod_$key(";
+
+    $info = ["id INT NOT NULL AUTO_INCREMENT"];
+    foreach ($fields as $f) {
+      $sqlType = FieldType::get($f->type, ['sql_type'])[0];;
+
+      $key = addslashes($f->key);
+      $r = "`$key` $sqlType DEFAULT NULL";
+
+      if ($f->unique) $r .= " UNIQUE";
+
+      $info[] = $r;
+    }
+
+    $info[] = "`active` INT(1) NOT NULL DEFAULT '1'";
+    $info[] = "`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
+    $info[] = "`alteredAt` TIMESTAMP NULL DEFAULT NULL";
+    $info[] = "PRIMARY KEY(id)";
+
+    $sql .= implode(",", $info);
+    $sql .= ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
+
+    return (bool) Conn::query($sql);;
+  }
+
+  /**
+   * Remover módulo.
+   *
+   * @param integer $id
+   * @param string $key
+   * @return boolean
+   */
+  public static function beforeRemoveModule(int $id, string $key): bool
+  {
+    return (bool) Conn::query("DROP TABLE mod_$key");
   }
 }

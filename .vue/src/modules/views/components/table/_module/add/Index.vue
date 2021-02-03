@@ -23,13 +23,8 @@ div
     .d-flex.align-center.mb-2
       .white--text.font-weight-bold.text-body-1 Cabeçalhos da lista
     v-chip-group(v-model="listHeaders", column, multiple)
-      v-chip(
-        v-for="({ name, key }, i) in fields",
-        :value="key",
-        :key="i",
-        filter,
-        outlined
-      ) {{ name }}
+      template(v-for="({ name, key }, i) in fields")
+        v-chip(v-if="name", :value="key", :key="i", filter, outlined) {{ name }}
     .pt-8.text-body-2.text-center.font-weight-bold.red--text(
       v-if="noListHeaders"
     ) Deve haver no mínimo um cabeçalho.
@@ -76,8 +71,8 @@ export default {
       if (!fieldList) return false;
 
       if (!this.listHeaders.length) {
-        this.noListHeaders = true
-        return false
+        this.noListHeaders = true;
+        return false;
       } else {
         this.noListHeaders = false;
       }

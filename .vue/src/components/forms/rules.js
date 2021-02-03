@@ -8,6 +8,7 @@ const email = v =>
 const phone = v =>
   /\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}/.test(v) || "Telefone inválido.";
 
-const lowerCase = v => /^[a-z]+$/.test(v) || "Apenas letras minúsculas.";
+const lowerCase = v =>
+  /^[a-z]+$/.test(v) || "Apenas letras minúsculas sem acento.";
 
 export { required, email, phone, lowerCase };

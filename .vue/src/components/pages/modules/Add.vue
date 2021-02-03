@@ -24,6 +24,7 @@ module-template(title="Adicionar módulo")
           v-text-field(
             v-model="icon",
             :rules="[rules.required]",
+            :append-icon="icon",
             label="Ícone",
             outlined,
             dense
@@ -31,7 +32,7 @@ module-template(title="Adicionar módulo")
         v-col.py-0(cols=12, sm=6, md=4, lg=3)
           v-text-field(
             v-model="key",
-            :rules="[rules.required]",
+            :rules="[rules.required, rules.lowerCase]",
             label="Chave",
             outlined,
             dense
@@ -45,7 +46,7 @@ module-template(title="Adicionar módulo")
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import { required } from "@/components/forms/rules";
+import { required, lowerCase } from "@/components/forms/rules";
 import { viewAddModuleComponents as addComponents } from "@/modules/views";
 
 export default {
@@ -57,6 +58,7 @@ export default {
     viewSelected: null,
     rules: {
       required,
+      lowerCase,
     },
   }),
   computed: {
@@ -112,4 +114,7 @@ export default {
 </script>
 
 <style>
+.v-input__icon.v-input__icon--append {
+  overflow: hidden;
+}
 </style>

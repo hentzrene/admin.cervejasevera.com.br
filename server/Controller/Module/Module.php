@@ -49,8 +49,12 @@ class Module
       Response::send();
     }
 
-    ModelModule::add(Req::getAll());
-    $this->getAll();
+    if (ModelModule::add(Req::getAll())) {
+      $this->getAll();
+    } else {
+      Response::status(500);
+      Response::send();
+    }
   }
 
   public function setName($d)
@@ -101,8 +105,12 @@ class Module
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelModule::remove((int) $d['moduleId']);
-      Response::set('status', 'success');
+      if (ModelModule::remove((int) $d['moduleId'])) {
+        Response::set('status', 'success');
+      } else {
+        Response::set('status', 'error');
+        Response::status(500);
+      }
     }
     Response::send();
   }

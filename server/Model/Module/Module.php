@@ -8,6 +8,10 @@ use Model\Account\Account;
 
 class Module
 {
+  const VIEWS_CLASSES = [
+    'table' => 'Model\Module\View\Table'
+  ];
+
   /**
    * Obter módulo.
    *
@@ -153,78 +157,6 @@ class Module
   }
 
   /**
-   * Adicionar módulo.
-   *
-   * @param object $data
-   * @return boolean
-   */
-  public static function add(object $data): bool
-  {
-    $name = addslashes($data->name);
-    $key = addslashes($data->key);
-    $icon = addslashes($data->icon);
-    $viewId = (int) $data->viewId;
-    $viewOptions = json_encode($data->viewOptions);
-
-    if (self::has($key)) {
-      throw new \Exception("Já existe um módulo com essa chave.");
-    }
-
-    Conn::table(Table::MODULES)
-      ::insert(
-        ['name', '`key`', 'icon', 'modules_views_id', 'view_options'],
-        ["'$name'", "'$key'", "'$icon'", $viewId, "'$viewOptions'"]
-      )
-      ::send();
-
-    $moduleId = Conn::$conn->insert_id;
-
-    Conn::table(Table::MODULES_FIELDS)
-      ::insert(
-        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
-        array_map(function ($f) use ($moduleId) {
-          $name = addslashes($f->name);
-          $key = addslashes($f->key);
-          $unique = (int) $f->unique;
-          $private = (int) $f->private;
-          $type = (int) $f->type;
-
-          return [
-            $moduleId, "'$name'", "'$key'", $unique, $private, $type,
-          ];
-        }, $data->fields),
-        true
-      )
-      ::send();
-
-    $sql = "CREATE TABLE mod_$key(";
-
-    $info = ["id INT NOT NULL AUTO_INCREMENT"];
-    foreach ($data->fields as $f) {
-      $sqlType = FieldType::get($f->type, ['sql_type'])[0];;
-
-      $key = addslashes($f->key);
-      $r = "`$key` $sqlType DEFAULT NULL";
-
-      if ($f->unique) $r .= " UNIQUE";
-
-      $info[] = $r;
-    }
-
-    $info[] = "`active` INT(1) NOT NULL DEFAULT '1'";
-    $info[] = "`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
-    $info[] = "`alteredAt` TIMESTAMP NULL DEFAULT NULL";
-    $info[] = "PRIMARY KEY(id)";
-
-    $sql .= implode(",", $info);
-    $sql .= ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
-
-    Conn::query($sql);
-
-    return true;
-  }
-
-  /**
    * Verificar se existe um módulo com essa chave e retornar a chave de sua view se existir.
    *
    * @param string $key
@@ -305,6 +237,43 @@ class Module
   }
 
   /**
+   * Adicionar módulo.
+   *
+   * @param object $data
+   * @return boolean
+   */
+  public static function add(object $data): bool
+  {
+    $name = addslashes($data->name);
+    $key = addslashes($data->key);
+    $icon = addslashes($data->icon);
+    $viewId = (int) $data->viewId;
+    $viewOptions = json_encode($data->viewOptions);
+
+    if (self::has($key)) {
+      throw new \Exception("Já existe um módulo com essa chave.");
+    }
+
+    $q1 = Conn::table(Table::MODULES)
+      ::insert(
+        ['name', '`key`', 'icon', 'modules_views_id', 'view_options'],
+        ["'$name'", "'$key'", "'$icon'", $viewId, "'$viewOptions'"]
+      )
+      ::send();
+
+    $moduleId = Conn::$conn->insert_id;
+
+    $q2 = null;
+    if (method_exists(self::VIEWS_CLASSES[$key], 'beforeRemoveModule')) {
+      $q2 = call_user_func([self::VIEWS_CLASSES[$key], 'beforeRemoveModule'], $moduleId, $key, $data->fields);
+    } else {
+      $q2 = true;
+    }
+
+    return $q1 && $q2;
+  }
+
+  /**
    * Remover módulo por id.
    *
    * @param integer $id
@@ -318,7 +287,12 @@ class Module
       ::send()
       ->fetch_row()[0];
 
-    $q1 = Conn::query("DROP TABLE mod_$key");
+    $q1 = null;
+    if (method_exists(self::VIEWS_CLASSES[$key], 'beforeRemoveModule')) {
+      $q1 = call_user_func([self::VIEWS_CLASSES[$key], 'beforeRemoveModule'], $id, $key);
+    } else {
+      $q1 = true;
+    }
 
     $q2 = Conn::table(Table::MODULES)
       ::deleteWhere('id', $id)
