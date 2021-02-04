@@ -49,50 +49,5 @@ if (!IMAGE_RESIZER_PROCESS) {
     Response::send();
   });
 
-  $cssPath = "";
-  if (APP === 'admin' || APP === 'setup') {
-    $cssPath = __DIR__ . "/../admin/css/";
-  } else {
-    $cssPath = __DIR__ . "/../css/";
-  }
-  $css = [];
-  if (is_dir($cssPath)) {
-    $cssDir = array_slice(scandir($cssPath), 2);
-    foreach ($cssDir as $n => $v) {
-      if (APP === 'admin' || APP === 'setup') {
-        $css[] = "/admin/css/$v";
-      } else {
-        $css[] = "/css/$v";
-      }
-    }
-  }
-
-  define('STYLES', $css);
-
-  $jsPath = "";
-  if (APP === 'admin' || APP === 'setup') {
-    $jsPath = __DIR__ . "/../admin/js/";
-  } else {
-    $jsPath = __DIR__ . "/../js/";
-  }
-
-  $js = [];
-  if (is_dir($jsPath)) {
-    $jsDir = array_slice(scandir($jsPath), 2);
-    foreach ($jsDir as $n => $v) {
-      if (preg_match('/\.map$/', $v)) {
-        continue;
-      }
-      if (APP === 'admin' || APP === 'setup') {
-        $js[] = "/admin/js/$v";
-      } else {
-        $js[] = "/js/$v";
-      }
-    }
-  }
-
-  define('SCRIPTS', $js);
-
-  // define('PROXY', '/proxy.js');
-  define('PROXY', null);
+  require __DIR__ . '/App/Config.php';
 }
