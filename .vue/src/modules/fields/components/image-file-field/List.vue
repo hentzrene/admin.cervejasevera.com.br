@@ -70,6 +70,7 @@ v-dialog(
     :name="inputName",
     ref="file",
     type="file",
+    accept="image/png, image/jpeg, image/gif, image/webp",
     multiple,
     hide-details,
     hidden

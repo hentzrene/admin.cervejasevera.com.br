@@ -56,11 +56,7 @@ v-dialog(
     .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
   v-overlay(v-if="value", v-model="loading")
     v-progress-circular(:size="50", color="secondary", indeterminate)
-  add(
-    @add="(data) => this.$emit('add', data)",
-    v-model="addDialog",
-    :field-id="fieldId"
-  )
+  add(v-model="addDialog", :field-id="fieldId")
 </template>
 
 <script>

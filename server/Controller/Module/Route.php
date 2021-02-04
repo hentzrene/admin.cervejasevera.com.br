@@ -4,7 +4,6 @@ namespace Controller\Module;
 
 use Model\Module\Module;
 use Model\Utility\Request as Req;
-use Model\Utility\Response;
 
 class Route
 {
@@ -17,7 +16,9 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'getAll')) {
       call_user_func([self::VIEWS_CLASSES[$viewKey], 'getAll'], $module);
@@ -29,7 +30,9 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'get')) {
       call_user_func([self::VIEWS_CLASSES[$viewKey], 'get'], $module, (int) $d['moduleItem']);
@@ -41,7 +44,9 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'add')) {
       call_user_func([self::VIEWS_CLASSES[$viewKey], 'add'], $module);
@@ -53,7 +58,9 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'remove')) {
       call_user_func([self::VIEWS_CLASSES[$viewKey], 'remove'], $module, (int) $d['moduleItem']);
@@ -65,7 +72,9 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'update')) {
       call_user_func([self::VIEWS_CLASSES[$viewKey], 'update'], $module, (int) $d['moduleItem'], Req::getAll());
@@ -77,11 +86,13 @@ class Route
     $module = $d['module'];
     $viewKey = Module::has($module);
 
-    if (!$viewKey) Response::send();
+    if (!self::VIEWS_CLASSES[$viewKey]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
 
     if (method_exists(self::VIEWS_CLASSES[$viewKey], 'setProp')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'setProp'], $module, (int) $d['moduleItem'], $d['prop'], Req::get('value'));
+      call_user_func([self::VIEWS_CLASSES[$viewKey], 'setProp'], $module, (int) $d['moduleItem'], $d['prop'], Req::get($d['prop']));
     }
   }
 }

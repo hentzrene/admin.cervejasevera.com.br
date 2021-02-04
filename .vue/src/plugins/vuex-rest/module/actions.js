@@ -40,7 +40,7 @@ const actions = {
     const res = await http.post(url, data);
     if (save && typeof save === "function")
       commit("function", state => save(state));
-    else if (res.data) commit("updateList", res.data);
+    else if (res.data) commit("updateList", { data: res.data });
     return res.data;
   },
   put: async ({ state, commit }, { id, prop, data, params, save = true }) => {

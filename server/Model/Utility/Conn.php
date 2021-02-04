@@ -42,11 +42,9 @@ class Conn
 
     if (Conn::$conn->errno) {
       throw new Exception(Conn::$conn->error);
-
-      return null;
     }
 
-    if (!Conn::$conn->affected_rows > 0 && !$q->num_rows) {
+    if (!Conn::$conn->affected_rows > 0 && !$q->num_rows && $q !== true) {
       return null;
     }
 

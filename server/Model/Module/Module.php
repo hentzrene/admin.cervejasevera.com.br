@@ -9,7 +9,7 @@ use Model\Account\Account;
 class Module
 {
   const VIEWS_CLASSES = [
-    'table' => 'Model\Module\View\Table'
+    2 => 'Model\Module\View\Table'
   ];
 
   /**
@@ -254,6 +254,10 @@ class Module
       throw new \Exception("Já existe um módulo com essa chave.");
     }
 
+    if (!self::VIEWS_CLASSES[$viewId]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
+
     $q1 = Conn::table(Table::MODULES)
       ::insert(
         ['name', '`key`', 'icon', 'modules_views_id', 'view_options'],
@@ -264,8 +268,9 @@ class Module
     $moduleId = Conn::$conn->insert_id;
 
     $q2 = null;
-    if (method_exists(self::VIEWS_CLASSES[$key], 'beforeRemoveModule')) {
-      $q2 = call_user_func([self::VIEWS_CLASSES[$key], 'beforeRemoveModule'], $moduleId, $key, $data->fields);
+
+    if (method_exists(self::VIEWS_CLASSES[$viewId], 'afterAddModule')) {
+      $q2 = call_user_func([self::VIEWS_CLASSES[$viewId], 'afterAddModule'], $moduleId, $key, $data->fields);
     } else {
       $q2 = true;
     }
@@ -281,15 +286,19 @@ class Module
    */
   public static function remove(int $id): bool
   {
-    $key = Conn::table(Table::MODULES)
-      ::select(['`key`'])
+    $module = Conn::table(Table::MODULES)
+      ::select(['`key`', 'modules_views_id' => 'viewId'])
       ::where('id', $id)
       ::send()
-      ->fetch_row()[0];
+      ->fetch_object();
+
+    if (!self::VIEWS_CLASSES[(int) $module->viewId]) {
+      throw new \Exception("View não configurada corretamente no código fonte.");
+    }
 
     $q1 = null;
-    if (method_exists(self::VIEWS_CLASSES[$key], 'beforeRemoveModule')) {
-      $q1 = call_user_func([self::VIEWS_CLASSES[$key], 'beforeRemoveModule'], $id, $key);
+    if (method_exists(self::VIEWS_CLASSES[$module->key], 'beforeRemoveModule')) {
+      $q1 = call_user_func([self::VIEWS_CLASSES[$module->key], 'beforeRemoveModule'], $id, $module->key);
     } else {
       $q1 = true;
     }

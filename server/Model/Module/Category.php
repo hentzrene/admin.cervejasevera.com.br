@@ -17,7 +17,7 @@ class Category
   public static function getAll(int $fieldId): array
   {
     $q = Conn::table(Table::CATEGORIES)
-      ::select(['id', 'title'])
+      ::select(['id', 'title', 'modules_fields_id' => 'fieldId'])
       ::where('modules_fields_id', $fieldId)
       ::send();
 

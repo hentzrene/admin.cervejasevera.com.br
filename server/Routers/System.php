@@ -43,6 +43,7 @@ $router->post('/modules-files/file', 'File:add');
 $router->put('/modules-files/{fileId}/title', 'File:setTitle');
 $router->delete('/modules-files/{fileId}', 'File:remove');
 
-$router->get('/modules-categories/{itemId}', 'Category:getAll');
+$router->get('/modules-categories', 'Category:getAll');
+$router->post('/modules-categories', 'Category:add');
 $router->put('/modules-categories/{categoryId}/title', 'Category:setTitle');
 $router->delete('/modules-categories/{categoryId}', 'Category:remove');

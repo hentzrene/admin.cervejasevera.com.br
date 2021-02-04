@@ -49,7 +49,9 @@ class Module
       Response::send();
     }
 
-    if (ModelModule::add(Req::getAll())) {
+    $t = ModelModule::add(Req::getAll());
+
+    if ($t) {
       $this->getAll();
     } else {
       Response::status(500);

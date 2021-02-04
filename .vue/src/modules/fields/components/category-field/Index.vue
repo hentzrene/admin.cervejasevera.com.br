@@ -12,12 +12,7 @@ grid-item(col-end=2, col-end-sm=1)
     )
     v-btn.ml-1(@click="listDialog = true", icon, small)
       v-icon(small) fas fa-cog
-  list(
-    @add="(data) => (this.categories = data)",
-    v-model="listDialog",
-    :field-id="fieldId",
-    :categories="categories"
-  )
+  list(v-model="listDialog", :field-id="fieldId", :categories="categories")
 </template>
 
 <script>
@@ -34,7 +29,6 @@ export default {
   },
   data: () => ({
     listDialog: false,
-    categories: [],
   }),
   computed: {
     moduleId() {
@@ -43,6 +37,12 @@ export default {
     itemId() {
       return this.$route.params.sub;
     },
+    categories() {
+      return this.$rest("modulesCategories").getters.filterByProperty(
+        "fieldId",
+        this.fieldId
+      );
+    },
     categoriesSelect() {
       return this.categories.map(({ title, id }) => ({
         text: title,
@@ -50,21 +50,13 @@ export default {
       }));
     },
   },
-  methods: {
-    get() {
-      return this.$rest("modulesCategories")
-        .get({
-          id: this.itemId,
-          params: {
-            moduleId: this.moduleId,
-            fieldId: this.fieldId,
-          },
-        })
-        .then((categories) => (this.categories = categories));
-    },
-  },
   created() {
-    this.get();
+    this.$rest("modulesCategories").get({
+      params: {
+        moduleId: this.moduleId,
+        fieldId: this.fieldId,
+      },
+    });
   },
   mixins: [mixin],
   components: {

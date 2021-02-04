@@ -193,7 +193,7 @@ class Table
 
     Conn::table("mod_$module")
       ::update([
-        $prop => $value
+        $prop => "'$value'"
       ])
       ::where('id', $id)
       ::send();
@@ -244,7 +244,7 @@ class Table
    */
   public static function afterAddModule(int $id, string $key, array $fields): bool
   {
-    Conn::table(EnumTable::MODULES_FIELDS)
+    $q1 = Conn::table(EnumTable::MODULES_FIELDS)
       ::insert(
         ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
         array_map(function ($f) use ($id) {
@@ -284,7 +284,9 @@ class Table
     $sql .= implode(",", $info);
     $sql .= ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
 
-    return (bool) Conn::query($sql);;
+    $q2 = Conn::query($sql);
+
+    return $q1 && $q2;
   }
 
   /**

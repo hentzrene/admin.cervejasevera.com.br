@@ -97,6 +97,10 @@ class Field
     $private = (int) $data->private;
     $type = (int) $data->type;
 
+    if (!self::FIELDS_CLASSES[$type]) {
+      throw new \Exception("Field não configurado corretamente no código fonte.");
+    }
+
     $sqlType = FieldType::get($type, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);
 
@@ -149,6 +153,10 @@ class Field
    */
   public static function setTypeId(int $id, int $value): bool
   {
+    if (!self::FIELDS_CLASSES[$value]) {
+      throw new \Exception("Field não configurado corretamente no código fonte.");
+    }
+
     $value = addslashes($value);
     [$moduleId, $key] = self::get($id, ['modules_id', '`key`']);
     $sqlType = FieldType::get($value, ['sql_type'])[0];
@@ -193,6 +201,10 @@ class Field
   {
     [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id']);
     $moduleKey = Module::getKeyById($moduleId);
+
+    if (!self::FIELDS_CLASSES[$typeId]) {
+      throw new \Exception("Field não configurado corretamente no código fonte.");
+    }
 
     $q1 = null;
 
