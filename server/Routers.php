@@ -3,6 +3,15 @@ $router = new CoffeeCode\Router\Router(ROOT);
 
 require __DIR__ . '/Core/Routers.php';
 
+$fields = array_slice(scandir(__DIR__ . '/Module/Field'), 2);
+
+foreach ($fields as $f) {
+  $r = __DIR__ . "/Module/Field/$f/Router.php";
+  if (file_exists($r)) {
+    require $r;
+  }
+}
+
 $router->group(null);
 $router->get('/{page}', function () {
   header('Location: /');

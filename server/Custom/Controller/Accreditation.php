@@ -2,11 +2,11 @@
 
 namespace Custom\Controller;
 
-use Model\Utility\Conn;
-use Model\Utility\Response;
+use Core\Model\Utility\Conn;
+use Core\Model\Utility\Response;
 use Custom\Model\Accreditation as ModelAccreditation;
 use Custom\Model\PagSeguro;
-use Model\Utility\Request as Req;
+use Core\Model\Utility\Request as Req;
 
 class Accreditation
 {

@@ -7,92 +7,77 @@ use Core\Model\Utility\Request as Req;
 
 class Route
 {
-  const VIEWS_CLASSES = [
-    'table' => 'Controller\Module\View\Table'
-  ];
-
   public function getAll($d)
   {
-    $module = $d['module'];
-    $viewKey = Module::has($module);
-
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
-
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'getAll')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'getAll'], $module);
-    }
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'getAll', $d['module']);
   }
 
   public function get($d)
   {
-    $module = $d['module'];
-    $viewKey = Module::has($module);
-
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
-
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'get')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'get'], $module, (int) $d['moduleItem']);
-    }
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'get', $d['module'], (int) $d['moduleItem']);
   }
 
   public function add($d)
   {
-    $module = $d['module'];
-    $viewKey = Module::has($module);
-
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
-
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'add')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'add'], $module);
-    }
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'add', $d['module']);
   }
 
   public function remove($d)
   {
-    $module = $d['module'];
-    $viewKey = Module::has($module);
-
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
-
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'remove')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'remove'], $module, (int) $d['moduleItem']);
-    }
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'remove', $d['module'], (int) $d['moduleItem']);
   }
 
   public function update($d)
   {
-    $module = $d['module'];
-    $viewKey = Module::has($module);
-
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
-
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'update')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'update'], $module, (int) $d['moduleItem'], Req::getAll());
-    }
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'update', $d['module'], (int) $d['moduleItem'], Req::getAll());
   }
 
   public function setProp($d)
   {
-    $module = $d['module'];
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'setProp', $d['module'], (int) $d['moduleItem'], $d['prop'], Req::get($d['prop']));
+  }
+
+  /**
+   * Verifica se a view foi criada no código fonte, se sim retorna a classe dela.
+   *
+   * @param string $viewKey
+   * @return string
+   */
+  private static function getViewClassOfModule(string $module): ?string
+  {
     $viewKey = Module::has($module);
 
-    if (!self::VIEWS_CLASSES[$viewKey]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
+    if (!$viewKey) {
+      throw new \Exception("Não existe um módulo com essa chave.");
     }
 
+    $viewDir = ucfirst($viewKey);
 
-    if (method_exists(self::VIEWS_CLASSES[$viewKey], 'setProp')) {
-      call_user_func([self::VIEWS_CLASSES[$viewKey], 'setProp'], $module, (int) $d['moduleItem'], $d['prop'], Req::get($d['prop']));
+    if (!file_exists(SYSTEM_ROOT . "/server/Module/View/$viewDir/Controller.php")) {
+      throw new \Exception("Controller da view não configurado corretamente no código fonte.");
+    }
+
+    return "Module\View\\$viewDir\Controller";
+  }
+
+  /**
+   * Chamar method do Controller da view.
+   *
+   * @param string $viewClass
+   * @param string $method
+   * @param [type] ...$params
+   * @return void
+   */
+  private static function callViewControllerMethod(string $viewClass, string $method, ...$params)
+  {
+    if (method_exists($viewClass, $method)) {
+      call_user_func([$viewClass, $method], ...$params);
     }
   }
 }

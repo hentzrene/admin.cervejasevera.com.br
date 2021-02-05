@@ -7,21 +7,6 @@ use Enum\Table;
 
 class Field
 {
-  const FIELDS_CLASSES = [
-    1 => 'Model\Module\Field\TinyText',
-    2 => 'Model\Module\Field\Email',
-    3 => 'Model\Module\Field\Password',
-    4 => 'Model\Module\Field\Category',
-    5 => 'Model\Module\Field\Date',
-    6 => 'Model\Module\Field\MediumText',
-    7 => 'Model\Module\Field\BigText',
-    8 => 'Model\Module\Field\ImageFile',
-    9 => 'Model\Module\Field\File',
-    10 => 'Model\Module\Field\Subcategory',
-    11 => 'Model\Module\Field\Url',
-    12 => 'Model\Module\Field\SwitchField',
-  ];
-
   /**
    * Obter campo.
    *
@@ -96,18 +81,15 @@ class Field
     $unique = (int) $data->unique;
     $private = (int) $data->private;
     $type = (int) $data->type;
-
-    if (!self::FIELDS_CLASSES[$type]) {
-      throw new \Exception("Field não configurado corretamente no código fonte.");
-    }
+    $fieldClass = self::getFieldClasOfTypeId($type);
 
     $sqlType = FieldType::get($type, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);
 
     $q1 = null;
 
-    if (method_exists(self::FIELDS_CLASSES[$type], 'beforeAdd')) {
-      $q1 = call_user_func([self::FIELDS_CLASSES[$type], 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
+    if (method_exists($fieldClass, 'beforeAdd')) {
+      $q1 = call_user_func([$fieldClass, 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
     } else {
       $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
 
@@ -153,7 +135,10 @@ class Field
    */
   public static function setTypeId(int $id, int $value): bool
   {
-    if (!self::FIELDS_CLASSES[$value]) {
+    $fieldClassTo = self::getFieldClasOfTypeId($value);
+    $fieldClassFrom = self::getFieldClasOfTypeId($id);
+
+    if (!$fieldClassTo) {
       throw new \Exception("Field não configurado corretamente no código fonte.");
     }
 
@@ -164,20 +149,20 @@ class Field
 
     $q1 = null;
     $q2 = null;
-    $hasBeforeSetTypeFrom = method_exists(self::FIELDS_CLASSES[$id], 'beforeSetTypeFrom');
-    $hasBeforeSetTypeTo = method_exists(self::FIELDS_CLASSES[$value], 'beforeSetTypeTo');
+    $hasBeforeSetTypeFrom = method_exists($fieldClassFrom, 'beforeSetTypeFrom');
+    $hasBeforeSetTypeTo = method_exists($fieldClassTo, 'beforeSetTypeTo');
 
     if (!$hasBeforeSetTypeFrom && !$hasBeforeSetTypeTo) {
       $q1 = $q2 = Conn::query("ALTER TABLE mod_$moduleKey MODIFY $key $sqlType");
     } else {
       if ($hasBeforeSetTypeFrom) {
-        $q1 = call_user_func([self::FIELDS_CLASSES[$id], 'beforeSetTypeFrom'], $moduleKey, $id, $key);
+        $q1 = call_user_func([$fieldClassFrom, 'beforeSetTypeFrom'], $moduleKey, $id, $key);
       } else {
         $q1 = true;
       }
 
       if ($hasBeforeSetTypeTo) {
-        $q2 = call_user_func([self::FIELDS_CLASSES[$value], 'beforeSetTypeTo'], $moduleKey, $key, $sqlType);
+        $q2 = call_user_func([$fieldClassTo, 'beforeSetTypeTo'], $moduleKey, $key, $sqlType);
       } else {
         $q2 = Conn::query("ALTER TABLE mod_$moduleKey MODIFY $key $sqlType");
       }
@@ -201,15 +186,12 @@ class Field
   {
     [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id']);
     $moduleKey = Module::getKeyById($moduleId);
-
-    if (!self::FIELDS_CLASSES[$typeId]) {
-      throw new \Exception("Field não configurado corretamente no código fonte.");
-    }
+    $fieldClass = self::getFieldClasOfTypeId($typeId);
 
     $q1 = null;
 
-    if (method_exists(self::FIELDS_CLASSES[$typeId], 'beforeRemove')) {
-      $q1 = call_user_func([self::FIELDS_CLASSES[$typeId], 'beforeRemove'], $moduleKey, $key);
+    if (method_exists($fieldClass, 'beforeRemove')) {
+      $q1 = call_user_func([$fieldClass, 'beforeRemove'], $moduleKey, $key);
     } else {
       $q1 = true;
     }
@@ -221,5 +203,29 @@ class Field
       ::send();
 
     return $q1 && $q2 && $q3;
+  }
+
+  /**
+   * Obter classe do tipo com seu id.
+   *
+   * @param integer $typeId
+   * @return string
+   */
+  private static function getFieldClasOfTypeId(int $typeId): string
+  {
+    $field = FieldType::get($typeId, ['key']);
+    $fieldDir = null;
+
+    if (!$field) {
+      throw new \Exception("Não existe um tipo de campo com esse id.");
+    } else {
+      $fieldDir = ucfirst($field[0]);
+    }
+
+    if (!file_exists(SYSTEM_ROOT . "/server/Module/Field/$fieldDir/Model.php")) {
+      throw new \Exception("Model do field não configurado corretamente no código fonte.");
+    }
+
+    return "Module\Field\\$fieldDir\Model";
   }
 }

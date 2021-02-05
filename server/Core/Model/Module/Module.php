@@ -8,10 +8,6 @@ use Core\Model\Account\Account;
 
 class Module
 {
-  const VIEWS_CLASSES = [
-    2 => 'Model\Module\View\Table'
-  ];
-
   /**
    * Obter módulo.
    *
@@ -249,14 +245,13 @@ class Module
     $icon = addslashes($data->icon);
     $viewId = (int) $data->viewId;
     $viewOptions = json_encode($data->viewOptions);
+    $viewKey = self::has($key);
 
-    if (self::has($key)) {
+    if ($viewKey) {
       throw new \Exception("Já existe um módulo com essa chave.");
     }
 
-    if (!self::VIEWS_CLASSES[$viewId]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
-    }
+    $viewClass = self::getViewClassOfKey($viewKey);
 
     $q1 = Conn::table(Table::MODULES)
       ::insert(
@@ -269,8 +264,8 @@ class Module
 
     $q2 = null;
 
-    if (method_exists(self::VIEWS_CLASSES[$viewId], 'afterAddModule')) {
-      $q2 = call_user_func([self::VIEWS_CLASSES[$viewId], 'afterAddModule'], $moduleId, $key, $data->fields);
+    if (method_exists($viewClass, 'afterAddModule')) {
+      $q2 = call_user_func([$viewClass, 'afterAddModule'], $moduleId, $key, $data->fields);
     } else {
       $q2 = true;
     }
@@ -292,13 +287,18 @@ class Module
       ::send()
       ->fetch_object();
 
-    if (!self::VIEWS_CLASSES[(int) $module->viewId]) {
-      throw new \Exception("View não configurada corretamente no código fonte.");
+    $viewKey = self::has($module->key);
+
+    if (!$viewKey) {
+      throw new \Exception("Não existe um módulo com essa chave.");
     }
 
+    $viewClass = self::getViewClassOfKey($viewKey);
+
     $q1 = null;
-    if (method_exists(self::VIEWS_CLASSES[$module->key], 'beforeRemoveModule')) {
-      $q1 = call_user_func([self::VIEWS_CLASSES[$module->key], 'beforeRemoveModule'], $id, $module->key);
+
+    if (method_exists($viewClass, 'beforeRemoveModule')) {
+      $q1 = call_user_func([$viewClass, 'beforeRemoveModule'], $id, $module->key);
     } else {
       $q1 = true;
     }
@@ -308,5 +308,22 @@ class Module
       ::send();
 
     return $q1 && $q2;
+  }
+
+  /**
+   * Verifica se a view foi criada no código fonte, se sim retorna a classe dela.
+   *
+   * @param string $viewKey
+   * @return string
+   */
+  private static function getViewClassOfKey(string $viewKey): string
+  {
+    $viewDir = ucfirst($viewKey);
+
+    if (!file_exists(SYSTEM_ROOT . "/server/Module/View/$viewDir/Model.php")) {
+      throw new \Exception("Model da view não configurado corretamente no código fonte.");
+    }
+
+    return "Module\View\\$viewDir\Model";
   }
 }

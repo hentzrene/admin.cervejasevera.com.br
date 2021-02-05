@@ -2,20 +2,20 @@
 
 namespace Module\Field\File;
 
-use Model\Module\Module;
-use Model\Utility\Response;
-use Model\Utility\Request as Req;
+use Core\Model\Module\Module;
+use Core\Model\Utility\Response;
+use Core\Model\Utility\Request as Req;
 
 class File
 {
-  public function getAll($d)
+  public function getAllItems($d)
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       Response::rawBody(
-        Model::getAll(
+        Model::getAllItems(
           (int) Req::get('fieldId'),
           (int) $d['itemId']
         )
@@ -25,14 +25,14 @@ class File
     Response::send();
   }
 
-  public function add()
+  public function addItem()
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       Response::rawBody(
-        Model::add(
+        Model::addItem(
           (int) Req::get('moduleId'),
           (int) Req::get('fieldId'),
           (int) Req::get('itemId'),
@@ -45,13 +45,13 @@ class File
     Response::send();
   }
 
-  public function setTitle($d)
+  public function setItemTitle($d)
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      if (Model::setTitle((int) $d['fileId'], Req::get('value'))) {
+      if (Model::setItemTitle((int) $d['fileId'], Req::get('value'))) {
         Response::set('status', 'success');
         Response::set('success', 'Título alterado.');
       }
@@ -60,13 +60,13 @@ class File
     Response::send();
   }
 
-  public function remove($d)
+  public function removeItem($d)
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Model::remove((int) $d['fileId']);
+      Model::removeItem((int) $d['fileId']);
       Response::set('status', 'success');
     }
     Response::send();

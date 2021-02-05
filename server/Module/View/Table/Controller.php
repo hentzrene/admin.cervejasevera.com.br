@@ -1,11 +1,11 @@
 <?php
 
-namespace Controller\Module\View;
+namespace Module\View\Table;
 
-use Model\Module\View\Table as ViewTable;
-use Model\Utility\Response;
+use Core\Model\Module\View\Table as ViewTable;
+use Core\Model\Utility\Response;
 
-class Table
+class Controller
 {
   public static function get(string $module, int $moduleItem)
   {

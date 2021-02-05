@@ -2,7 +2,7 @@
 
 namespace Module\Field\File;
 
-use Model\Utility\Conn;
+use Core\Model\Utility\Conn;
 use Enum\Table;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter as Local;
@@ -16,7 +16,7 @@ class Model
    * @param integer $itemId
    * @return array
    */
-  public static function getAll(int $fieldId, int $itemId): array
+  public static function getAllItems(int $fieldId, int $itemId): array
   {
     $q = Conn::table(Table::FILES)
       ::select(['id', 'title', 'path'])
@@ -37,7 +37,7 @@ class Model
    * @param array $file
    * @return string|null
    */
-  public static function add(int $moduleId, int $fieldId, int $itemId, string $title, array $file): ?object
+  public static function addItem(int $moduleId, int $fieldId, int $itemId, string $title, array $file): ?object
   {
     $title = addslashes($title);
 
@@ -85,7 +85,7 @@ class Model
    * @param string $value
    * @return array
    */
-  public static function setTitle(int $fileId, string $value): bool
+  public static function setItemTitle(int $fileId, string $value): bool
   {
     $value = addslashes($value);
 
@@ -101,7 +101,7 @@ class Model
    * @param integer $id
    * @return boolean
    */
-  public static function remove(int $id): bool
+  public static function removeItem(int $id): bool
   {
     $path = Conn::table(Table::FILES)
       ::select('path')

@@ -2,7 +2,7 @@
 
 namespace Module\Field\ImageFile;
 
-use Model\Utility\Conn;
+use Core\Model\Utility\Conn;
 use Enum\Table;
 use Intervention\Image\ImageManager as Img;
 
@@ -15,7 +15,7 @@ class Model
    * @param integer $itemId
    * @return array
    */
-  public static function getAll(int $fieldId, int $itemId): array
+  public static function getAllItems(int $fieldId, int $itemId): array
   {
     $q = Conn::table(Table::IMAGES)
       ::select(['id', 'path'])
@@ -35,7 +35,7 @@ class Model
    * @param array $file
    * @return string|null
    */
-  public static function add(int $moduleId, int $fieldId, int $itemId, array $file): ?object
+  public static function addItem(int $moduleId, int $fieldId, int $itemId, array $file): ?object
   {
     $manager = new Img(array('driver' => 'gd'));
     $make = $manager->make($file['tmp_name']);
@@ -72,7 +72,7 @@ class Model
    * @param integer $id
    * @return boolean
    */
-  public static function remove(int $id): bool
+  public static function removeItem(int $id): bool
   {
     $path = Conn::table(Table::IMAGES)
       ::select('path')

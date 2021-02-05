@@ -2,20 +2,22 @@
 
 namespace Core\Controller;
 
+use Core\Model\Email as ModelEmail;
+
 class Email
 {
   public function contactUs($d)
   {
-    \Model\Email::contactUs($d['name'], $d['phone'], $d['subject'], $d['message']);
+    ModelEmail::contactUs($d['name'], $d['phone'], $d['subject'], $d['message']);
   }
 
   public function sendApproveAccount($d)
   {
-    \Model\Email::sendApproveAccount($d['name'], $d['email']);
+    ModelEmail::sendApproveAccount($d['name'], $d['email']);
   }
 
   public function sendRecoverPassword($d)
   {
-    \Model\Email::sendRecoverPassword($d['email']);
+    ModelEmail::sendRecoverPassword($d['email']);
   }
 }

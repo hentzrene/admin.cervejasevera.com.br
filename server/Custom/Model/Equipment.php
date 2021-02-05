@@ -2,7 +2,7 @@
 
 namespace Custom\Model;
 
-use Model\Utility\Conn;
+use Core\Model\Utility\Conn;
 
 class Equipment
 {

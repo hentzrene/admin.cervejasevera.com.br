@@ -3,7 +3,7 @@
 namespace Module\Field\Category;
 
 use Enum\Table;
-use Model\Utility\Conn;
+use Core\Model\Utility\Conn;
 
 class Model
 {

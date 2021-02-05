@@ -7,7 +7,8 @@ export default Object.fromEntries(
       path
         .replace(/\.\/([^./]+)\/Index.vue/, "$1")
         .toLowerCase()
-        .replace(/[^a-z]/g, ""),
+        .replace(/[^a-z]/g, "")
+        .concat("field"),
       () => import("./components/" + path.slice(2))
     ])
 );

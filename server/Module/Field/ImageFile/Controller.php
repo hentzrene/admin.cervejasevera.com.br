@@ -2,20 +2,20 @@
 
 namespace Module\Field\ImageFile;
 
-use Model\Module\Module;
-use Model\Utility\Response;
-use Model\Utility\Request as Req;
+use Core\Model\Module\Module;
+use Core\Model\Utility\Response;
+use Core\Model\Utility\Request as Req;
 
 class Image
 {
-  public function getAll($d)
+  public function getAllItems($d)
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       Response::rawBody(
-        Model::getAll(
+        Model::getAllItems(
           (int) Req::get('fieldId'),
           (int) $d['itemId']
         )
@@ -25,14 +25,14 @@ class Image
     Response::send();
   }
 
-  public function add()
+  public function addItem()
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       Response::rawBody(
-        Model::add(
+        Model::addItem(
           (int) Req::get('moduleId'),
           (int) Req::get('fieldId'),
           (int) Req::get('itemId'),
@@ -44,13 +44,13 @@ class Image
     Response::send();
   }
 
-  public function remove($d)
+  public function removeItem($d)
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Model::remove((int) $d['imageId']);
+      Model::removeItem((int) $d['imageId']);
       Response::set('status', 'success');
     }
     Response::send();

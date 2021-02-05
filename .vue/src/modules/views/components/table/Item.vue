@@ -10,7 +10,7 @@ module-template(
         component(
           v-for="({ id, name, key, typeKey }, i) in data.fields",
           :value="item[key] || ''",
-          :is="typeKey + 'field'",
+          :is="typeKey.toLowerCase() + 'field'",
           :label="name",
           :name="key",
           :key="i",

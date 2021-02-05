@@ -2,9 +2,9 @@
 
 namespace Module\Field\Category;
 
-use Model\Module\Module;
-use Model\Utility\Response;
-use Model\Utility\Request as Req;
+use Core\Model\Module\Module;
+use Core\Model\Utility\Response;
+use Core\Model\Utility\Request as Req;
 
 class Controller
 {

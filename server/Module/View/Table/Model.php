@@ -1,15 +1,15 @@
 <?php
 
-namespace Model\Module\View;
+namespace Module\View\Table;
 
 use Enum\Table as EnumTable;
-use Model\Utility\Conn;
-use Model\Module\Module;
-use Model\Module\Field;
-use Model\Module\FieldType;
-use Model\Utility\Request as Req;
+use Core\Model\Utility\Conn;
+use Core\Model\Module\Module;
+use Core\Model\Module\Field;
+use Core\Model\Module\FieldType;
+use Core\Model\Utility\Request as Req;
 
-class Table
+class Model
 {
   /**
    * Obter item;
