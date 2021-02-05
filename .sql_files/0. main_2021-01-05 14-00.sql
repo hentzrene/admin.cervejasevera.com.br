@@ -150,6 +150,14 @@ CREATE TABLE IF NOT EXISTS `subcategories` (
   KEY `categories_id` (`categories_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `configurations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `data` json NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Criando tabela temporária para evitar erros de dependência de VIEW
 CREATE TABLE `vw_modules` (
 	`id` INT(11) NOT NULL,

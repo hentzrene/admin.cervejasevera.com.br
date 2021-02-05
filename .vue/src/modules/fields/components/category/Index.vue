@@ -44,10 +44,17 @@ export default {
       );
     },
     categoriesSelect() {
-      return this.categories.map(({ title, id }) => ({
+      const categories = this.categories.map(({ title, id }) => ({
         text: title,
         value: id,
       }));
+
+      categories.unshift({
+        text: "",
+        value: "",
+      });
+
+      return categories;
     },
   },
   created() {

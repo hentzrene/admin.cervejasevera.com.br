@@ -12,6 +12,8 @@ class Table
 
   const CATEGORIES = "categories";
 
+  const CONFIGURATIONS = "configurations";
+
   const FILES = "files";
 
   const IMAGES = "images";

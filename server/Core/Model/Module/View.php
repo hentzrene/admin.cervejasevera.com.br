@@ -21,4 +21,21 @@ class View
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
   }
+
+
+  /**
+   * Obter chave pelo id.
+   *
+   * @param integer $id
+   * @return string|null
+   */
+  public static function getKeyById(int $id): ?string
+  {
+    $q = Conn::table(Table::MODULES_VIEWS)
+      ::select(['`key`'])
+      ::where('id', $id)
+      ::send();
+
+    return $q ? $q->fetch_row()[0] : null;
+  }
 }

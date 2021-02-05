@@ -23,18 +23,29 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           h4 {{ user.name }}
           p.caption.mt-1 {{ user.email }}
           v-divider
-          v-btn.text-none(
-            v-if="user.type == 1",
-            @click="$router.push('/admin/modules') && (menu = false)",
-            color="white",
-            depressed,
-            text,
-            block,
-            tile
-          )
-            v-icon(left) fas fa-cogs
-            span Módulos
-          v-divider
+          template(v-if="user.type == 1")
+            v-btn.text-none(
+              @click="$router.push('/admin/modules') && (menu = false)",
+              color="white",
+              depressed,
+              text,
+              block,
+              tile
+            )
+              v-icon(left) fas fa-cogs
+              span Módulos
+            v-divider
+            v-btn.text-none(
+              @click="$router.push('/admin/email') && (menu = false)",
+              color="white",
+              depressed,
+              text,
+              block,
+              tile
+            )
+              v-icon(left) fas fa-envelope
+              span E-mail
+            v-divider
           v-btn.text-none(
             @click="logout",
             :loading="loading",

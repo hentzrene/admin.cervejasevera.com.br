@@ -6,6 +6,7 @@ import Setup from "@/components/pages/Setup";
 import ModuleList from "@/components/pages/modules/List.vue";
 import ModuleAdd from "@/components/pages/modules/Add.vue";
 import ModuleEdit from "@/components/pages/modules/Edit.vue";
+import Email from "@/components/pages/Email.vue";
 import Error404 from "@/components/pages/Error404.vue";
 import Module from "@/modules/Index.vue";
 
@@ -22,6 +23,11 @@ const routes = [
     name,
     path: "/admin",
     component: Home
+  },
+  {
+    name: "E-mail",
+    path: `/admin/email`,
+    component: Email
   },
   {
     name: "Módulos",

@@ -183,17 +183,19 @@ class Model
    */
   public static function setProp(string $module, int $id, string $prop, string $value): bool
   {
-    if ($prop === 'active') {
+    if (!$value) {
+      $value = 'NULL';
+    } else if ($prop === 'active') {
       $value = (int) $value;
     } else {
-      $value = addslashes($value);
+      $value = "'" . addslashes($value) . "'";
     }
 
     $module = addslashes($module);
 
     Conn::table("mod_$module")
       ::update([
-        $prop => "'$value'"
+        $prop => $value
       ])
       ::where('id', $id)
       ::send();
@@ -244,49 +246,21 @@ class Model
    */
   public static function afterAddModule(int $id, string $key, array $fields): bool
   {
-    $q1 = Conn::table(EnumTable::MODULES_FIELDS)
-      ::insert(
-        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
-        array_map(function ($f) use ($id) {
-          $name = addslashes($f->name);
-          $key = addslashes($f->key);
-          $unique = (int) $f->unique;
-          $private = (int) $f->private;
-          $type = (int) $f->type;
+    Conn::query(
+      "CREATE TABLE mod_$key(
+        id INT NOT NULL AUTO_INCREMENT,
+        `active` INT(1) NOT NULL DEFAULT '1',
+        `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        `alteredAt` TIMESTAMP NULL DEFAULT NULL,
+        PRIMARY KEY(id)
+      ) COLLATE='utf8_general_ci' ENGINE=InnoDB;"
+    );
 
-          return [
-            $id, "'$name'", "'$key'", $unique, $private, $type,
-          ];
-        }, $fields),
-        true
-      )
-      ::send();
-
-    $sql = "CREATE TABLE mod_$key(";
-
-    $info = ["id INT NOT NULL AUTO_INCREMENT"];
     foreach ($fields as $f) {
-      $sqlType = FieldType::get($f->type, ['sql_type'])[0];;
-
-      $key = addslashes($f->key);
-      $r = "`$key` $sqlType DEFAULT NULL";
-
-      if ($f->unique) $r .= " UNIQUE";
-
-      $info[] = $r;
+      Field::add($f, $id);
     }
 
-    $info[] = "`active` INT(1) NOT NULL DEFAULT '1'";
-    $info[] = "`createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP";
-    $info[] = "`alteredAt` TIMESTAMP NULL DEFAULT NULL";
-    $info[] = "PRIMARY KEY(id)";
-
-    $sql .= implode(",", $info);
-    $sql .= ") COLLATE='utf8_general_ci' ENGINE=InnoDB;";
-
-    $q2 = Conn::query($sql);
-
-    return $q1 && $q2;
+    return true;
   }
 
   /**

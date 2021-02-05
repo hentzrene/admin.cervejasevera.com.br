@@ -41,7 +41,13 @@ module-template(title="Adicionar módulo")
       .d-flex.justify-end.py-4(
         v-if="viewSelected && viewSelected !== 'custom'"
       )
-        v-btn.text-none(@click="add", color="secondary", depressed) Adicionar
+        v-btn.text-none(
+          @click="add",
+          color="secondary",
+          depressed,
+          :loading="loading",
+          :disabled="loading"
+        ) Adicionar
 </template>
 
 <script>
@@ -60,6 +66,7 @@ export default {
       required,
       lowerCase,
     },
+    loading: false,
   }),
   computed: {
     views() {
@@ -85,6 +92,7 @@ export default {
         ({ key }) => key === this.viewSelected
       ).id;
 
+      this.loading = true;
       this.$rest("modules")
         .post({
           data: {
@@ -95,7 +103,10 @@ export default {
             ...view.data,
           },
         })
-        .then(() => this.$router.push("/admin/modules"));
+        .then(() => this.$router.push("/admin/modules"))
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
   beforeCreate() {

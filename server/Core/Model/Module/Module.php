@@ -233,6 +233,76 @@ class Module
   }
 
   /**
+   * Remover item da propiedade listHeaders da viewOptions.
+   *
+   * @param integer $id
+   * @param string $value
+   * @return void
+   */
+  public static function removeFromViewOptionsListHeaders(int $id, string $value): bool
+  {
+    $value = addslashes($value);
+
+    var_dump("UPDATE modules
+    SET view_options = IF(
+      JSON_SEARCH(
+        view_options->\"$.listHeaders\",
+        'one',
+        '$value'
+      ) IS NOT NULL,
+      JSON_REMOVE(
+      view_options,
+        CONCAT(
+          '$.listHeaders',
+          REPLACE(
+            JSON_UNQUOTE(
+              JSON_SEARCH(
+                view_options->\"$.listHeaders\",
+                'one',
+                '$value'
+              )
+            ),
+            '$',
+            ''
+          )
+        )
+      ),
+      view_options
+    )
+  WHERE id = $id;");
+
+    return (bool) Conn::query(
+      "UPDATE modules
+        SET view_options = IF(
+          JSON_SEARCH(
+            view_options->\"$.listHeaders\",
+            'one',
+            '$value'
+          ) IS NOT NULL,
+          JSON_REMOVE(
+          view_options,
+            CONCAT(
+              '$.listHeaders',
+              REPLACE(
+                JSON_UNQUOTE(
+                  JSON_SEARCH(
+                    view_options->\"$.listHeaders\",
+                    'one',
+                    '$value'
+                  )
+                ),
+                '$',
+                ''
+              )
+            )
+          ),
+          view_options
+        )
+      WHERE id = $id;"
+    );
+  }
+
+  /**
    * Adicionar módulo.
    *
    * @param object $data
@@ -245,12 +315,12 @@ class Module
     $icon = addslashes($data->icon);
     $viewId = (int) $data->viewId;
     $viewOptions = json_encode($data->viewOptions);
-    $viewKey = self::has($key);
 
-    if ($viewKey) {
+    if (self::has($key)) {
       throw new \Exception("Já existe um módulo com essa chave.");
     }
 
+    $viewKey = View::getKeyById($viewId);
     $viewClass = self::getViewClassOfKey($viewKey);
 
     $q1 = Conn::table(Table::MODULES)

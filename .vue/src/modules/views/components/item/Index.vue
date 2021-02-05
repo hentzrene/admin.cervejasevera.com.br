@@ -17,7 +17,7 @@ module-template(
           :field-id="parseInt(id)"
         )
       .d-flex.justify-end
-        v-btn.text-none(@click="send", color="secondary", depressed) {{ isPublished ? 'Alterar' : 'Publicar' }}
+        v-btn.text-none(@click="send", color="secondary", depressed) Alterar
 </template>
 
 <script>
@@ -29,15 +29,12 @@ export default {
   props: {
     data: Object,
   },
+  data: () => ({
+    itemId: 1,
+  }),
   computed: {
-    itemId() {
-      return this.$route.params.sub;
-    },
     item() {
       return this.$rest(this.data.key).item;
-    },
-    isPublished() {
-      return this.item.alteredAt && parseInt(this.item.active);
     },
   },
   methods: {
@@ -51,18 +48,16 @@ export default {
           if (typeof data[key] === "object") delete data[key];
         }
 
-        if (!this.isPublished) data.active = 1;
-
         this.$rest(this.data.key)
           .put({ id: this.itemId, data })
-          .then(() => this.$router.push(`/admin/${this.data.key}`));
+          .then(() => this.$router.push("/admin"));
       }
     },
   },
   created() {
     this.$rest(this.data.key)
       .get({ id: this.itemId })
-      .catch(() => this.$router.replace("/admin/" + this.data.key));
+      .catch(() => this.$router.replace("/admin"));
   },
   components: {
     ModuleTemplate,

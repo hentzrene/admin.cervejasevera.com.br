@@ -2,7 +2,6 @@
 
 namespace Module\View\Table;
 
-use Core\Model\Module\View\Table as ViewTable;
 use Core\Model\Utility\Response;
 
 class Controller
@@ -13,7 +12,7 @@ class Controller
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ViewTable::get($module, $moduleItem));
+      Response::rawBody(Model::get($module, $moduleItem));
     }
 
     Response::send();
@@ -22,9 +21,9 @@ class Controller
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(ViewTable::getAll($module, true));
+      Response::rawBody(Model::getAll($module, true));
     } else {
-      Response::rawBody(ViewTable::getAll($module));
+      Response::rawBody(Model::getAll($module));
     }
 
     Response::send();
@@ -38,7 +37,7 @@ class Controller
       Response::send();
     }
 
-    Response::set('id', ViewTable::add($module));
+    Response::set('id', Model::add($module));
     Response::send();
   }
 
@@ -48,7 +47,7 @@ class Controller
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ViewTable::remove($module, $moduleItem);
+      Model::remove($module, $moduleItem);
       Response::set('status', 'success');
     }
     Response::send();
@@ -60,7 +59,7 @@ class Controller
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ViewTable::update($module, $moduleItem, $data);
+      Model::update($module, $moduleItem, $data);
       Response::set('status', 'success');
       Response::set('success', 'Item alterado com sucesso.');
     }
@@ -74,7 +73,7 @@ class Controller
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ViewTable::setProp($module, $moduleItem, $prop, $value);
+      Model::setProp($module, $moduleItem, $prop, $value);
       Response::set('status', 'success');
       Response::set('success', 'Propiedade alterada com sucesso.');
     }

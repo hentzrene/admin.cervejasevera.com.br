@@ -2,21 +2,69 @@
 
 namespace Core\Model;
 
+use Core\Model\Utility\Conn;
+use Enum\Table;
 use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\Exception;
 
 class Email
 {
-  private static function getConfig(): object
+  /**
+   * Obter configuração do e-mail.
+   *
+   * @return object
+   */
+  public static function getConfig(): object
   {
-    return (object) [
-      'user' => 'no-reply@mrxweb.com.br',
-      'password' => '8{9v+#t0vX@{UC)Hxt',
-      'name' => 'No Reply',
-      'host' => 'mail.mrxweb.com.br',
-      'smtpPort' => '587',
-      'recipient' => 'comercial@mrxweb.com.br'
-    ];
+    $q = Conn::table(Table::CONFIGURATIONS)
+      ::select('`data`')
+      ::where('`key`', "'email' ")
+      ::send();
+
+    return !$q ? (object) []  : json_decode($q->fetch_row()[0]);
+  }
+
+  /**
+   * Atualizar configuração do e-mail.
+   *
+   * @param object $data
+   * @return boolean
+   */
+  public static function updateConfig(object $data): bool
+  {
+    $data = json_encode($data);
+
+    return (bool) Conn::table(Table::CONFIGURATIONS)
+      ::update(['data' => "'$data'"])
+      ::where('`key`', "'email'")
+      ::send();
+  }
+
+  public static function contactUs(string $name, string $phone, string $subject, string $text)
+  {
+    $message = "$text<br>
+        <hr>
+        <strong>Nome:</strong> $name<br>
+        <strong>Assunto:</strong> $subject<br>
+        <strong>Telefone:</strong> $phone";
+
+    self::send('CONTATO REALIZADO PELO SITE!!!', $message, self::getConfig()->recipient);
+  }
+
+  public static function sendApproveAccount(string $name, string $email)
+  {
+    $title = "Aprovar criação de conta!";
+    $message = "$name $email";
+
+    self::send($title, $message, self::getConfig()->recipient);
+  }
+
+  public static function sendRecoverPassword(string $email)
+  {
+    $title = "Recuperação de senha!";
+    $message = "";
+
+    self::send($title, $message, $email);
   }
 
   private static function send(string $subject, string $message, string $recipient, ?array $file = null)
@@ -60,32 +108,5 @@ class Email
       \Logger::log($e->getMessage());
       http_response_code(500);
     }
-  }
-
-  public static function contactUs(string $name, string $phone, string $subject, string $text)
-  {
-    $message = "$text<br>
-        <hr>
-        <strong>Nome:</strong> $name<br>
-        <strong>Assunto:</strong> $subject<br>
-        <strong>Telefone:</strong> $phone";
-
-    self::send('CONTATO REALIZADO PELO SITE!!!', $message, self::getConfig()->recipient);
-  }
-
-  public static function sendApproveAccount(string $name, string $email)
-  {
-    $title = "Aprovar criação de conta!";
-    $message = "$name $email";
-
-    self::send($title, $message, self::getConfig()->recipient);
-  }
-
-  public static function sendRecoverPassword(string $email)
-  {
-    $title = "Recuperação de senha!";
-    $message = "";
-
-    self::send($title, $message, $email);
   }
 }

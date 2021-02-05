@@ -31,10 +31,12 @@ if (TOKEN) {
   $checkIn = Auth::checkIn(TOKEN);
 
   define('ON', (bool) $checkIn);
-  define('ACCOUNT_ID', $checkIn);
+  define('ACCOUNT_ID', $checkIn->accountId);
+  define('ACCOUNT_TYPE', $checkIn->accountTypeId);
 } else {
   define('ON', false);
   define('ACCOUNT_ID', 0);
+  define('ACCOUNT_TYPE', 0);
 }
 
 require __DIR__ . '/server/Routers.php';

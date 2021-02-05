@@ -95,9 +95,10 @@ class Auth
    * @param string $token
    * @return int Retornar o id da conta da sessão ativa caso houver, se não null.
    */
-  public static function checkIn(string $token): ?int
+  public static function checkIn(string $token): ?object
   {
     $token = addslashes($token);
+    $r = (object) [];
 
     $q = Conn::table(Table::SESSIONS)
       ::select('accounts_id')
@@ -109,9 +110,21 @@ class Auth
       return null;
     }
 
-    $accountId = $q->fetch_row()[0];
+    $r->accountId = $q->fetch_row()[0];
 
-    Logger::auth(Logger::AUTH_CHECK_IN, $accountId);
-    return $accountId;
+    $q = Conn::table(Table::ACCOUNTS)
+      ::select('accounts_types_id')
+      ::where('id', $r->accountId)
+      ::send();
+
+    if (!$q) {
+      return null;
+    }
+
+    $r->accountTypeId = (int) $q->fetch_row()[0];
+
+
+    Logger::auth(Logger::AUTH_CHECK_IN, $r->accountId);
+    return $r;
   }
 }

@@ -202,7 +202,9 @@ class Field
       ::deleteWhere('id', $id)
       ::send();
 
-    return $q1 && $q2 && $q3;
+    $q4 = Module::removeFromViewOptionsListHeaders($moduleId, $key);
+
+    return $q1 && $q2 && $q3 && $q4;
   }
 
   /**
@@ -213,7 +215,7 @@ class Field
    */
   private static function getFieldClasOfTypeId(int $typeId): string
   {
-    $field = FieldType::get($typeId, ['key']);
+    $field = FieldType::get($typeId, ['`key`']);
     $fieldDir = null;
 
     if (!$field) {
