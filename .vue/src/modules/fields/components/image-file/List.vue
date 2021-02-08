@@ -54,7 +54,7 @@ v-dialog(
         )
           v-overlay(v-if="path === highlightedImage", absolute, opacity="0.2")
             v-icon(color="yellow", size="40") fas fa-star
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
+    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
   v-overlay(v-model="uploading")
     v-progress-circular.font-weight-bold.accent--text(
       :value="progress",
@@ -113,7 +113,7 @@ export default {
       return this.$rest("modules").item.id;
     },
     itemId() {
-      return this.$route.params.sub;
+      return this.$route.params.sub || 1;
     },
   },
   methods: {

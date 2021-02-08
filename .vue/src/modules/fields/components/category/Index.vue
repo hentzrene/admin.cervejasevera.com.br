@@ -2,8 +2,8 @@
 grid-item(col-end=2, col-end-sm=1)
   .d-flex
     v-select(
+      v-model="value_",
       :label="label",
-      :value="value",
       :name="name",
       :items="categoriesSelect",
       dense,
@@ -29,6 +29,7 @@ export default {
   },
   data: () => ({
     listDialog: false,
+    value_: null,
   }),
   computed: {
     moduleId() {
@@ -57,13 +58,21 @@ export default {
       return categories;
     },
   },
+  watch: {
+    value(v) {
+      this.value_ = v;
+    },
+  },
   created() {
     this.$rest("modulesCategories").get({
       params: {
         moduleId: this.moduleId,
-        fieldId: this.fieldId,
       },
+      keepCache: true,
     });
+  },
+  mounted() {
+    this.value_ = this.value;
   },
   mixins: [mixin],
   components: {

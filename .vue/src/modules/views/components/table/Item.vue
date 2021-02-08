@@ -8,13 +8,14 @@ module-template(
     v-form(ref="form")
       .table-module-add-form
         component(
-          v-for="({ id, name, key, typeKey }, i) in data.fields",
+          v-for="({ id, name, key, typeKey, options }, i) in data.fields",
           :value="item[key] || ''",
           :is="typeKey.toLowerCase() + 'field'",
           :label="name",
           :name="key",
           :key="i",
-          :field-id="parseInt(id)"
+          :field-id="parseInt(id)",
+          :field-options="options"
         )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) {{ isPublished ? 'Alterar' : 'Publicar' }}

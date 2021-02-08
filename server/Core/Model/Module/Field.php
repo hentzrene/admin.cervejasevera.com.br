@@ -59,12 +59,23 @@ class Field
         'name',
         '`key`',
         'type_id' => 'typeId',
-        'type_key' => 'typeKey'
+        'type_key' => 'typeKey',
+        'options'
       ])
       ::where('modules_key', "'$key'")
       ::send();
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    if (!$q) {
+      return [];
+    }
+
+    $fields = $q->fetch_all(MYSQLI_ASSOC);
+
+    foreach ($fields as $n => $f) {
+      $fields[$n]['options'] = json_decode($f['options']);
+    }
+
+    return $fields;
   }
 
   /**
@@ -101,8 +112,8 @@ class Field
 
     $q2 = Conn::table(Table::MODULES_FIELDS)
       ::insert(
-        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id'],
-        [$moduleId, "'$name'", "'$key'", $unique, $private, $type]
+        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id', 'options'],
+        [$moduleId, "'$name'", "'$key'", $unique, $private, $type, "'{}'"]
       )
       ::send();
 
@@ -136,14 +147,16 @@ class Field
   public static function setTypeId(int $id, int $value): bool
   {
     $fieldClassTo = self::getFieldClasOfTypeId($value);
-    $fieldClassFrom = self::getFieldClasOfTypeId($id);
 
     if (!$fieldClassTo) {
       throw new \Exception("Field não configurado corretamente no código fonte.");
     }
 
     $value = addslashes($value);
-    [$moduleId, $key] = self::get($id, ['modules_id', '`key`']);
+    [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id' => 'typeId']);
+
+    $fieldClassFrom = self::getFieldClasOfTypeId($typeId);
+
     $sqlType = FieldType::get($value, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);;
 
@@ -174,6 +187,25 @@ class Field
       ::send();
 
     return $q1 && $q2 && $q3;
+  }
+
+  /**
+   * Definir opção.
+   *
+   * @param integer $id
+   * @param string $option
+   * @param integer $value
+   * @return boolean
+   */
+  public static function setOption(int $id, string $option, int $value): bool
+  {
+    $option =addslashes($option);
+    $value = addslashes($value);
+
+    return (bool) Conn::table(Table::MODULES_FIELDS)
+      ::update(["options" => "JSON_SET(`options`, '$.$option', '$value')"])
+      ::where('id', $id)
+      ::send();
   }
 
   /**
@@ -225,7 +257,7 @@ class Field
     }
 
     if (!file_exists(SYSTEM_ROOT . "/server/Module/Field/$fieldDir/Model.php")) {
-      throw new \Exception("Model do field não configurado corretamente no código fonte.");
+      throw new \Exception("Model do field \"{$field[0]}\" não configurado corretamente no código fonte.");
     }
 
     return "Module\Field\\$fieldDir\Model";

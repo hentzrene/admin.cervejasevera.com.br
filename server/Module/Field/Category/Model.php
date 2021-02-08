@@ -10,15 +10,14 @@ class Model
   /**
    * Obter todas as categorias.
    *
-   * @param integer $fieldId
-   * @param integer $itemId
+   * @param integer $moduleId
    * @return array
    */
-  public static function getAllItems(int $fieldId): array
+  public static function getAllItems(int $moduleId): array
   {
-    $q = Conn::table(Table::CATEGORIES)
+    $q = Conn::table(Table::VM_CATEGORIES)
       ::select(['id', 'title', 'modules_fields_id' => 'fieldId'])
-      ::where('modules_fields_id', $fieldId)
+      ::where('modules_id', $moduleId)
       ::send();
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];

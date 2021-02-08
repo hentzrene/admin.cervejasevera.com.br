@@ -20,11 +20,11 @@ export default {
   }),
   watch: {
     value(val) {
-      this.value_ = !!val;
+      this.value_ = !!parseInt(val);
     },
   },
   created() {
-    this.value_ = !!this.value;
+    this.value_ = !!parseInt(this.value);
   },
   mixins: [mixin],
 };

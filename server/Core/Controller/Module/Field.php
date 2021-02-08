@@ -29,7 +29,7 @@ class Field
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelField::setName((int) $d['FieldId'], Req::get('value'));
+      ModelField::setName((int) $d['fieldId'], Req::get('value'));
       Response::set('status', 'success');
       Response::set('success', 'Nome alterado com sucesso.');
     }
@@ -43,7 +43,21 @@ class Field
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelField::setTypeId((int) $d['FieldId'], (int) Req::get('value'));
+      ModelField::setTypeId((int) $d['fieldId'], (int) Req::get('value'));
+      Response::set('status', 'success');
+      Response::set('success', 'Tipo alterado com sucesso.');
+    }
+
+    Response::send();
+  }
+
+  public function setOption($d)
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      ModelField::setOption((int) $d['fieldId'], Req::get('option'), (int) Req::get('value'));
       Response::set('status', 'success');
       Response::set('success', 'Tipo alterado com sucesso.');
     }
@@ -57,7 +71,7 @@ class Field
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelField::remove((int) $d['FieldId']);
+      ModelField::remove((int) $d['fieldId']);
       Response::set('status', 'success');
     }
     Response::send();

@@ -6,7 +6,7 @@ use Core\Model\Module\Module;
 use Core\Model\Utility\Response;
 use Core\Model\Utility\Request as Req;
 
-class File
+class Controller
 {
   public function getAllItems($d)
   {

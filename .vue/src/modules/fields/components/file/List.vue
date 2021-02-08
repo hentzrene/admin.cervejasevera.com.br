@@ -64,7 +64,7 @@ v-dialog(
           v-icon(small) fas fa-star
         v-btn(v-else, @click="highlight(item.id)", color="yellow", icon, small)
           v-icon(small) far fa-star
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum arquivo foi enviado.
+    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum arquivo foi enviado.
   v-overlay(v-model="uploading")
     v-progress-circular.font-weight-bold.accent--text(
       :value="progress",
@@ -135,7 +135,7 @@ export default {
       return this.$rest("modules").item.id;
     },
     itemId() {
-      return this.$route.params.sub;
+      return this.$route.params.sub || 1;
     },
   },
   methods: {

@@ -17,7 +17,7 @@ class Module
   public static function get(int $id): ?object
   {
     $permissions = Account::getPermissions(ACCOUNT_ID);
-    if (!in_array($id, $permissions)) {
+    if (ACCOUNT_TYPE !== 1 && !in_array($id, $permissions)) {
       return null;
     }
 
@@ -106,8 +106,6 @@ class Module
    */
   public static function getAll(): array
   {
-    $permissions = json_encode(Account::getPermissions(ACCOUNT_ID));
-
     $q = Conn::table(Table::VW_MODULES)
       ::select([
         'id',
@@ -118,9 +116,14 @@ class Module
         'view_key' => 'viewKey',
         'view_name' => 'viewName',
         'removable'
-      ])
-      ::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1)
-      ::send();
+      ]);
+
+    if (ACCOUNT_TYPE !== 1) {
+      $permissions = json_encode(Account::getPermissions(ACCOUNT_ID));
+      $q = $q::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1);
+    }
+
+    $q = $q::send();
 
     if (!$q) return [];
 
@@ -176,6 +179,8 @@ class Module
    */
   public static function isAllowed(int $id, int $accountId): bool
   {
+    if (ACCOUNT_TYPE === 1) return true;
+
     $permissions = Account::getPermissions($accountId);
     return in_array((string) $id, $permissions);
   }

@@ -26,7 +26,8 @@ class Account
     }
 
     $account = $q->fetch_object();
-    $account->permissions = self::getPermissions($id);
+
+    if ($account->type != 1) $account->permissions = self::getPermissions($id);
 
     return $account;
   }
@@ -266,15 +267,14 @@ class Account
    */
   private static function setPermissions(int $id, array $permissions): bool
   {
-    $permissions = array_map(function ($p) use ($id) {
-      return [$id, $p];
-    }, $permissions);
-
     Conn::table(Table::ACCOUNTS_PERMISSIONS)
       ::deleteWhere('accounts_id', $id)
       ::send();
 
     if (count($permissions)) {
+      $permissions = array_map(function ($p) use ($id) {
+        return [$id, $p];
+      }, $permissions);
 
       Conn::table(Table::ACCOUNTS_PERMISSIONS)
         ::insert(

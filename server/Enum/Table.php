@@ -28,6 +28,10 @@ class Table
 
   const SESSIONS = "sessions";
 
+  const SUBCATEGORIES = "subcategories";
+
+  const VM_CATEGORIES = "vw_categories";
+
   const VW_MODULES = "vw_modules";
 
   const VW_MODULES_FIELDS = "vw_modules_fields";

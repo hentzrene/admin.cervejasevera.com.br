@@ -2,7 +2,7 @@
 v-dialog(
   :value="value",
   @input="(data) => $emit('input', data)",
-  max-width="880px"
+  max-width="500px"
 )
   v-card.pa-4(dark)
     .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
@@ -23,7 +23,7 @@ v-dialog(
           depressed,
           small
         )
-          v-icon(left, small) fas fa-upload
+          v-icon(left, small) fas fa-plus
           span Adicionar
     v-data-table(
       :headers="headers",
@@ -53,7 +53,7 @@ v-dialog(
               single-line,
               counter
             )
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
+    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
   v-overlay(v-if="value", v-model="loading")
     v-progress-circular(:size="50", color="secondary", indeterminate)
   add(v-model="addDialog", :field-id="fieldId")
@@ -99,7 +99,7 @@ export default {
       return this.$rest("modules").item.id;
     },
     itemId() {
-      return this.$route.params.sub;
+      return this.$route.params.sub || 1;
     },
   },
   methods: {
@@ -140,11 +140,7 @@ export default {
             moduleId: this.moduleId,
           },
         })
-        .then(() =>
-          this.$parent.get().then(() => {
-            this.loading = false;
-          })
-        );
+        .then(() => (this.loading = false));
     },
   },
   components: {

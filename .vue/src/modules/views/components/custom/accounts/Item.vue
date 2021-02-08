@@ -22,7 +22,7 @@ module-template(title="Contas / Alterar", width="800px")
             dense
           )
       v-text-field(label="Senha", name="password", outlined, dense)
-      .d-flex.flex-wrap
+      .d-flex.flex-wrap(v-if="account.type != 1")
         v-checkbox.mx-2(
           v-for="({ id, name }, i) in modules",
           v-model="permissions",
@@ -85,7 +85,7 @@ export default {
     this.$rest("accounts")
       .get({ id: this.accountId })
       .then(({ permissions }) => {
-        this.permissions = permissions;
+        this.permissions = permissions || [];
       })
       .catch(() => this.$router.replace("/admin/accounts"));
   },

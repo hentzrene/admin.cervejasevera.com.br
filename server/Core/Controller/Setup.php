@@ -16,6 +16,7 @@ class Setup
     } else {
       Response::set('status', 'error');
       Response::set('error', 'Não foi possível configurar o banco de dados.');
+      Response::status(409);
     }
 
     Response::send();

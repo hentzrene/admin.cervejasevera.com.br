@@ -10,7 +10,7 @@ class Email
 {
   public function getConfig($d)
   {
-    if (!ON || ACCOUNT_TYPE !== 1) {
+    if (ACCOUNT_TYPE !== 1) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
@@ -22,7 +22,7 @@ class Email
 
   public function updateConfig()
   {
-    if (!ON || ACCOUNT_TYPE !== 1) {
+    if (ACCOUNT_TYPE !== 1) {
       Response::set('status', 'error');
       Response::status(401);
     } else {

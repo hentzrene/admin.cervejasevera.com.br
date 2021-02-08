@@ -157,7 +157,7 @@ class Model
   {
     $data = array_map(function ($v) {
       $v = addslashes($v);
-      return "'$v'";
+      return $v === '' ? 'NULL'  : "'$v'";
     }, (array) $data);
 
     $module = addslashes($module);

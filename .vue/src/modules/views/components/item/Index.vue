@@ -6,15 +6,16 @@ module-template(
 )
   v-card.pa-4.rounded-t-0(outlined, dark)
     v-form(ref="form")
-      .table-module-add-form
+      .item-module-add-form
         component(
-          v-for="({ id, name, key, typeKey }, i) in data.fields",
+          v-for="({ id, name, key, typeKey, options }, i) in data.fields",
           :value="item[key] || ''",
           :is="typeKey.toLowerCase() + 'field'",
           :label="name",
           :name="key",
           :key="i",
-          :field-id="parseInt(id)"
+          :field-id="parseInt(id)",
+          :field-options="options"
         )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) Alterar
@@ -55,6 +56,7 @@ export default {
     },
   },
   created() {
+    console.log(this.itemId);
     this.$rest(this.data.key)
       .get({ id: this.itemId })
       .catch(() => this.$router.replace("/admin"));
@@ -67,7 +69,7 @@ export default {
 </script>
 
 <style>
-.table-module-add-form {
+.item-module-add-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 16px;

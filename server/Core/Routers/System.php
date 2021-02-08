@@ -31,6 +31,7 @@ $router->get('/modules-fields-types', 'FieldType:getAll');
 $router->get('/modules-views', 'View:getAll');
 
 $router->post('/modules-fields', 'Field:add');
-$router->put('/modules-fields/{FieldId}/name', 'Field:setName');
-$router->put('/modules-fields/{FieldId}/type-id', 'Field:setTypeId');
-$router->delete('/modules-fields/{FieldId}', 'Field:remove');
+$router->put('/modules-fields/{fieldId}/name', 'Field:setName');
+$router->put('/modules-fields/{fieldId}/type-id', 'Field:setTypeId');
+$router->put('/modules-fields/{fieldId}/options', 'Field:setOption');
+$router->delete('/modules-fields/{fieldId}', 'Field:remove');
