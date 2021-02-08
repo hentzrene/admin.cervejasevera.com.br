@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  div
+  div.mb-4
     .d-flex.align-center.mb-2
       .white--text.font-weight-bold.text-body-1 Campos
       tooltip(tip="Adicionar", top)
@@ -14,34 +14,10 @@ div
           v-icon fas fa-plus
     field-list(
       v-if="data.fields && data.fields.length",
-      @changefieldkey="updateListHeaders",
       :items="data.fields",
       ref="fieldList"
     )
     .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
-  .mt-6.mb-4
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Cabeçalhos da lista
-    v-chip-group(v-model="listHeaders", column, multiple)
-      v-chip(
-        v-for="({ name, key }, i) in data.fields",
-        :value="key",
-        :key="i",
-        filter,
-        outlined
-      ) {{ name }}
-      v-btn(
-        @click="sendListHeaders",
-        :loading="sendingListHeaders",
-        color="secondary darken-1",
-        fab,
-        small,
-        depressed
-      )
-        v-icon fas fa-save
-    .pt-8.text-body-2.text-center.font-weight-bold.red--text(
-      v-if="noListHeaders"
-    ) Deve haver no mínimo um cabeçalho.
     add-field(v-model="addDialog", :types="fieldsTypes")
 </template>
 
@@ -59,8 +35,6 @@ export default {
     },
   },
   data: () => ({
-    noListHeaders: null,
-    sendingListHeaders: false,
     addDialog: false,
   }),
   computed: {
@@ -73,14 +47,7 @@ export default {
         value: id,
       }));
     },
-    listHeaders: {
-      get() {
-        return this.data.viewOptions.listHeaders;
-      },
-      set(v) {
-        this.data.viewOptions.listHeaders = v;
-      },
-    },
+
   },
   methods: {
     validate() {
@@ -88,36 +55,7 @@ export default {
 
       if (!fieldList) return false;
 
-      if (!this.listHeaders.length) this.noListHeaders = true;
-      else this.noListHeaders = false;
-
       return fieldList.validate();
-    },
-    updateListHeaders() {
-      for (let header of this.listHeaders) {
-        if (!this.fields.find(({ key }) => key === header)) {
-          this.listHeaders.splice(this.listHeaders.indexOf(header), 1);
-        }
-      }
-    },
-    sendListHeaders() {
-      this.sendingListHeaders = true;
-      this.$rest("modules")
-        .put({
-          id: this.moduleId,
-          data: {
-            value: { listHeaders: this.data.viewOptions.listHeaders },
-          },
-          prop: "viewOptions",
-        })
-        .finally(() => {
-          this.sendingListHeaders = false;
-        });
-    },
-  },
-  watch: {
-    listHeaders(v) {
-      if (v.length) this.noListHeaders = false;
     },
   },
   components: {

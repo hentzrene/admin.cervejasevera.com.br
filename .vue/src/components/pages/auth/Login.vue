@@ -22,7 +22,7 @@ export default {
     loading: false,
   }),
   created() {
-    if (this.$auth.on) this.$router.replace("/admin");
+    if (this.$auth.on) this.$router.replace("/");
   },
   methods: {
     send(data) {
@@ -31,7 +31,7 @@ export default {
         .login(data)
         .then((data) => {
           this.$store.dispatch("setInfoUser", data);
-          this.$router.push("/admin");
+          this.$router.push("/");
         })
         .finally(() => (this.loading = false));
     },

@@ -55,7 +55,7 @@ export default {
     },
     async renderModule() {
       if (!this.module) {
-        this.$router.push("/admin/error404");
+        this.$router.push("/error404");
         return;
       } else {
         await this.$rest("modules").get({ id: this.module.id });

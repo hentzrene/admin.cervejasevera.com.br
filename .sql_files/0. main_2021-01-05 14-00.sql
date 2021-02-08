@@ -10,6 +10,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+CREATE TABLE IF NOT EXISTS `accounts_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `alteredAt` timestamp NULL DEFAULT NULL,
+  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -24,6 +32,30 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   CONSTRAINT `accounts_accounts_types_id` FOREIGN KEY (`accounts_types_id`) REFERENCES `accounts_types` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `modules_views` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `modules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `icon` varchar(255) NOT NULL,
+  `modules_views_id` int(11) DEFAULT NULL,
+  `view_options` json DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `removable` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`),
+  KEY `modules_modules_views_id` (`modules_views_id`),
+  CONSTRAINT `modules_modules_views_id` FOREIGN KEY (`modules_views_id`) REFERENCES `modules_views` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `accounts_permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `accounts_id` int(11) NOT NULL,
@@ -35,12 +67,31 @@ CREATE TABLE IF NOT EXISTS `accounts_permissions` (
   CONSTRAINT `accounts_permissions_modules_id` FOREIGN KEY (`modules_id`) REFERENCES `modules` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `accounts_types` (
+CREATE TABLE IF NOT EXISTS `modules_fields_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `alteredAt` timestamp NULL DEFAULT NULL,
-  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `key` varchar(255) NOT NULL,
+  `sql_type` varchar(255) NOT NULL,
+  `active` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `name` (`name`) USING BTREE,
+  UNIQUE KEY `key` (`key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `modules_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `modules_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `unique` tinyint(1) NOT NULL DEFAULT '0',
+  `private` tinyint(1) NOT NULL DEFAULT '0',
+  `modules_fields_types_id` int(11) NOT NULL,
+  `options` json NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `modules_id_key` (`modules_id`,`key`),
+  KEY `modules_fields_modules_fields_types_id` (`modules_fields_types_id`),
+  CONSTRAINT `modules_fields_modules_fields_types_id` FOREIGN KEY (`modules_fields_types_id`) REFERENCES `modules_fields_types` (`id`),
+  CONSTRAINT `modules_modules_id` FOREIGN KEY (`modules_id`) REFERENCES `modules` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -78,57 +129,6 @@ CREATE TABLE IF NOT EXISTS `images` (
   KEY `image_modules_fields_id` (`modules_fields_id`),
   CONSTRAINT `image_modules_fields_id` FOREIGN KEY (`modules_fields_id`) REFERENCES `modules_fields` (`id`)  ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `image_modules_id` FOREIGN KEY (`modules_id`) REFERENCES `modules` (`id`)  ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `modules` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `icon` varchar(255) NOT NULL,
-  `modules_views_id` int(11) DEFAULT NULL,
-  `view_options` json DEFAULT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '1',
-  `removable` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`),
-  KEY `modules_modules_views_id` (`modules_views_id`),
-  CONSTRAINT `modules_modules_views_id` FOREIGN KEY (`modules_views_id`) REFERENCES `modules_views` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `modules_fields` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `modules_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `unique` tinyint(1) NOT NULL DEFAULT '0',
-  `private` tinyint(1) NOT NULL DEFAULT '0',
-  `modules_fields_types_id` int(11) NOT NULL,
-  `options` json NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `modules_id_key` (`modules_id`,`key`),
-  KEY `modules_fields_modules_fields_types_id` (`modules_fields_types_id`),
-  CONSTRAINT `modules_fields_modules_fields_types_id` FOREIGN KEY (`modules_fields_types_id`) REFERENCES `modules_fields_types` (`id`),
-  CONSTRAINT `modules_modules_id` FOREIGN KEY (`modules_id`) REFERENCES `modules` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `modules_fields_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `sql_type` varchar(255) NOT NULL,
-  `active` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `name` (`name`) USING BTREE,
-  UNIQUE KEY `key` (`key`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE IF NOT EXISTS `modules_views` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `key` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `sessions` (

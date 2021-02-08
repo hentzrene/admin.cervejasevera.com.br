@@ -29,6 +29,7 @@ Vue.mixin({
     ...config
   })
 });
+console.log("Ok");
 
 new Vue({
   router,

@@ -22,7 +22,7 @@ export default {
     loading: false,
   }),
   created() {
-    if (this.$auth.on || this.installed) this.$router.replace("/admin");
+    if (this.$auth.on || this.installed) this.$router.replace("/");
   },
   methods: {
     send(data) {
@@ -31,7 +31,7 @@ export default {
         .post({ data })
         .then(() => {
           this.installed = true;
-          this.$router.push("/admin/entrar");
+          this.$router.push("/entrar");
         })
         .finally(() => (this.loading = false));
     },

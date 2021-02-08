@@ -4,7 +4,7 @@ export default {
   routes: [
     {
       name: "{name} / Alterar",
-      path: `/admin/{key}`,
+      path: `/{key}`,
       component: Index
     }
   ]

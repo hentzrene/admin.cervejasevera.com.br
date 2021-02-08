@@ -5,12 +5,12 @@ export default {
   routes: [
     {
       name: "{name}",
-      path: `/admin/{key}`,
+      path: `/{key}`,
       component: List
     },
     {
       name: "{name} / Alterar",
-      path: `/admin/{key}/:sub`,
+      path: `/{key}/:sub`,
       component: Item
     }
   ]

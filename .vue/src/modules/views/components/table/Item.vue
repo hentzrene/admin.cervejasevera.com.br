@@ -56,14 +56,14 @@ export default {
 
         this.$rest(this.data.key)
           .put({ id: this.itemId, data })
-          .then(() => this.$router.push(`/admin/${this.data.key}`));
+          .then(() => this.$router.push(`/${this.data.key}`));
       }
     },
   },
   created() {
     this.$rest(this.data.key)
       .get({ id: this.itemId })
-      .catch(() => this.$router.replace("/admin/" + this.data.key));
+      .catch(() => this.$router.replace("/" + this.data.key));
   },
   components: {
     ModuleTemplate,

@@ -1,9 +1,7 @@
 <template lang="pug">
 v-app
   template(v-if="!checking")
-    main-nav(
-      v-if="!['/admin/error404', '/admin/entrar', '/admin/setup'].includes($route.path)"
-    )
+    main-nav(v-if="!['/error404', '/entrar', '/setup'].includes($route.path)")
     v-main
       router-view
   v-sheet.d-flex.justify-center.align-center(
@@ -62,8 +60,7 @@ export default {
   },
   created() {
     if (!this.installed) {
-      if (this.$route.path !== "/admin/setup")
-        this.$router.replace(`/admin/setup`);
+      if (this.$route.path !== "/setup") this.$router.replace(`/setup`);
 
       this.checking = false;
     } else if (!this.$auth.on) {
@@ -77,13 +74,13 @@ export default {
           .checkIn()
           .then((data) => {
             this.$store.dispatch("setInfoUser", data);
-            if (login) this.$router.replace(`/admin`);
+            if (login) this.$router.replace(`/`);
           })
-          .catch(() => !login && this.$router.replace(`/admin/entrar`))
+          .catch(() => !login && this.$router.replace(`/entrar`))
           .finally(() => (this.checking = false));
       } else if (!login) {
         this.checking = false;
-        this.$router.replace(`/admin/entrar`);
+        this.$router.replace(`/entrar`);
       } else {
         this.checking = false;
       }

@@ -4,14 +4,15 @@ v-sheet.mx-auto.pa-4.d-flex.align-center(
   max-width="480px",
   height="100%"
 )
-  grid-list(col-width="100px", gap="16px")
+  div(v-if="!modules.length").pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto Nenhum módulo adicionado.
+  grid-list(v-else col-width="100px", gap="16px")
     v-responsive(
       v-for="({ name, icon, key }, i) in modules",
       :aspect-ratio="1",
       :key="i",
       width="100px"
     )
-      module-card(:to="'/admin/' + key", :title="name", :icon="icon")
+      module-card(:to="'/' + key", :title="name", :icon="icon")
 </template>
 
 <script>

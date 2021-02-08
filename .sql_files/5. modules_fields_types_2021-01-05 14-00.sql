@@ -12,5 +12,5 @@ INSERT INTO `modules_fields_types` (`id`, `name`, `key`, `sql_type`, `active`) V
 	(10, 'Subcategoria', 'subcategory', 'INT', 1),
 	(11, 'URL', 'url', 'VARCHAR(255)', 0),
 	(12, 'Sim/Não', 'switchBoolean', 'INT(1)', 1),
-	(12, 'Apenas Leitura', 'readOnly', 'VARCHAR(255)', 1);
+	(13, 'Apenas Leitura', 'readOnly', 'VARCHAR(255)', 1);
 /*!40000 ALTER TABLE `modules_fields_types` ENABLE KEYS */;

@@ -23,9 +23,20 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           h4 {{ user.name }}
           p.caption.mt-1 {{ user.email }}
           v-divider
+          v-btn.text-none(
+            @click="$router.push('/accounts') && (menu = false)",
+            color="white",
+            depressed,
+            text,
+            block,
+            tile
+          )
+            v-icon(left) fas fa-users
+            span Contas
+          v-divider
           template(v-if="user.type == 1")
             v-btn.text-none(
-              @click="$router.push('/admin/modules') && (menu = false)",
+              @click="$router.push('/modules') && (menu = false)",
               color="white",
               depressed,
               text,
@@ -36,7 +47,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               span Módulos
             v-divider
             v-btn.text-none(
-              @click="$router.push('/admin/email') && (menu = false)",
+              @click="$router.push('/email') && (menu = false)",
               color="white",
               depressed,
               text,
@@ -86,7 +97,7 @@ export default {
       this.loading = true;
       this.$auth
         .logout()
-        .then(() => this.$router.push("/admin/entrar"))
+        .then(() => this.$router.push("/entrar"))
         .finally(() => (this.loading = false));
     },
   },

@@ -6,6 +6,9 @@ import Setup from "@/components/pages/Setup";
 import ModuleList from "@/components/pages/modules/List.vue";
 import ModuleAdd from "@/components/pages/modules/Add.vue";
 import ModuleEdit from "@/components/pages/modules/Edit.vue";
+import AccountList from "@/components/pages/account/List.vue";
+import AccountAdd from "@/components/pages/account/Add.vue";
+import AccountItem from "@/components/pages/account/Item.vue";
 import Email from "@/components/pages/Email.vue";
 import Error404 from "@/components/pages/Error404.vue";
 import Module from "@/modules/Index.vue";
@@ -16,63 +19,74 @@ const name = "Painel de Administração";
 
 const routes = [
   {
-    path: "/",
-    redirect: "/admin"
-  },
-  {
     name,
-    path: "/admin",
+    path: "/",
     component: Home
   },
   {
     name: "E-mail",
-    path: `/admin/email`,
+    path: `/email`,
     component: Email
   },
   {
     name: "Módulos",
-    path: `/admin/modules`,
+    path: `/modules`,
     component: ModuleList
   },
   {
     name: "Adicionar módulo",
-    path: `/admin/modules/adicionar`,
+    path: `/modules/adicionar`,
     component: ModuleAdd
   },
   {
     name: "Alterar módulo",
-    path: `/admin/modules/:module`,
+    path: `/modules/:module`,
     component: ModuleEdit
   },
   {
+    name: "Contas",
+    path: "/accounts",
+    component: AccountList
+  },
+  {
+    name: "Adicionar conta",
+    path: "/accounts/adicionar",
+    component: AccountAdd
+  },
+  {
+    name: "Alterar conta",
+    path: "/accounts/:account",
+    component: AccountItem
+  },
+  {
     name: `Instalar - ${name}`,
-    path: "/admin/setup",
+    path: "/setup",
     component: Setup
   },
   {
     name: `Entrar - ${name}`,
-    path: "/admin/entrar",
+    path: "/entrar",
     component: Login
   },
   {
     name: "Error404",
-    path: "/admin/error404",
+    path: "/error404",
     component: Error404
   },
   {
     name: `Módulo - ${name}`,
-    path: "/admin/:module",
+    path: "/:module",
     component: Module
   },
   {
     name: `Módulo - ${name}`,
-    path: "/admin/:module/:sub",
+    path: "/:module/:sub",
     component: Module
   },
   {
     path: "*",
     beforeEnter: (to, from, next) => {
-      next("/admin/error404");
+      next("/error404");
     }
   }
 ];

@@ -64,7 +64,7 @@ export default {
         data.permissions = this.permissions;
         this.$rest("accounts")
           .post({ data })
-          .then(() => this.$router.push("/admin/accounts"));
+          .then(() => this.$router.push("/accounts"));
       }
     },
   },

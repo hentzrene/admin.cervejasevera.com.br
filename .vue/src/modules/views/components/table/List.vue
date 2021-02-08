@@ -166,7 +166,7 @@ export default {
             }
           },
         })
-        .catch(() => this.$router.replace("/admin"))
+        .catch(() => this.$router.replace("/"))
         .finally(() => (this.loading = false));
     },
     add() {

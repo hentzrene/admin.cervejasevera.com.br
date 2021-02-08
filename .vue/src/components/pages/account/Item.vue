@@ -73,7 +73,7 @@ export default {
               this.$store.dispatch("setInfoUser", this.$rest("accounts").item);
             }
             this.$rest("modules").get();
-            this.$router.push("/admin/accounts");
+            this.$router.push("/accounts");
           });
       }
     },
@@ -87,7 +87,7 @@ export default {
       .then(({ permissions }) => {
         this.permissions = permissions || [];
       })
-      .catch(() => this.$router.replace("/admin/accounts"));
+      .catch(() => this.$router.replace("/accounts"));
   },
   components: {
     ModuleTemplate,

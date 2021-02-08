@@ -51,15 +51,14 @@ export default {
 
         this.$rest(this.data.key)
           .put({ id: this.itemId, data })
-          .then(() => this.$router.push("/admin"));
+          .then(() => this.$router.push("/"));
       }
     },
   },
   created() {
-    console.log(this.itemId);
     this.$rest(this.data.key)
       .get({ id: this.itemId })
-      .catch(() => this.$router.replace("/admin"));
+      .catch(() => this.$router.replace("/"));
   },
   components: {
     ModuleTemplate,

@@ -103,7 +103,7 @@ export default {
             ...view.data,
           },
         })
-        .then(() => this.$router.push("/admin/modules"))
+        .then(() => this.$router.push("/modules"))
         .finally(() => {
           this.loading = false;
         });

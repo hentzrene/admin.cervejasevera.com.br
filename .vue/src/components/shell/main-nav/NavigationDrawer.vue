@@ -14,32 +14,34 @@ v-navigation-drawer(
     router-link.white--text.h-100(to="/")
       img.logo(src="/admin/img/logo.svg", contain)
   v-divider
-  v-list-item-group.mt-2(v-model="current")
-    v-list(dense, nav)
-      template(v-for="({ text, to, icon, items }, i) in nav")
-        v-list-item(v-if="!items", :key="i", :to="to", link)
-          v-list-item-icon
-            v-icon {{ icon }}
-          v-list-item-content
-            v-list-item-title.body-2 {{ text }}
-        v-list-group(
-          v-else,
-          :key="i",
-          :prepend-icon="icon",
-          no-action,
-          color="black"
-        )
-          template(v-slot:activator)
-            v-list-item.pa-0
-              v-list-item-title.body-2 {{ text }}
-          v-list-item(
-            v-for="({ to, text }, i) in items",
-            :key="i",
-            :to="to",
-            link
-          )
+  div(v-if="!modules.length").pa-2.mx-2.mt-10.white--text.font-weight-bold.primary.rounded-pill.text-body-2.text-center Nenhum módulo adicionado.
+  template(v-else)
+    v-list-item-group.mt-2(v-model="current")
+      v-list(dense, nav)
+        template(v-for="({ text, to, icon, items }, i) in nav")
+          v-list-item(v-if="!items", :key="i", :to="to", link)
+            v-list-item-icon
+              v-icon {{ icon }}
             v-list-item-content
               v-list-item-title.body-2 {{ text }}
+          v-list-group(
+            v-else,
+            :key="i",
+            :prepend-icon="icon",
+            no-action,
+            color="black"
+          )
+            template(v-slot:activator)
+              v-list-item.pa-0
+                v-list-item-title.body-2 {{ text }}
+            v-list-item(
+              v-for="({ to, text }, i) in items",
+              :key="i",
+              :to="to",
+              link
+            )
+              v-list-item-content
+                v-list-item-title.body-2 {{ text }}
 </template>
 
 <script>
@@ -56,7 +58,7 @@ export default {
     nav() {
       return this.modules.map(({ name, key, icon }) => ({
         text: name,
-        to: "/admin/" + key,
+        to: "/" + key,
         icon,
       }));
     },
