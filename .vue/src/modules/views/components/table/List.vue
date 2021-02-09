@@ -140,6 +140,7 @@ export default {
 
             const formatForDisplay_ = await formatForDisplay;
 
+            this.items = [];
             for (let item of list) {
               const item_ = {};
 

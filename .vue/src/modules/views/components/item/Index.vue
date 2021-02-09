@@ -57,7 +57,7 @@ export default {
   },
   created() {
     this.$rest(this.data.key)
-      .get({ id: this.itemId })
+      .get({ save: (state, data) => (state.item = data) })
       .catch(() => this.$router.replace("/"));
   },
   components: {
@@ -70,7 +70,7 @@ export default {
 <style>
 .item-module-add-form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, calc(50% - 16px / 2));
   column-gap: 16px;
   grid-auto-flow: dense;
 }

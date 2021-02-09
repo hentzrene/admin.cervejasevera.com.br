@@ -4,6 +4,7 @@ namespace Module\View\Item;
 
 use Core\Model\Utility\Conn;
 use Core\Model\Module\Field;
+use Core\Model\Utility\Request as Req;
 
 class Model
 {
@@ -14,11 +15,30 @@ class Model
    * @param integer $id
    * @return object
    */
-  public static function get(string $module): object
+  public static function get(string $module, bool $onlyPublic = false): object
   {
+    $fields = [];
+
+    if (!$onlyPublic) {
+      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
+    } else {
+      $publicFields = Field::getAllPublics($module);
+      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
+
+      if ($requestedFields) {
+        foreach ($requestedFields as $field) {
+          if (in_array($field, $publicFields)) {
+            $fields[] = $field;
+          }
+        }
+      } else {
+        $fields = $publicFields;
+      }
+    }
+
     $module = addslashes($module);
     $q = Conn::table("mod_$module")
-      ::select()
+      ::select($fields)
       ::where('id', 1)
       ::send();
 

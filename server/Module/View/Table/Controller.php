@@ -9,8 +9,7 @@ class Controller
   public static function get(string $module, int $moduleItem)
   {
     if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
+      Response::rawBody(Model::get($module, $moduleItem, true));
     } else {
       Response::rawBody(Model::get($module, $moduleItem));
     }

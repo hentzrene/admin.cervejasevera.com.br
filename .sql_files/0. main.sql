@@ -162,6 +162,25 @@ CREATE TABLE IF NOT EXISTS `configurations` (
   UNIQUE KEY `key` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `mod_informations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `alteredAt` timestamp NULL DEFAULT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `share` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `keywords` varchar(300) DEFAULT NULL,
+  `tel` varchar(255) DEFAULT NULL,
+  `whatsapp` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `facebook` varchar(255) DEFAULT NULL,
+  `instagram` varchar(255) DEFAULT NULL,
+  `youtube` varchar(255) DEFAULT NULL,
+  `local` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- Criando tabela temporária para evitar erros de dependência de VIEW
 CREATE TABLE `vw_modules` (
 	`id` INT(11) NOT NULL,

@@ -1,16 +1,16 @@
 <template lang="pug">
 v-sheet.mx-auto.pa-4.d-flex.align-center(
   color="transparent",
-  max-width="480px",
+  max-width="960px",
   height="100%"
-)
+).mt-9
   div(v-if="!modules.length").pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto Nenhum módulo adicionado.
-  grid-list(v-else col-width="100px", gap="16px")
+  grid-list(v-else col-width="150px", gap="16px").py-4
     v-responsive(
       v-for="({ name, icon, key }, i) in modules",
       :aspect-ratio="1",
       :key="i",
-      width="100px"
+      width="150px"
     )
       module-card(:to="'/' + key", :title="name", :icon="icon")
 </template>

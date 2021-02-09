@@ -5,9 +5,13 @@ namespace Module\Field\ImageFile;
 use Core\Model\Utility\Conn;
 use Enum\Table;
 use Intervention\Image\ImageManager as Img;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter as Local;
 
 class Model
 {
+  const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
+
   /**
    * Obter todas as imagens.
    *
@@ -37,8 +41,8 @@ class Model
    */
   public static function addItem(int $moduleId, int $fieldId, int $itemId, array $file): ?object
   {
-    $manager = new Img(array('driver' => 'gd'));
-    $make = $manager->make($file['tmp_name']);
+    $path = '';
+    $ext = pathinfo($file['name'])['extension'];
 
     if (!is_dir(SYSTEM_ROOT . '/upload')) {
       mkdir(SYSTEM_ROOT . '/upload', 0755);
@@ -50,8 +54,25 @@ class Model
       mkdir(SYSTEM_ROOT . "/upload/$moduleId/$itemId", 0755);
     }
 
-    $path = "/upload/$moduleId/$itemId/" . dechex(time()) . bin2hex(random_bytes(5)) . '.png';
-    $make->save(SYSTEM_ROOT . $path);
+    if (in_array(mime_content_type($file['tmp_name']), self::CONVERT_MIME_TYPES)) {
+      $manager = new Img(array('driver' => 'gd'));
+      $make = $manager->make($file['tmp_name']);
+
+      $path = "/upload/$moduleId/$itemId/" . dechex(time()) . bin2hex(random_bytes(5)) . ".$ext";
+      $make->save(SYSTEM_ROOT . $path);
+    } else {
+      $adapter = new Local(SYSTEM_ROOT);
+      $filesystem = new Filesystem($adapter);
+
+      $path = "/upload/$moduleId/$itemId/" . dechex(time()) . bin2hex(random_bytes(5)) . ".$ext";
+      $stream = fopen($file['tmp_name'], 'r+');
+
+      $filesystem->writeStream($path, $stream);
+
+      if (is_resource($stream)) {
+        fclose($stream);
+      }
+    }
 
     $q = Conn::table(Table::IMAGES)
       ::insert(

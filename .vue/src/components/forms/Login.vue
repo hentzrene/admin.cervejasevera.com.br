@@ -13,9 +13,11 @@ v-form(ref="form")
   )
   v-text-field(
     @keydown.enter="send",
+    @click:append="show = !show"
     :rules="[rules.required]",
     :loading="loading",
-    type="password",
+    :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+    :type="show ? 'text' : 'password'"
     label="Senha",
     name="password",
     dense,
@@ -49,6 +51,7 @@ export default {
       required,
       email,
     },
+    show: false
   }),
   methods: {
     send() {
@@ -63,4 +66,8 @@ export default {
 </script>
 
 <style>
+.v-input__icon.v-input__icon--append button::before {
+  font-size: 20px !important;
+
+}
 </style>

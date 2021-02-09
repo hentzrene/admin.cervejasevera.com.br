@@ -27,7 +27,7 @@ v-dialog(
           v-icon(left, small) fas fa-trash
           span Remover
         v-btn.text-none(
-          @click="$refs.file.$refs.input.click()",
+          @click="$refs.imageFileLabel.click()",
           color="secondary",
           depressed,
           small
@@ -65,12 +65,13 @@ v-dialog(
     ) {{ progress }}%
   v-overlay(v-model="loading")
     v-progress-circular(:size="50", color="secondary", indeterminate)
-  v-text-field.ma-0.pa-0(
-    v-model="file",
-    :name="inputName",
-    ref="file",
+  label(for="imageFileInput", ref="imageFileLabel")
+  input#imageFileInput.ma-0.pa-0(
+    @input="upload",
+    :value="file",
+    ref="imageFileInput",
     type="file",
-    accept="image/png, image/jpeg, image/gif, image/webp",
+    accept="image/*",
     multiple,
     hide-details,
     hidden
@@ -164,10 +165,8 @@ export default {
             })
         );
     },
-  },
-  watch: {
-    async file() {
-      const files = this.$refs.file.$refs.input.files,
+    async upload({ target }) {
+      const files = target.files,
         onUploadProgress = ({ loaded, total }) =>
           (this.progress = new Intl.NumberFormat("pt-BR", {
             maximumFractionDigits: 0,
@@ -175,26 +174,28 @@ export default {
 
       this.uploading = true;
 
-      for (const file of files) {
-        await this.$rest("modulesImages")
-          .upload({
-            file,
-            prop: "image",
-            params: {
-              itemId: this.itemId,
-              moduleId: this.moduleId,
-              fieldId: this.fieldId,
-            },
-            onUploadProgress,
-          })
-          .then(({ file, id }) => {
-            this.progress = 0;
-            this.imgs.push({ path: file, id });
-          });
-      }
-
-      this.$refs.file.$refs.input.value = "";
-      this.uploading = false;
+      Promise.all(
+        Array.from(files).map((file) =>
+          this.$rest("modulesImages")
+            .upload({
+              file,
+              prop: "image",
+              params: {
+                itemId: this.itemId,
+                moduleId: this.moduleId,
+                fieldId: this.fieldId,
+              },
+              onUploadProgress,
+            })
+            .then(({ file, id }) => {
+              this.progress = 0;
+              this.imgs.push({ path: file, id });
+            })
+        )
+      ).then(() => {
+        this.$refs.imageFileInput.value = "";
+        this.uploading = false;
+      });
     },
   },
   created() {

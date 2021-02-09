@@ -75,7 +75,7 @@ export default {
 <style>
 .table-module-add-form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, calc(50% - 16px / 2));
   column-gap: 16px;
   grid-auto-flow: dense;
 }

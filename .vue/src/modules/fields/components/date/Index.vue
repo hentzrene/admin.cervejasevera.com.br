@@ -17,7 +17,7 @@ import { toDateTimeHTML } from "@/components/filters.js";
 
 export default {
   filters: {
-    toDateTimeHTML: (str) => toDateTimeHTML(new Date(str || null)),
+    toDateTimeHTML: (str) => toDateTimeHTML(new Date(str || Date.now())),
   },
   mixins: [mixin],
 };

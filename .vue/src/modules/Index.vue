@@ -95,6 +95,9 @@ export default {
     async sub() {
       await this.get();
     },
+    async $route() {
+      await this.renderModule();
+    },
   },
   async created() {
     await this.get();

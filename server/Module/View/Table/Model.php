@@ -18,11 +18,32 @@ class Model
    * @param integer $id
    * @return object
    */
-  public static function get(string $module, int $id): object
+  public static function get(string $module, int $id, bool $onlyPublic = false): object
   {
     $module = addslashes($module);
+
+    $fields = [];
+
+    if (!$onlyPublic) {
+      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
+    } else {
+      $publicFields = Field::getAllPublics($module);
+      array_unshift($publicFields, 'id');
+      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
+
+      if ($requestedFields) {
+        foreach ($requestedFields as $field) {
+          if (in_array($field, $publicFields)) {
+            $fields[] = $field;
+          }
+        }
+      } else {
+        $fields = $publicFields;
+      }
+    }
+
     $q = Conn::table("mod_$module")
-      ::select()
+      ::select($fields)
       ::where('id', $id)
       ::send();
 

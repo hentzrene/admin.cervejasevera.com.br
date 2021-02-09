@@ -6,11 +6,10 @@ use Core\Model\Utility\Response;
 
 class Controller
 {
-  public static function getAll(string $module, int $moduleItem)
+  public static function getAll(string $module)
   {
     if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
+      Response::rawBody(Model::get($module, true));
     } else {
       Response::rawBody(Model::get($module));
     }
