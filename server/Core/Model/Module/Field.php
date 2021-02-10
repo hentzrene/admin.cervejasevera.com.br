@@ -92,7 +92,7 @@ class Field
     $unique = (int) $data->unique;
     $private = (int) $data->private;
     $type = (int) $data->type;
-    $fieldClass = self::getFieldClasOfTypeId($type);
+    $fieldClass = self::getFieldClassOfTypeId($type);
 
     $sqlType = FieldType::get($type, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);
@@ -146,7 +146,7 @@ class Field
    */
   public static function setTypeId(int $id, int $value): bool
   {
-    $fieldClassTo = self::getFieldClasOfTypeId($value);
+    $fieldClassTo = self::getFieldClassOfTypeId($value);
 
     if (!$fieldClassTo) {
       throw new \Exception("Field não configurado corretamente no código fonte.");
@@ -155,7 +155,7 @@ class Field
     $value = addslashes($value);
     [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id' => 'typeId']);
 
-    $fieldClassFrom = self::getFieldClasOfTypeId($typeId);
+    $fieldClassFrom = self::getFieldClassOfTypeId($typeId);
 
     $sqlType = FieldType::get($value, ['sql_type'])[0];
     $moduleKey = Module::getKeyById($moduleId);;
@@ -199,7 +199,7 @@ class Field
    */
   public static function setOption(int $id, string $option, int $value): bool
   {
-    $option =addslashes($option);
+    $option = addslashes($option);
     $value = addslashes($value);
 
     return (bool) Conn::table(Table::MODULES_FIELDS)
@@ -218,7 +218,7 @@ class Field
   {
     [$moduleId, $key, $typeId] = self::get($id, ['modules_id', '`key`', 'modules_fields_types_id']);
     $moduleKey = Module::getKeyById($moduleId);
-    $fieldClass = self::getFieldClasOfTypeId($typeId);
+    $fieldClass = self::getFieldClassOfTypeId($typeId);
 
     $q1 = null;
 
@@ -245,7 +245,7 @@ class Field
    * @param integer $typeId
    * @return string
    */
-  private static function getFieldClasOfTypeId(int $typeId): string
+  private static function getFieldClassOfTypeId(int $typeId): string
   {
     $field = FieldType::get($typeId, ['`key`']);
     $fieldDir = null;
@@ -261,5 +261,25 @@ class Field
     }
 
     return "Module\Field\\$fieldDir\Model";
+  }
+
+  /**
+   * Obter id do campo por id do módulo e sua chave.
+   *
+   * @param integer $moduleId
+   * @param string $key
+   * @return void
+   */
+  public static function getId(int $moduleId, string $key): ?int
+  {
+    $key = addslashes($key);
+
+    $q =  Conn::table(Table::MODULES_FIELDS)
+      ::select(['id'])
+      ::where('modules_id', $moduleId)
+      ::and('`key`', "'$key'")
+      ::send();
+
+    return $q ? $q->fetch_row()[0] : null;
   }
 }

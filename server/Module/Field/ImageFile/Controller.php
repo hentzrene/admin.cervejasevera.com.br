@@ -2,6 +2,7 @@
 
 namespace Module\Field\ImageFile;
 
+use Core\Model\Module\Field;
 use Core\Model\Module\Module;
 use Core\Model\Utility\Response;
 use Core\Model\Utility\Request as Req;
@@ -10,17 +11,22 @@ class Controller
 {
   public function getAllItems($d)
   {
-    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
-      Response::set('status', 'error');
-      Response::status(401);
-    } else {
-      Response::rawBody(
-        Model::getAllItems(
-          (int) Req::get('fieldId'),
-          (int) $d['itemId']
-        )
-      );
+    $fieldId = Req::get('fieldId');
+    if (!$fieldId) {
+      $fieldKey = Req::get('fieldKey');
+      $moduleKey = Req::get('moduleKey');
+      if ($moduleKey) {
+        $moduleId = Module::getIdByKey($moduleKey);
+        if ($moduleId) $fieldId = Field::getId($moduleId, $fieldKey);
+      }
     }
+
+    Response::rawBody(
+      Model::getAllItems(
+        (int) $fieldId,
+        (int) $d['itemId']
+      )
+    );
 
     Response::send();
   }
