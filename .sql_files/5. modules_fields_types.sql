@@ -7,7 +7,7 @@ INSERT INTO `modules_fields_types` (`id`, `name`, `key`, `sql_type`, `active`) V
 	(5, 'Data', 'date', 'DATETIME', 1),
 	(6, 'Texto Médio', 'mediumText', 'VARCHAR(300)', 1),
 	(7, 'Texto Grande', 'bigText', 'TEXT', 1),
-	(8, 'Image', 'imageFile', 'VARCHAR(255)', 1),
+	(8, 'Imagem', 'imageFile', 'VARCHAR(255)', 1),
 	(9, 'Arquivo', 'file', 'VARCHAR(255)', 1),
 	(10, 'Subcategoria', 'subcategory', 'INT', 1),
 	(11, 'URL', 'url', 'VARCHAR(255)', 0),

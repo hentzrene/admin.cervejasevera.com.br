@@ -10,6 +10,7 @@ import AccountList from "@/components/pages/account/List.vue";
 import AccountAdd from "@/components/pages/account/Add.vue";
 import AccountItem from "@/components/pages/account/Item.vue";
 import Email from "@/components/pages/Email.vue";
+import Informations from "@/components/pages/Informations.vue";
 import Error404 from "@/components/pages/Error404.vue";
 import Module from "@/modules/Index.vue";
 
@@ -24,24 +25,14 @@ const routes = [
     component: Home
   },
   {
-    name: "E-mail",
-    path: `/email`,
-    component: Email
+    name: `Instalar - ${name}`,
+    path: "/setup",
+    component: Setup
   },
   {
-    name: "Módulos",
-    path: `/modules`,
-    component: ModuleList
-  },
-  {
-    name: "Adicionar módulo",
-    path: `/modules/adicionar`,
-    component: ModuleAdd
-  },
-  {
-    name: "Alterar módulo",
-    path: `/modules/:module`,
-    component: ModuleEdit
+    name: `Entrar - ${name}`,
+    path: "/entrar",
+    component: Login
   },
   {
     name: "Contas",
@@ -59,14 +50,29 @@ const routes = [
     component: AccountItem
   },
   {
-    name: `Instalar - ${name}`,
-    path: "/setup",
-    component: Setup
+    name: "E-mail",
+    path: `/email`,
+    component: Email
   },
   {
-    name: `Entrar - ${name}`,
-    path: "/entrar",
-    component: Login
+    name: "Informações",
+    path: `/informations`,
+    component: Informations
+  },
+  {
+    name: "Módulos",
+    path: `/modules`,
+    component: ModuleList
+  },
+  {
+    name: "Adicionar módulo",
+    path: `/modules/adicionar`,
+    component: ModuleAdd
+  },
+  {
+    name: "Alterar módulo",
+    path: `/modules/:module`,
+    component: ModuleEdit
   },
   {
     name: "Error404",

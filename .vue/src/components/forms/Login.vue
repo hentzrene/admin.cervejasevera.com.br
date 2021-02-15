@@ -7,6 +7,7 @@ v-form(ref="form")
     type="email",
     label="E-mail",
     name="email",
+    autocomplete="email"
     dense,
     outlined,
     dark
@@ -20,6 +21,7 @@ v-form(ref="form")
     :type="show ? 'text' : 'password'"
     label="Senha",
     name="password",
+    autocomplete="password"
     dense,
     outlined,
     dark

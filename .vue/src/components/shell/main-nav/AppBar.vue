@@ -47,6 +47,17 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               span Módulos
             v-divider
             v-btn.text-none(
+              @click="$router.push('/informations') && (menu = false)",
+              color="white",
+              depressed,
+              text,
+              block,
+              tile
+            )
+              v-icon(left) fas fa-info-circle
+              span Informações
+            v-divider
+            v-btn.text-none(
               @click="$router.push('/email') && (menu = false)",
               color="white",
               depressed,
@@ -55,7 +66,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               tile
             )
               v-icon(left) fas fa-envelope
-              span E-mail
+              span Envio de E-mail
             v-divider
           v-btn.text-none(
             @click="logout",
