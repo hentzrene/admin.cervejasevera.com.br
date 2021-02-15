@@ -3,7 +3,7 @@ self.addEventListener("fetch", (e) => {
     (async () => {
       const url = new URL(e.request.url);
 
-      if (e.request.method === "GET" && url.host === "www.mrxweb.com.br") {
+      if (e.request.method === "GET") {
         const dir = url.pathname.match(/\/([^\/]+)\//);
 
         if (
