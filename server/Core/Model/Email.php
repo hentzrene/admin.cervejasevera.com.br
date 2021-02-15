@@ -2,75 +2,35 @@
 
 namespace Core\Model;
 
-use Core\Model\Utility\Conn;
-use Enum\Table;
 use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\Exception;
 
 class Email
 {
-  /**
-   * Obter configuração do e-mail.
-   *
-   * @return object
-   */
-  public static function getConfig(): object
+  public static function contactUs(array $d)
   {
-    $q = Conn::table(Table::CONFIGURATIONS)
-      ::select('`data`')
-      ::where('`key`', "'email' ")
-      ::send();
+    $name = $d['name'];
+    $phone = $d['phone'];
+    $subject = $d['subject'];
+    $text = $d['text'];
+    $email = $d['email'];
 
-    return !$q ? (object) []  : json_decode($q->fetch_row()[0]);
+    $message = "$text<br><hr>";
+
+    if ($name) $message .= "<strong>Nome:</strong> $name<br>";
+    if ($subject) $message .= "<strong>Assunto:</strong> $subject<br>";
+    if ($phone) $message .= "<strong>Telefone:</strong> $phone<br>";
+    if ($email) $message .= "<strong>E-mail:</strong> $email<br>";
+
+
+    self::send('CONTATO REALIZADO PELO SITE!!!', $message, Configuration::getConfig('email')->recipient);
   }
 
-  /**
-   * Atualizar configuração do e-mail.
-   *
-   * @param object $data
-   * @return boolean
-   */
-  public static function updateConfig(object $data): bool
-  {
-    $data = json_encode($data);
-
-    return (bool) Conn::table(Table::CONFIGURATIONS)
-      ::update(['data' => "'$data'"])
-      ::where('`key`', "'email'")
-      ::send();
-  }
-
-  public static function contactUs(string $name, string $phone, string $subject, string $text)
-  {
-    $message = "$text<br>
-        <hr>
-        <strong>Nome:</strong> $name<br>
-        <strong>Assunto:</strong> $subject<br>
-        <strong>Telefone:</strong> $phone";
-
-    self::send('CONTATO REALIZADO PELO SITE!!!', $message, self::getConfig()->recipient);
-  }
-
-  public static function sendApproveAccount(string $name, string $email)
-  {
-    $title = "Aprovar criação de conta!";
-    $message = "$name $email";
-
-    self::send($title, $message, self::getConfig()->recipient);
-  }
-
-  public static function sendRecoverPassword(string $email)
-  {
-    $title = "Recuperação de senha!";
-    $message = "";
-
-    self::send($title, $message, $email);
-  }
 
   private static function send(string $subject, string $message, string $recipient, ?array $file = null)
   {
     $mail = new PHPMailer(true);
-    $config = self::getConfig();
+    $config = Configuration::getConfig('email');
 
     try {
       // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
