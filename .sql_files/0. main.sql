@@ -158,9 +158,10 @@ CREATE TABLE IF NOT EXISTS `configurations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
   `data` json NOT NULL,
+  `public` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `mod_informations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
