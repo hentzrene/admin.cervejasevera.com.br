@@ -172,13 +172,6 @@ CREATE TABLE IF NOT EXISTS `mod_informations` (
   `name` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `keywords` varchar(300) DEFAULT NULL,
-  `tel` varchar(255) DEFAULT NULL,
-  `whatsapp` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `facebook` varchar(255) DEFAULT NULL,
-  `instagram` varchar(255) DEFAULT NULL,
-  `youtube` varchar(255) DEFAULT NULL,
-  `local` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

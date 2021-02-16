@@ -3,6 +3,7 @@
 namespace App;
 
 use Core\Model\Configuration;
+use Module\View\Item\Model as ItemModel;
 
 class ShareTags
 {
@@ -10,59 +11,22 @@ class ShareTags
 
   public static function app()
   {
-    $informations = Configuration::getConfig('informations');
+    $_GET['fields'] = 'name,description,keywords,share';
+    $informations = ItemModel::get('informations');
 
     self::$defaultTags = (object) [
       'name' => $informations->name,
       'title' => $informations->name,
       'description' => $informations->description,
       'keywords' => $informations->keywords,
-      'image' =>  '/img/share.png'
+      'image' =>  $informations->share
     ];
 
     define('SHARE_TAGS_DEFINEDS', true);
 
     return [
       '/' => [
-        'title' => 'Início - ' . self::$defaultTags->name,
-      ],
-      '/historia' => [
-        'title' => 'História - ' . self::$defaultTags->name,
-      ],
-      '/empresas/{itemId}' => function () {
-        return [
-          'title' => 'Empresa - ' . self::$defaultTags->name
-        ];
-      },
-      '/enterprises' => [
-        'title' => 'Empreendimentos - ' . self::$defaultTags->name,
-      ],
-      '/noticias' => [
-        'title' => 'Notícias - ' . self::$defaultTags->name,
-      ],
-      '/noticias/{article}' => [
-        'title' => 'Notícia - ' . self::$defaultTags->name
-      ],
-      '/videos' => [
-        'title' => 'Vídeos - ' . self::$defaultTags->name
-      ],
-      '/videos/{video}' => [
-        'title' => 'Vídeo - ' . self::$defaultTags->name
-      ],
-      '/obras' => [
-        'title' => 'Obras - ' . self::$defaultTags->name
-      ],
-      '/obras/{work}' => [
-        'title' => 'Obra - ' . self::$defaultTags->name
-      ],
-      '/classificados' => [
-        'title' => 'Classificados - ' . self::$defaultTags->name,
-      ],
-      '/classificados/{classified}' => [
-        'title' => 'Classificado - ' . self::$defaultTags->name
-      ],
-      '/contato' => [
-        'title' => 'Contato - ' . self::$defaultTags->name
+        'title' => 'Residencial Bonne Vie - ' . self::$defaultTags->name,
       ],
     ];
   }

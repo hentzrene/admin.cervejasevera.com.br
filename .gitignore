@@ -1,7 +1,7 @@
 .DS_Store
 /server/Resource
 /server/composer.lock
-/server/DB.php
+/server/Core/DB.php
 /dist
 /css
 /fonts
