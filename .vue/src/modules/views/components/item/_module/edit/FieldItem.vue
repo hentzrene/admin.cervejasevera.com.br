@@ -70,7 +70,7 @@ export default {
   }),
   computed: {
     moduleId() {
-      return this.$route.params.sub;
+      return this.$route.params.module;
     },
   },
   methods: {

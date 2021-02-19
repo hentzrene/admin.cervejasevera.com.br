@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  div.mb-4
+  .mb-4
     .d-flex.align-center.mb-2
       .white--text.font-weight-bold.text-body-1 Campos
       tooltip(tip="Adicionar", top)
@@ -39,7 +39,7 @@ export default {
   }),
   computed: {
     moduleId() {
-      return this.$route.params.sub;
+      return this.$route.params.module;
     },
     fieldsTypes() {
       return this.$rest("modulesFieldsTypes").list.map(({ id, name }) => ({
@@ -47,7 +47,6 @@ export default {
         value: id,
       }));
     },
-
   },
   methods: {
     validate() {
