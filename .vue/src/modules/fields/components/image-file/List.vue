@@ -64,10 +64,11 @@ v-dialog(
       color="secondary"
     ) {{ progress }}%
   v-overlay(v-model="loading")
-    v-progress-circular(:size="50", color="secondary", indeterminate)
-  label(for="imageFileInput", ref="imageFileLabel")
-  input#imageFileInput.ma-0.pa-0(
+    loading
+  label(:for="'imageFileInput_' + fieldId", ref="imageFileLabel")
+  input.ma-0.pa-0(
     @input="upload",
+    :id="'imageFileInput_' + fieldId",
     :value="file",
     ref="imageFileInput",
     type="file",
@@ -79,6 +80,8 @@ v-dialog(
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
+
 export default {
   props: {
     value: Boolean,
@@ -200,6 +203,9 @@ export default {
   },
   created() {
     this.get();
+  },
+  components: {
+    Loading,
   },
 };
 </script>

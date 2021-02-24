@@ -31,11 +31,12 @@ module-template(:title="`Alterar módulo \"${module.name}\"`")
       width="100%",
       color="transparent"
     )
-      v-progress-circular(:size="50", color="secondary", indeterminate)
+      loading
 </template>
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
+import Loading from "@/components/tools/Loading";
 import { viewEditModuleComponents as editComponents } from "@/modules/views";
 import { required } from "@/components/forms/rules";
 
@@ -78,6 +79,11 @@ export default {
     },
   },
   created() {
+    if (this.$store.state.user.type != 1) {
+      this.$router.replace("/error404");
+      return;
+    }
+
     this.loaded = false;
     this.$rest("modules")
       .get({ id: this.moduleId })
@@ -85,6 +91,7 @@ export default {
   },
   components: {
     ModuleTemplate,
+    Loading,
     ...Object.fromEntries(
       Object.entries(editComponents).map((c) => {
         c[0] = c[0].toLowerCase() + "-edit";

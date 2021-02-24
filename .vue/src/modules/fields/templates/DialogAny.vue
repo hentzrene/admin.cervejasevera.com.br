@@ -13,10 +13,12 @@ v-dialog(
         slot(name="actions")
     slot
   v-overlay(v-if="value", v-model="loading")
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
+
 export default {
   props: {
     value: Boolean,
@@ -27,6 +29,9 @@ export default {
       type: Boolean,
       value: false,
     },
+  },
+  components: {
+    Loading,
   },
 };
 </script>

@@ -3,9 +3,12 @@ v-sheet.mx-auto.pa-4.d-flex.align-center(
   color="transparent",
   max-width="960px",
   height="100%"
-).mt-9
-  div(v-if="!modules.length").pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto Nenhum módulo adicionado.
-  grid-list(v-else col-width="150px", gap="16px").py-4
+)
+  loading.mx-auto(v-if="loading")
+  .pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto(
+    v-else-if="!modules.length"
+  ) Nenhum módulo adicionado.
+  grid-list.py-4(v-else, col-width="150px", gap="16px")
     v-responsive(
       v-for="({ name, icon, key }, i) in modules",
       :aspect-ratio="1",
@@ -16,18 +19,23 @@ v-sheet.mx-auto.pa-4.d-flex.align-center(
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
 import ModuleCard from "@/components/cards/Module";
 
 export default {
+  data: () => ({ loading: true }),
   computed: {
     modules() {
       return this.$rest("modules").list;
     },
   },
   beforeCreate() {
-    this.$rest("modules").get();
+    this.$rest("modules")
+      .get()
+      .finally(() => (this.loading = false));
   },
   components: {
+    Loading,
     ModuleCard,
   },
 };

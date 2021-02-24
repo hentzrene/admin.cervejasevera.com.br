@@ -23,18 +23,18 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           h4 {{ user.name }}
           p.caption.mt-1 {{ user.email }}
           v-divider
-          v-btn.text-none(
-            @click="$router.push('/accounts') && (menu = false)",
-            color="white",
-            depressed,
-            text,
-            block,
-            tile
-          )
-            v-icon(left) fas fa-users
-            span Contas
-          v-divider
           template(v-if="user.type == 1")
+            v-btn.text-none(
+              @click="$router.push('/accounts') && (menu = false)",
+              color="white",
+              depressed,
+              text,
+              block,
+              tile
+            )
+              v-icon(left) fas fa-users
+              span Contas
+            v-divider
             v-btn.text-none(
               @click="$router.push('/modules') && (menu = false)",
               color="white",
@@ -55,7 +55,18 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               tile
             )
               v-icon(left) fas fa-envelope
-              span Envio de E-mail
+              span E-mail
+            v-divider
+            v-btn.text-none(
+              @click="$router.push('/tags') && (menu = false)",
+              color="white",
+              depressed,
+              text,
+              block,
+              tile
+            )
+              v-icon(left) fas fa-code
+              span Tags
             v-divider
           v-btn.text-none(
             @click="logout",

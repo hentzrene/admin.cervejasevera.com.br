@@ -69,6 +69,11 @@ export default {
     },
   },
   beforeCreate() {
+    if (this.$store.state.user.type != 1) {
+      this.$router.replace("/error404");
+      return;
+    }
+
     this.$rest("modulesBasic").get();
   },
   components: {

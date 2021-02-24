@@ -12,17 +12,12 @@ div
           x-small
         )
           v-icon fas fa-plus
-    field-list(
-      v-if="fields.length",
-      :items="fields",
-      ref="fieldList"
-    )
+    field-list(v-if="fields.length", :items="fields", ref="fieldList")
     .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
 </template>
 
 <script>
-import FieldItem from "./FieldItem";
-import FieldList from "./FieldList";
+import FieldList from "@/modules/fields/_module/AddFieldList";
 import Tooltip from "@/components/tools/Tooltip";
 
 export default {
@@ -33,7 +28,7 @@ export default {
   computed: {
     data() {
       return {
-        fields: this.fields
+        fields: this.fields,
       };
     },
     fieldsTypes() {
@@ -59,13 +54,12 @@ export default {
       if (!fieldList) return false;
 
       return fieldList.validate();
-    }
+    },
   },
   beforeCreate() {
     this.$rest("modulesFieldsTypes").get();
   },
   components: {
-    FieldItem,
     FieldList,
     Tooltip,
   },

@@ -55,12 +55,13 @@ v-dialog(
             )
     .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
   v-overlay(v-if="value", v-model="loading")
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
   add(v-model="addDialog", :field-id="fieldId")
 </template>
 
 <script>
 import Add from "./Add";
+import Loading from "@/components/tools/Loading";
 import { required } from "@/components/forms/rules.js";
 
 export default {
@@ -144,6 +145,7 @@ export default {
     },
   },
   components: {
+    Loading,
     Add,
   },
 };

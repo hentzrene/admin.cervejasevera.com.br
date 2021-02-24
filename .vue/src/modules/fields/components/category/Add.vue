@@ -21,10 +21,12 @@ v-dialog(
       depressed
     ) Adicionar
   v-overlay(v-if="value", v-model="loading")
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
+
 export default {
   props: {
     value: Boolean,
@@ -62,6 +64,9 @@ export default {
           this.loading = false;
         });
     },
+  },
+  components: {
+    Loading,
   },
 };
 </script>

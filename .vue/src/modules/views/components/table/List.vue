@@ -62,7 +62,7 @@ module-template(:title="data.name")
           )
             v-icon(small) fas fa-eye-slash
   v-overlay(v-model="loading", absolute)
-    v-progress-circular(:size="50", color="secondary", indeterminate, absolute)
+    loading
 </template>
 
 <script>
@@ -70,6 +70,7 @@ import ToolbarButton from "@/components/buttons/Toolbar";
 import PrintButton from "@/components/buttons/Print";
 import ModuleTemplate from "@/components/templates/Module";
 import formatForDisplay from "@/modules/fields/formatForDisplay.js";
+import Loading from "@/components/tools/Loading";
 
 export default {
   name: "TableList",
@@ -193,11 +194,15 @@ export default {
       ).finally(() => (this.loading = false));
     },
     toggleActive(id, active) {
-      this.$rest(this.data.key).put({
-        id,
-        prop: "active",
-        data: { value: active | 0 },
-      });
+      this.$rest(this.data.key)
+        .put({
+          id,
+          prop: "active",
+          data: { value: active | 0 },
+        })
+        .then(
+          () => (this.items.find((item) => item.id == id).active = active | 0)
+        );
     },
     changePage(page) {
       this.loading = true;
@@ -215,6 +220,7 @@ export default {
     ToolbarButton,
     PrintButton,
     ModuleTemplate,
+    Loading,
   },
 };
 </script>

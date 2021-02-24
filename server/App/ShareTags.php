@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Core\Model\Configuration;
 use Module\View\Item\Model as ItemModel;
 
 class ShareTags
@@ -26,7 +25,7 @@ class ShareTags
 
     return [
       '/' => [
-        'title' => 'Residencial Bonne Vie - ' . self::$defaultTags->name,
+        'title' => 'MRX Websites' . self::$defaultTags->name,
       ],
     ];
   }

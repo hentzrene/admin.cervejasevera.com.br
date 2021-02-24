@@ -106,24 +106,37 @@ class Module
    */
   public static function getAll(): array
   {
-    $q = Conn::table(Table::VW_MODULES)
-      ::select([
-        'id',
-        'name',
-        '`key`',
-        'icon',
-        'view_options' => 'viewOptions',
-        'view_key' => 'viewKey',
-        'view_name' => 'viewName',
-        'removable'
-      ]);
+    $q = null;
 
     if (ACCOUNT_TYPE !== 1) {
       $permissions = json_encode(Account::getPermissions(ACCOUNT_ID));
-      $q = $q::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1);
+      $q = Conn::table(Table::VW_MODULES)
+        ::select([
+          'id',
+          'name',
+          '`key`',
+          'icon',
+          'view_options' => 'viewOptions',
+          'view_key' => 'viewKey',
+          'view_name' => 'viewName',
+          'removable'
+        ])
+        ::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1)
+        ::send();
+    } else {
+      $q = Conn::table(Table::VW_MODULES)
+        ::select([
+          'id',
+          'name',
+          '`key`',
+          'icon',
+          'view_options' => 'viewOptions',
+          'view_key' => 'viewKey',
+          'view_name' => 'viewName',
+          'removable'
+        ])
+        ::send();
     }
-
-    $q = $q::send();
 
     if (!$q) return [];
 

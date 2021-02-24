@@ -105,6 +105,11 @@ export default {
     },
   },
   created() {
+    if (this.$store.state.user.type != 1) {
+      this.$router.replace("/error404");
+      return;
+    }
+
     this.loading = true;
     this.$rest("configuration")
       .get({ id: "email", save: (state, data) => (state.item = data) })

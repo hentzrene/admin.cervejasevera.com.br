@@ -22,9 +22,8 @@ div
 </template>
 
 <script>
-import FieldItem from "./FieldItem";
-import FieldList from "./FieldList";
-import AddField from "./AddField";
+import FieldList from "@/modules/fields/_module/EditFieldList";
+import AddField from "@/modules/fields/_module/AddField";
 import Tooltip from "@/components/tools/Tooltip";
 
 export default {
@@ -58,7 +57,6 @@ export default {
     },
   },
   components: {
-    FieldItem,
     FieldList,
     AddField,
     Tooltip,

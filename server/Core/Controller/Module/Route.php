@@ -40,7 +40,8 @@ class Route
   public function setProp($d)
   {
     $viewClass = self::getViewClassOfModule($d['module']);
-    self::callViewControllerMethod($viewClass, 'setProp', $d['module'], (int) $d['moduleItem'], $d['prop'], Req::get($d['prop']));
+    $value = Req::get($d['prop']) ? Req::get($d['prop']) : Req::get('value');
+    self::callViewControllerMethod($viewClass, 'setProp', $d['module'], (int) $d['moduleItem'], $d['prop'], $value);
   }
 
   /**

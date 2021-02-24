@@ -7,10 +7,11 @@ div
     width="100%",
     color="transparent"
   )
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
 import { views, components } from "@/modules/views";
 import pathToRegexp from "path-to-regexp";
 
@@ -102,7 +103,10 @@ export default {
   async created() {
     await this.get();
   },
-  components,
+  components: {
+    Loading,
+    ...components,
+  },
 };
 </script>
 

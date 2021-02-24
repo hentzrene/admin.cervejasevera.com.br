@@ -169,8 +169,11 @@ CREATE TABLE IF NOT EXISTS `mod_informations` (
   `alteredAt` timestamp NULL DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL,
   `share` varchar(255) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `mask_icon` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `short_name` varchar(255) DEFAULT NULL,
+  `description` varchar(300) DEFAULT NULL,
   `keywords` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

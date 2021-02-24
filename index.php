@@ -4,39 +4,51 @@ use Core\Model\Account\Auth;
 use Core\Model\Utility\Request;
 
 define('APP', $_SERVER['REDIRECT_APP']);
-define('INSTALLED', file_exists(__DIR__ . '/server/Core/DB.php'));
 
-require __DIR__ . '/server/Resource/autoload.php';
-
-if (!INSTALLED) {
-  if (APP === 'rest' && $_GET['route'] !== '/rest/setup') {
-    throw new Exception('Database not configured.');
-  }
-
-  if (APP !== 'rest' && APP !== 'setup' && $_GET['route'] !== '/setup') {
-    header('Location: /admin/setup');
-    die(302);
-  }
+if (APP === 'robots') {
+  require __DIR__ . '/server/App/Robots.php';
+} else if (APP === 'sitemap') {
+  require __DIR__ . '/server/App/Sitemap.php';
 } else {
-  require __DIR__ . '/server/Core/DB.php';
+  define('INSTALLED', file_exists(__DIR__ . '/server/Core/DB.php'));
 
-  $token = $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
-    ? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
-    : Request::get('AUTH_TOKEN');
+  require __DIR__ . '/server/Resource/autoload.php';
 
-  define('TOKEN', $token);
+  if (!INSTALLED) {
+    if (APP === 'rest' && $_GET['route'] !== '/rest/setup') {
+      throw new Exception('Database not configured.');
+    }
 
-  if (TOKEN) {
-    $checkIn = Auth::checkIn(TOKEN);
-
-    define('ON', (bool) $checkIn);
-    define('ACCOUNT_ID', $checkIn->accountId);
-    define('ACCOUNT_TYPE', $checkIn->accountTypeId);
+    if (APP !== 'rest' && APP !== 'setup' && $_GET['route'] !== '/setup') {
+      header('Location: /admin/setup');
+      die(302);
+    }
   } else {
-    define('ON', false);
-    define('ACCOUNT_ID', 0);
-    define('ACCOUNT_TYPE', 0);
-  }
-}
+    require __DIR__ . '/server/Core/DB.php';
 
-require __DIR__ . '/server/Routers.php';
+    if (APP === 'manifest') {
+      require __DIR__ . '/server/App/Manifest.php';
+      die();
+    }
+
+    $token = $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+      ? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+      : Request::get('AUTH_TOKEN');
+
+    define('TOKEN', $token);
+
+    if (TOKEN) {
+      $checkIn = Auth::checkIn(TOKEN);
+
+      define('ON', (bool) $checkIn);
+      define('ACCOUNT_ID', $checkIn->accountId);
+      define('ACCOUNT_TYPE', $checkIn->accountTypeId);
+    } else {
+      define('ON', false);
+      define('ACCOUNT_ID', 0);
+      define('ACCOUNT_TYPE', 0);
+    }
+  }
+
+  require __DIR__ . '/server/Routers.php';
+}

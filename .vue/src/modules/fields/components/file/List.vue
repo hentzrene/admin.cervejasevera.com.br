@@ -74,7 +74,7 @@ v-dialog(
       color="secondary"
     ) {{ progress }}%
   v-overlay(v-model="loading")
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
   v-text-field.ma-0.pa-0(
     v-model="file",
     :name="inputName",
@@ -87,6 +87,7 @@ v-dialog(
 </template>
 
 <script>
+import Loading from "@/components/tools/Loading";
 import { required } from "@/components/forms/rules.js";
 
 export default {
@@ -248,6 +249,9 @@ export default {
   },
   created() {
     this.get();
+  },
+  components: {
+    Loading,
   },
 };
 </script>

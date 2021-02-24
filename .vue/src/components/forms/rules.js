@@ -10,8 +10,10 @@ const email = v =>
 const phone = v =>
   !v || /\([0-9]{2}\) [0-9]{4,5}-[0-9]{4}/.test(v) || "Telefone inválido.";
 
-const lowerCase = v =>
-  !v || /^[a-z]+$/.test(v) || "Apenas letras minúsculas sem acento.";
+const alphaNumUnderline = v =>
+  !v ||
+  /^[a-z0-9_]+$/.test(v) ||
+  "Apenas caracteres alfanuméricos minúsculos e underline.";
 
 const url = v =>
   !v ||
@@ -20,4 +22,4 @@ const url = v =>
   ) ||
   "URL inválida.";
 
-export { required, email, phone, lowerCase, url };
+export { required, email, phone, alphaNumUnderline, url };

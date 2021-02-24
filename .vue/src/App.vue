@@ -1,6 +1,6 @@
 <template lang="pug">
 v-app
-  template(v-if="!checking && !test")
+  template(v-if="!checking")
     main-nav(v-if="!['/error404', '/entrar', '/setup'].includes($route.path)")
     v-main
       router-view
@@ -26,7 +26,6 @@ import { mapState } from "vuex";
 
 export default {
   data: () => ({
-    test: true,
     checking: true,
   }),
   computed: {

@@ -1,5 +1,4 @@
 RewriteEngine On
-# Require ip 177.155.215.222
 # RewriteCond %{HTTP_HOST} !^www\. [NC]
 # RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
@@ -15,6 +14,12 @@ RewriteCond %{REQUEST_URI} ^/admin/setup/?
 RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/rest(/.*)?
 RewriteRule ^ - [E=APP:rest]
+RewriteCond %{REQUEST_URI} ^/robots.txt$
+RewriteRule ^ - [E=APP:robots]
+RewriteCond %{REQUEST_URI} ^/sitemap.xml$
+RewriteRule ^ - [E=APP:sitemap]
+RewriteCond %{REQUEST_URI} ^/manifest.json$
+RewriteRule ^ - [E=APP:manifest]
 
 RewriteCond %{SCRIPT_FILENAME} -f
 RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$

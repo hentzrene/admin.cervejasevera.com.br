@@ -8,7 +8,7 @@ svg.mrx-loading(viewBox="0 0 105 76")
 <style >
 .mrx-loading {
   fill: var(--v-secondary-base);
-  height: 60px;
+  height: 100px;
 }
 
 .mrx-loading path {

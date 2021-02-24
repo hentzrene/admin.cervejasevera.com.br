@@ -39,6 +39,7 @@ class Configuration
   {
     $key = addslashes($key);
     $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+    $data = addslashes($data);
 
     return (bool) Conn::table(Table::CONFIGURATIONS)
       ::update(['data' => "'$data'"])

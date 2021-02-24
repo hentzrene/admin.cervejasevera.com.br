@@ -31,8 +31,7 @@ div
 </template>
 
 <script>
-import FieldItem from "./FieldItem";
-import FieldList from "./FieldList";
+import FieldList from "@/modules/fields/_module/AddFieldList";
 import Tooltip from "@/components/tools/Tooltip";
 
 export default {
@@ -96,7 +95,6 @@ export default {
     this.$rest("modulesFieldsTypes").get();
   },
   components: {
-    FieldItem,
     FieldList,
     Tooltip,
   },

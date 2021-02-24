@@ -32,7 +32,7 @@ module-template(title="Adicionar módulo")
         v-col.py-0(cols=12, sm=6, md=4, lg=3)
           v-text-field(
             v-model="key",
-            :rules="[rules.required, rules.lowerCase]",
+            :rules="[rules.required, rules.alphaNumUnderline]",
             label="Chave",
             outlined,
             dense
@@ -52,7 +52,7 @@ module-template(title="Adicionar módulo")
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import { required, lowerCase } from "@/components/forms/rules";
+import { required, alphaNumUnderline } from "@/components/forms/rules";
 import { viewAddModuleComponents as addComponents } from "@/modules/views";
 
 export default {
@@ -64,7 +64,7 @@ export default {
     viewSelected: null,
     rules: {
       required,
-      lowerCase,
+      alphaNumUnderline,
     },
     loading: false,
   }),
@@ -111,6 +111,12 @@ export default {
   },
   beforeCreate() {
     this.$rest("modulesViews").get();
+  },
+  created() {
+    if (this.$store.state.user.type != 1) {
+      this.$router.replace("/error404");
+      return;
+    }
   },
   components: {
     ModuleTemplate,
