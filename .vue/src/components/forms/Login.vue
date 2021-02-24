@@ -4,24 +4,26 @@ v-form(ref="form")
     @keydown.enter="send",
     :rules="[rules.required, rules.email]",
     :loading="loading",
+    prepend-inner-icon="fas fa-user",
     type="email",
     label="E-mail",
     name="email",
-    autocomplete="email"
+    autocomplete="email",
     dense,
     outlined,
     dark
   )
   v-text-field(
     @keydown.enter="send",
-    @click:append="show = !show"
+    @click:append="show = !show",
     :rules="[rules.required]",
     :loading="loading",
-    :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
-    :type="show ? 'text' : 'password'"
+    :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'",
+    :type="show ? 'text' : 'password'",
+    prepend-inner-icon="fas fa-lock",
     label="Senha",
     name="password",
-    autocomplete="password"
+    autocomplete="password",
     dense,
     outlined,
     dark
@@ -53,7 +55,7 @@ export default {
       required,
       email,
     },
-    show: false
+    show: false,
   }),
   methods: {
     send() {
@@ -70,6 +72,5 @@ export default {
 <style>
 .v-input__icon.v-input__icon--append button::before {
   font-size: 20px !important;
-
 }
 </style>

@@ -1,6 +1,6 @@
 <template lang="pug">
 v-app
-  template(v-if="!checking")
+  template(v-if="!checking && !test")
     main-nav(v-if="!['/error404', '/entrar', '/setup'].includes($route.path)")
     v-main
       router-view
@@ -10,7 +10,7 @@ v-app
     height="100%",
     width="100%"
   )
-    v-progress-circular(:size="50", color="secondary", indeterminate)
+    loading
   float-alert(:value="lastRequestError", color="red")
     span {{ lastRequestError }}
   float-alert(:value="lastRequestSuccess", color="green")
@@ -20,11 +20,13 @@ v-app
 <script>
 import MainNav from "@/components/shell/main-nav/Index.vue";
 import FloatAlert from "@/components/tools/FloatAlert";
+import Loading from "@/components/tools/Loading";
 import { http } from "./plugins/vuex-rest";
 import { mapState } from "vuex";
 
 export default {
   data: () => ({
+    test: true,
     checking: true,
   }),
   computed: {
@@ -89,6 +91,7 @@ export default {
   components: {
     MainNav,
     FloatAlert,
+    Loading,
   },
 };
 </script>
