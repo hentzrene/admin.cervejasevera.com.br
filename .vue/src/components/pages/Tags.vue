@@ -86,6 +86,6 @@ export default {
 <style>
 .page-tags textarea {
   font-family: monospace;
-  line-height: 20px;
+  line-height: 18px !important;
 }
 </style>

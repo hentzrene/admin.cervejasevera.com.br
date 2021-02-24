@@ -25,7 +25,7 @@ class ShareTags
 
     return [
       '/' => [
-        'title' => 'MRX Websites' . self::$defaultTags->name,
+        'title' => 'MRX Websites - ' . self::$defaultTags->name,
       ],
     ];
   }

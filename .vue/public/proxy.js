@@ -1,40 +1,46 @@
-const CHACHE_NAME = "v1";
+const CACHE_NAME = "v1";
 const DIRS_SAVE_PERMANENTLY = ["css", "js", "img"];
 const DIRS_NO_SAVE = ["upload"];
 const FILES_SAVE_ONINSTALL = [];
 
-self.addEventListener("install", (e) => {
+self.addEventListener("install", e => {
   e.waitUntil(
     (async () => {
-      const CACHE = await caches.open(CHACHE_NAME);
+      const CACHE = await caches.open(CACHE_NAME);
       return CACHE.addAll(FILES_SAVE_ONINSTALL);
     })()
   );
 });
 
-self.addEventListener("fetch", (e) => {
+self.addEventListener("fetch", e => {
   e.respondWith(
     (async () => {
-      const CACHE = await caches.open(CHACHE_NAME);
-      const DIR = new URL(e.request.url).pathname.match(/\/([^\/]+)\//);
+      const request = e.request;
 
-      if (DIR && DIRS_SAVE_PERMANENTLY.includes(DIR[1])) {
-        const res = CACHE.match(e.request);
-        if (res) return res;
+      if (request.method !== "GET") return fetch(request);
 
-        const res = await fetch(e.request);
-        await cache.put(e.request);
-        return res.clone();
+      const CACHE = await caches.open(CACHE_NAME);
+      const url = new URL(request.url);
+      const DIR = url.pathname.match(/\/([^\/]+)\//);
+      const getCache = Object.fromEntries(url.searchParams.entries()).cache;
+
+      if ((DIR && DIRS_SAVE_PERMANENTLY.includes(DIR[1])) || getCache === "1") {
+        let response = await CACHE.match(request);
+        if (response) return response;
+
+        response = await fetch(request);
+        CACHE.put(request, response.clone());
+        return response;
       } else if (DIR && DIRS_NO_SAVE.includes(DIR[1])) {
-        return fetch(e.request);
+        return fetch(request);
       } else {
-        const res = await fetch(e.request);
+        let response = await fetch(request);
 
-        if (res.ok) {
-          CACHE.put(e.request, response);
-          return res.clone();
+        if (response.ok) {
+          CACHE.put(request, response.clone());
+          return response;
         } else {
-          return cache.match(e.request);
+          return (await CACHE.match(request)) || response;
         }
       }
     })()
