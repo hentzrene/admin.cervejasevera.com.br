@@ -18,7 +18,6 @@ $informations = ItemModel::get('informations');
 <link rel=icon type=image/png sizes=96x96 href="<?= BASE  . $informations->icon  ?>?resize=1&w=96&h=96">
 <link rel=icon type=image/png sizes=16x16 href="<?= BASE  . $informations->icon  ?>?resize=1&w=16&h=16">
 <link rel=icon type=image/png sizes=295x295 href="<?= BASE  . $informations->icon  ?>?resize=1&w=295&h=295">
-<link rel=manifest href="<?= BASE ?>/manifest.json">
 <meta name=msapplication-TileColor content=#ffffff>
 <meta name=msapplication-TileImage content="<?= BASE . $informations->icon ?>144x144">
 <meta name=theme-color content=#ffffff>

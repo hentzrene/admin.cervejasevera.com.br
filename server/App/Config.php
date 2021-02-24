@@ -43,5 +43,6 @@ if (is_dir($jsPath)) {
 
 define('SCRIPTS', $js);
 
-define('PROXY', '/proxy.js');
-// define('PROXY', null);
+define('PROXY', true);
+
+define('MANIFEST', true);

@@ -7,15 +7,15 @@
   <meta http-equiv='content-language' content='pt-br'>
   <meta http-equiv='content-type' content='text/html; charset=UTF-8'>
   <meta name=viewport content="width=device-width,initial-scale=1">
-  <?php if (APP === 'admin' || APP === 'SETUP') : ?>
-    <meta name="robots" content="noindex" />
-  <?php endif; ?>
-
 
   <?php if (SHARE_TAGS_DEFINEDS) : ?>
     <title><?= SHARE_TAG_TITLE ?></title>
   <?php else : ?>
     <title></title>
+  <?php endif; ?>
+
+  <?php if (MANIFEST) : ?>
+    <link rel=manifest href="<?= BASE ?>/manifest.json">
   <?php endif; ?>
 
   <?php
@@ -24,18 +24,16 @@
   include __DIR__ . '/Document/ScriptTags.php';
   ?>
 
-  <!-- ##### PROXY ##### -->
   <?php if (PROXY) : ?>
     <script async>
       if ('serviceWorker' in window.navigator)
-        window.navigator.serviceWorker.register('<?= PROXY ?>')
+        window.navigator.serviceWorker.register('/proxy.js')
         .catch((e) => {
           console.log('Erro no processamento. Tente recarregar a página ou usar o navegador Google Chorme.')
         })
     </script>
   <?php endif; ?>
 
-  <!-- ##### VUE ##### -->
   <?php foreach (STYLES as $file) : ?>
     <link href=<?= $file ?> rel=preload as=style>
   <?php endforeach; ?>
