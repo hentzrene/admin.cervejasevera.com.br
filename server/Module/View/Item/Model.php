@@ -12,7 +12,7 @@ class Model
    * Obter item;
    *
    * @param string $module
-   * @param integer $id
+   * @param bool $onlyPublic
    * @return object
    */
   public static function get(string $module, bool $onlyPublic = false): object

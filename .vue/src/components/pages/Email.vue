@@ -89,7 +89,7 @@ export default {
   }),
   computed: {
     configuration() {
-      return this.$rest("email").item;
+      return this.$rest("configuration").item;
     },
   },
   methods: {
@@ -98,16 +98,16 @@ export default {
       if (form.validate()) {
         this.loading = true;
 
-        this.$rest("email")
-          .put({ id: "configuration", data: new FormData(form.$el) })
+        this.$rest("configuration")
+          .put({ id: "email", data: new FormData(form.$el) })
           .finally(() => (this.loading = false));
       }
     },
   },
   created() {
     this.loading = true;
-    this.$rest("email")
-      .get({ id: "configuration", save: (state, data) => (state.item = data) })
+    this.$rest("configuration")
+      .get({ id: "email", save: (state, data) => (state.item = data) })
       .finally(() => (this.loading = false));
   },
   components: {

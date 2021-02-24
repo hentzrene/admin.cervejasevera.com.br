@@ -10,7 +10,6 @@ import AccountList from "@/components/pages/account/List.vue";
 import AccountAdd from "@/components/pages/account/Add.vue";
 import AccountItem from "@/components/pages/account/Item.vue";
 import Email from "@/components/pages/Email.vue";
-import Informations from "@/components/pages/Informations.vue";
 import Error404 from "@/components/pages/Error404.vue";
 import Module from "@/modules/Index.vue";
 
@@ -53,11 +52,6 @@ const routes = [
     name: "E-mail",
     path: `/email`,
     component: Email
-  },
-  {
-    name: "Informações",
-    path: `/informations`,
-    component: Informations
   },
   {
     name: "Módulos",

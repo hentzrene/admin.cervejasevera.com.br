@@ -27,8 +27,9 @@ RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 Options All -Indexes
 DirectoryIndex index.php
 
-SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080|192.168.1.107:8081|192.168.0.108:8080)$" origin_is=$0 
-Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+# SetEnvIf Origin "^https?://(.+\.)?(%{HTTP_HOST}%|192.168.1.107:8080|192.168.1.107:8081|192.168.0.108:8080)$" origin_is=$0 
+# Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+Header always set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "OPTIONS,GET,HEAD,POST,PUT,DELETE"
 Header append Access-Control-Allow-Headers "Authorization,Content-Type,X-PINGOTHER"
 Header set Access-Control-Allow-Credentials "true"
