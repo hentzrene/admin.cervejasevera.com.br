@@ -30,6 +30,8 @@ class Table
 
   const SUBCATEGORIES = "subcategories";
 
+  const TAGS = "tags";
+
   const VM_CATEGORIES = "vw_categories";
 
   const VW_MODULES = "vw_modules";
