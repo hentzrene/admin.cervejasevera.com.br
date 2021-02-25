@@ -4,9 +4,12 @@ grid-item(col-end=2, col-end-sm=1)
     :label="label",
     :value="value",
     :name="name",
-    :rules="[rules.url]",
-    append-icon="fas fa-globe",
-    type="url",
+    :rules="[rules.price]",
+    append-icon="fas fa-dollar-sign",
+    type="number",
+    step=".01",
+    min="0.00",
+    max="9999999999.99",
     dense,
     outlined,
     dark
@@ -15,14 +18,15 @@ grid-item(col-end=2, col-end-sm=1)
 
 <script>
 import mixin from "../../mixin";
-import { url } from "@/components/forms/rules";
+import { price } from "@/components/forms/rules";
 
 export default {
   data: () => ({
     rules: {
-      url,
+      price,
     },
   }),
+
   mixins: [mixin],
 };
 </script>

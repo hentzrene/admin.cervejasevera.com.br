@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(col-end=2, col-end-sm=1)
+grid-item.field-date(col-end=2, col-end-sm=1)
   v-text-field(
     :label="label",
     :value="value | toDateTimeHTML",
@@ -22,3 +22,9 @@ export default {
   mixins: [mixin],
 };
 </script>
+
+<style>
+.field-date input[type="datetime-local" i]::-webkit-calendar-picker-indicator {
+  filter: brightness(1) invert(1);
+}
+</style>

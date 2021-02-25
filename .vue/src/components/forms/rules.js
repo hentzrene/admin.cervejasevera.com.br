@@ -22,4 +22,14 @@ const url = v =>
   ) ||
   "URL inválida.";
 
-export { required, email, phone, alphaNumUnderline, url };
+const price = v =>
+  [
+    /^[0-9]*$/,
+    /^[0-9]+(,|.)$/,
+    /^[0-9]+(,|.)[0-9]{1}$/,
+    /^[0-9]+(,|.)[0-9]{2}$/
+  ].find(p => p.test(v))
+    ? true
+    : "Preço inválido.";
+
+export { required, email, phone, alphaNumUnderline, url, price };
