@@ -19,9 +19,11 @@
   <?php endif; ?>
 
   <?php
-  include __DIR__ . '/Document/Icons.php';
   if (SHARE_TAGS_DEFINEDS) include __DIR__ . '/Document/Share.php';
-  include __DIR__ . '/Document/ScriptTags.php';
+  if (INSTALLED) {
+    include __DIR__ . '/Document/Icons.php';
+    include __DIR__ . '/Document/ScriptTags.php';
+  }
   ?>
 
   <?php if (PROXY) : ?>

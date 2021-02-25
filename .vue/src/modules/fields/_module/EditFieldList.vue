@@ -13,7 +13,7 @@ div
 </template>
 
 <script>
-import FieldItem from "./AddFieldItem";
+import FieldItem from "./EditFieldItem";
 
 export default {
   props: {
