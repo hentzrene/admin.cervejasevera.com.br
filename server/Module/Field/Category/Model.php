@@ -37,7 +37,7 @@ class Model
 
     return (bool) Conn::table(Table::CATEGORIES)
       ::insert(['modules_id', 'modules_fields_id', 'title'], [$moduleId, $fieldId, "'$title'"])
-      ::send();;
+      ::send();
   }
 
   /**
