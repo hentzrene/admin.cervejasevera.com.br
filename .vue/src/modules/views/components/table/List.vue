@@ -11,7 +11,7 @@ module-template(:title="data.name")
     toolbar-button(@click="add", title="Adicionar", icon="fas fa-plus", dark)
     print-button
   div
-    .pa-2.primary.lighten-1
+    .pa-2.primary.lighten-1.module-search
       v-text-field(
         v-model="search",
         @click:append="get(1)",
@@ -156,7 +156,7 @@ export default {
 
                   if (!f) item_[key] = item[key];
                   else
-                    item_[key] = f({
+                    item_[key] = await f({
                       component: this,
                       value: item[key],
                       moduleId: this.data.id,
@@ -172,9 +172,11 @@ export default {
         .finally(() => (this.loading = false));
     },
     add() {
+      this.loading = true;
       this.$rest(this.data.key)
         .post()
-        .then(({ id }) => this.$router.push(this.$route.path + "/" + id));
+        .then(({ id }) => this.$router.push(this.$route.path + "/" + id))
+        .finally(() => (this.loading = false));
     },
     remove() {
       this.loading = true;

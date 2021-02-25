@@ -4,10 +4,7 @@ const keys = require
   .filter(path => /\.\/[^]+\/formatForDisplay.js/.test(path));
 
 const names = keys.map(path =>
-  path
-    .replace(/\.\/([^./]+)\/formatForDisplay.js/, "$1")
-    .toLowerCase()
-    .replace(/[^a-z]/g, "")
+  path.replace(/\.\/([^./]+)\/formatForDisplay.js/, "$1")
 );
 
 const imports = keys.map(path =>
@@ -15,5 +12,5 @@ const imports = keys.map(path =>
 );
 
 export default Promise.all(imports).then(importsResolved =>
-  importsResolved.map((imp, i) => [names[i], imp])
+  Object.fromEntries(importsResolved.map((imp, i) => [names[i], imp]))
 );
