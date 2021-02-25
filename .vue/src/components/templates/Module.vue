@@ -77,7 +77,8 @@ export default {
   .module-page-toolbar,
   .v-data-table .v-data-footer,
   .v-data-table tr > :last-child,
-  .v-data-table tr > :first-child {
+  .v-data-table tr > :first-child,
+  .module-search {
     display: none !important;
   }
   .v-data-table__wrapper,
