@@ -10,14 +10,21 @@ class Controller
 {
   public function getAllItems()
   {
-    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
-      Response::set('status', 'error');
-      Response::status(401);
-    } else {
-      Response::rawBody(
-        Model::getAllItems((int) Req::get('moduleId'))
-      );
+    $moduleId = Req::get('moduleId');
+
+    if (!$moduleId) {
+      $moduleKey = Req::get('moduleKey');
+      if ($moduleKey) {
+        $moduleId = Module::getIdByKey($moduleKey);
+      } else {
+        Response::rawBody([]);
+        Response::send();
+      }
     }
+
+    Response::rawBody(
+      Model::getAllItems((int) $moduleId)
+    );
 
     Response::send();
   }
@@ -29,7 +36,6 @@ class Controller
       Response::status(401);
     } else {
       Model::addItem(
-        (int) Req::get('moduleId'),
         (int) Req::get('fieldId'),
         Req::get('title')
       );

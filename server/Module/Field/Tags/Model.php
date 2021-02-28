@@ -15,8 +15,8 @@ class Model
    */
   public static function getAllItems(int $moduleId): array
   {
-    $q = Conn::table(Table::TAGS)
-      ::select(['id', 'title', 'modules_fields_id' => 'fieldId'])
+    $q = Conn::table(Table::VW_TAGS)
+      ::select(['id', 'title', 'modules_fields_id' => 'fieldId', 'modules_fields_key' => 'fieldKey'])
       ::where('modules_id', $moduleId)
       ::send();
 
@@ -26,17 +26,16 @@ class Model
   /**
    * Adicionar.
    *
-   * @param integer $moduleId
    * @param integer $fieldId
    * @param string $title
    * @return boolean
    */
-  public static function addItem(int $moduleId, int $fieldId, string $title): bool
+  public static function addItem(int $fieldId, string $title): bool
   {
     $title = addslashes($title);
 
     return (bool) Conn::table(Table::TAGS)
-      ::insert(['modules_id', 'modules_fields_id', 'title'], [$moduleId, $fieldId, "'$title'"])
+      ::insert(['modules_fields_id', 'title'], [$fieldId, "'$title'"])
       ::send();
   }
 

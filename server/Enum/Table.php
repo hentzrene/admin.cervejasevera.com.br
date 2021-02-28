@@ -37,4 +37,6 @@ class Table
   const VW_MODULES = "vw_modules";
 
   const VW_MODULES_FIELDS = "vw_modules_fields";
+
+  const VW_TAGS = "vw_tags";
 }
