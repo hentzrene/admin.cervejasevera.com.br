@@ -190,6 +190,21 @@ class Field
   }
 
   /**
+   * Obter opções.
+   *
+   * @param integer $id
+   * @return boolean
+   */
+  public static function getOptions(int $id): object
+  {
+    return json_decode(Conn::table(Table::MODULES_FIELDS)
+      ::select(["options"])
+      ::where('id', $id)
+      ::send()
+      ->fetch_row()[0]);
+  }
+
+  /**
    * Definir opção.
    *
    * @param integer $id

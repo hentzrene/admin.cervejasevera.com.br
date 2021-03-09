@@ -2,6 +2,7 @@
 
 namespace Module\Field\ImageFile;
 
+use Core\Model\Module\Field;
 use Core\Model\Utility\Conn;
 use Enum\Table;
 use Intervention\Image\ImageManager as Img;
@@ -41,6 +42,8 @@ class Model
    */
   public static function addItem(int $moduleId, int $fieldId, int $itemId, array $file): ?object
   {
+    $options = Field::getOptions($fieldId);
+
     $path = '';
     $ext = pathinfo($file['name'])['extension'];
 
@@ -56,10 +59,20 @@ class Model
 
     if (in_array(mime_content_type($file['tmp_name']), self::CONVERT_MIME_TYPES)) {
       $manager = new Img(array('driver' => 'gd'));
-      $make = $manager->make($file['tmp_name']);
+      $img = $manager->make($file['tmp_name']);
+
+      if ($options->mask) {
+        $mask = $manager->make(SYSTEM_ROOT . $options->mask);
+        $mask->resize($img->width() * .25, null, function ($constraint) {
+          $constraint->aspectRatio();
+        });
+
+        $img->insert($mask, 'center');
+      }
 
       $path = "/upload/$moduleId/$itemId/" . dechex(time()) . bin2hex(random_bytes(5)) . ".$ext";
-      $make->save(SYSTEM_ROOT . $path);
+
+      $img->save(SYSTEM_ROOT . $path);
     } else {
       $adapter = new Local(SYSTEM_ROOT);
       $filesystem = new Filesystem($adapter);
