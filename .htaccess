@@ -26,11 +26,6 @@ RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$
 RewriteCond %{QUERY_STRING} resize=1
 RewriteRule ^(.*)$ image-resizer.php [L,QSA]
 
-RewriteCond %{SCRIPT_FILENAME} -f
-RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$
-RewriteCond %{QUERY_STRING} mask=1
-RewriteRule ^(.*)$ image-mask.php [L,QSA]
-
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 

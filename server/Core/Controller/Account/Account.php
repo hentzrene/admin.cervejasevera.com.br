@@ -14,7 +14,7 @@ class Account
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      Response::rawBody(ModelAccount::get($d['accountId']));
+      Response::rawBody(ModelAccount::get((int) $d['accountId']));
     }
 
     Response::send();

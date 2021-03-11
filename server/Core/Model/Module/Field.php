@@ -94,7 +94,7 @@ class Field
     $type = (int) $data->type;
     $fieldClass = self::getFieldClassOfTypeId($type);
 
-    $sqlType = FieldType::get($type, ['sql_type'])[0];
+    [$sqlType, $defaultOptions] = FieldType::get($type, ['sql_type', 'default_options']);
     $moduleKey = Module::getKeyById($moduleId);
 
     $q1 = null;
@@ -109,11 +109,10 @@ class Field
       $q1 = Conn::query($sql);
     }
 
-
     $q2 = Conn::table(Table::MODULES_FIELDS)
       ::insert(
         ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id', 'options'],
-        [$moduleId, "'$name'", "'$key'", $unique, $private, $type, "'{}'"]
+        [$moduleId, "'$name'", "'$key'", $unique, $private, $type, $defaultOptions ? "'$defaultOptions'" : "'{}'"]
       )
       ::send();
 

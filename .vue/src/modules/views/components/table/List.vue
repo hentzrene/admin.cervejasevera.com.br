@@ -4,11 +4,11 @@ module-template(:title="data.name")
     toolbar-button(
       @click="remove",
       :disabled="!selecteds.length",
-      title="Remover",
+      tip="Remover",
       icon="fas fa-trash",
       dark
     )
-    toolbar-button(@click="add", title="Adicionar", icon="fas fa-plus", dark)
+    toolbar-button(@click="add", tip="Adicionar", icon="fas fa-plus", dark)
     print-button
   div
     .pa-2.primary.lighten-1.module-search
@@ -185,7 +185,7 @@ export default {
           this.$rest(this.data.key)
             .delete({ id })
             .then(() => {
-              this.items = this.items.splice(
+              this.items.splice(
                 this.items.findIndex((v) => v.id == id),
                 1
               );

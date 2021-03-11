@@ -120,6 +120,8 @@ class Model
         id INT NOT NULL AUTO_INCREMENT,
         `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `alteredAt` TIMESTAMP NULL DEFAULT NULL,
+        `showFrom` DATETIME NULL DEFAULT NULL,
+        `showUp` DATETIME NULL DEFAULT NULL,
         PRIMARY KEY(id)
       ) COLLATE='utf8_general_ci' ENGINE=InnoDB;"
     );

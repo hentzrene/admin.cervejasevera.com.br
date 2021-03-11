@@ -1,11 +1,10 @@
 <template lang="pug">
 div
-  tooltip(v-if="sm", :tip="title", top)
-    v-btn(v-bind="$attrs", v-on="$listeners", icon, exact, small)
+  tooltip(:tip="tip", top)
+    v-btn(v-if="sm", v-bind="$attrs", v-on="$listeners", icon, exact, small)
       v-icon(small) {{ icon }}
-  v-btn(v-else, v-bind="$attrs", v-on="$listeners", text, exact, small)
-    v-icon(small, left) {{ icon }}
-    span {{ title }}
+    v-btn.toolbar-button-desktop(v-else, v-bind="$attrs", v-on="$listeners", text, exact, small)
+      v-icon(small) {{ icon }}
 </template>
 
 <script>
@@ -17,9 +16,9 @@ export default {
       type: String,
       required: true,
     },
-    title: {
+    tip: {
       type: String,
-      required: true,
+      default: "",
     },
   },
   computed: {
@@ -32,3 +31,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.toolbar-button-desktop {
+  min-width: 20px !important;
+}
+</style>

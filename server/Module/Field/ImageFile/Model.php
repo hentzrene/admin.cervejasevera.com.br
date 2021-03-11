@@ -13,6 +13,10 @@ class Model
 {
   const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
+  const MASK_SIZE = .20;
+
+  const MASK_OPACITY = 50;
+
   /**
    * Obter todas as imagens.
    *
@@ -63,9 +67,11 @@ class Model
 
       if ($options->mask) {
         $mask = $manager->make(SYSTEM_ROOT . $options->mask);
-        $mask->resize($img->width() * .25, null, function ($constraint) {
+        $mask->resize($img->width() * self::MASK_SIZE, null, function ($constraint) {
           $constraint->aspectRatio();
         });
+
+        $mask->opacity(self::MASK_OPACITY);
 
         $img->insert($mask, 'center');
       }

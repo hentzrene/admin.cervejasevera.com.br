@@ -3,7 +3,7 @@ module-template(title="Módulos")
   template(#toolbar)
     toolbar-button(
       :to="$route.path + '/adicionar'",
-      title="Adicionar",
+      tip="Adicionar",
       icon="fas fa-plus",
       dark
     )

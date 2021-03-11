@@ -4,9 +4,43 @@ module-template(
   width="800px",
   max-width="100%"
 )
+  template(#toolbar)
+    toolbar-button(
+      @click="rangeDateActiveDialog = true",
+      tip="Começo/Fim",
+      icon="fas fa-calendar-alt"
+    )
+    v-dialog(v-model="rangeDateActiveDialog", max-width="330px")
+      v-card.pa-4(dark)
+        .title.mb-4.text-center Alterar período ativo
+        v-form.table-module-edit-rangedateactived(ref="rangeDateActiveForm")
+          v-text-field.mb-3(
+            label="Começo",
+            type="datetime-local",
+            name="showFrom",
+            outlined,
+            dense,
+            hide-details
+          )
+          v-text-field.mb-3(
+            label="Fim",
+            type="datetime-local",
+            name="showUp",
+            outlined,
+            dense,
+            hide-details
+          )
+        v-btn.text-none(
+          @click="setRangeDateActived",
+          color="secondary",
+          :loading="updatingRangeDateActived",
+          :disabled="updatingRangeDateActived",
+          block,
+          depressed
+        ) Alterar
   v-card.pa-4.rounded-t-0(outlined, dark)
     v-form(ref="form")
-      .table-module-add-form
+      .table-module-edit-form
         component(
           v-for="({ id, name, key, typeKey, options }, i) in data.fields",
           :value="item[key] || ''",
@@ -23,6 +57,7 @@ module-template(
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
+import ToolbarButton from "@/components/buttons/Toolbar";
 import fieldsElements from "../../../fields";
 
 export default {
@@ -30,6 +65,10 @@ export default {
   props: {
     data: Object,
   },
+  data: () => ({
+    rangeDateActiveDialog: false,
+    updatingRangeDateActived: false,
+  }),
   computed: {
     itemId() {
       return this.$route.params.sub;
@@ -59,6 +98,17 @@ export default {
           .then(() => this.$router.push(`/${this.data.key}`));
       }
     },
+    setRangeDateActived() {
+      this.updatingRangeDateActived = true;
+
+      const data = Object.fromEntries(
+        new FormData(this.$refs.rangeDateActiveForm.$el).entries()
+      );
+
+      this.$rest(this.data.key)
+        .put({ id: this.itemId, data })
+        .finally(() => (this.updatingRangeDateActived = false));
+    },
   },
   created() {
     this.$rest(this.data.key)
@@ -67,16 +117,21 @@ export default {
   },
   components: {
     ModuleTemplate,
+    ToolbarButton,
     ...fieldsElements,
   },
 };
 </script>
 
 <style>
-.table-module-add-form {
+.table-module-edit-form {
   display: grid;
   grid-template-columns: repeat(2, calc(50% - 16px / 2));
   column-gap: 16px;
   grid-auto-flow: dense;
+}
+
+.table-module-edit-rangedateactived input::-webkit-calendar-picker-indicator {
+  filter: brightness(1) invert(1);
 }
 </style>

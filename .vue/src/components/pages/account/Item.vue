@@ -49,7 +49,7 @@ export default {
   }),
   computed: {
     accountId() {
-      return parseInt(this.$route.params.sub);
+      return parseInt(this.$route.params.account);
     },
     account() {
       return this.$rest("accounts").item;

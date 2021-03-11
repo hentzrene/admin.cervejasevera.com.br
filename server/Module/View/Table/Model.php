@@ -6,8 +6,9 @@ use Enum\Table as EnumTable;
 use Core\Model\Utility\Conn;
 use Core\Model\Module\Module;
 use Core\Model\Module\Field;
-use Core\Model\Module\FieldType;
 use Core\Model\Utility\Request as Req;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class Model
 {
@@ -114,7 +115,11 @@ class Model
       $list = Conn::table("mod_$module")
         ::select($fields);
 
-      if ($onlyPublic) $list = $list::where('active', 1);
+      if ($onlyPublic) {
+        $list = $list::where('active', 1)
+          ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
+          ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1);
+      }
 
       $list = $list::orderBy('id', 'DESC')
         ::limit($itemsPerPage, $offset)
@@ -234,16 +239,11 @@ class Model
   public static function remove(string $module, int $id): bool
   {
     $moduleId = Module::getIdByKey($module);
-    $dir = SYSTEM_ROOT . "/upload/$moduleId/$id";
+    $dir = "/upload/$moduleId/$id";
     if (is_dir($dir)) {
-      $files = scandir($dir);
-      $files = array_slice($files, 2);;
-
-      foreach ($files as $file) {
-        unlink("$dir/$file");
-      }
-
-      rmdir($dir);
+      $adapter = new LocalFilesystemAdapter(SYSTEM_ROOT);
+      $filesystem = new Filesystem($adapter);
+      $filesystem->deleteDirectory($dir);
     }
 
     $q1 = Conn::table(EnumTable::IMAGES)
@@ -273,6 +273,8 @@ class Model
         `active` INT(1) NOT NULL DEFAULT '1',
         `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         `alteredAt` TIMESTAMP NULL DEFAULT NULL,
+        `showFrom` DATETIME NULL DEFAULT NULL,
+        `showUp` DATETIME NULL DEFAULT NULL,
         PRIMARY KEY(id)
       ) COLLATE='utf8_general_ci' ENGINE=InnoDB;"
     );

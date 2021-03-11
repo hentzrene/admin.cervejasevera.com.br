@@ -17,7 +17,7 @@ v-sheet.mx-auto.module-page.pa-2(
       toolbar-button(
         v-if="prev && !sm",
         :to="prev",
-        title="Voltar",
+        tip="Voltar",
         icon="fas fa-undo-alt",
         dark
       )
@@ -26,6 +26,7 @@ v-sheet.mx-auto.module-page.pa-2(
 
 <script>
 import ToolbarButton from "@/components/buttons/Toolbar";
+
 export default {
   props: {
     title: {
