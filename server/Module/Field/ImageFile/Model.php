@@ -130,4 +130,14 @@ class Model
 
     return $q;
   }
+
+  public static function beforeSetOption(int $id, string $option, string $value): bool
+  {
+    return true;
+  }
+
+  public static function afterSetOption(int $id, string $option, string $value): bool
+  {
+    return true;
+  }
 }

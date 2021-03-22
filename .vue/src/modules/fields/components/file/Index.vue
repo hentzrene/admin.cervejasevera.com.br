@@ -1,10 +1,10 @@
 <template lang="pug">
-grid-item(row-end=4, col-end=2, col-end-sm=1)
+grid-item.mb-2(row-end=2, col-end=2, col-end-sm=1)
   .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
   tooltip(:tip="label", top)
     v-responsive.grey.d-flex.align-center.rounded-lg.primary.cursor-pointer(
       @click="dialog = true",
-      :aspect-ratio="19 / 9",
+      :aspect-ratio="38 / 9",
       v-ripple
     )
       .d-flex.justify-center.align-center

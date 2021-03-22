@@ -215,11 +215,36 @@ class Field
   {
     $option = addslashes($option);
     $value = addslashes($value);
+    [$typeId] = self::get($id, ['modules_fields_types_id']);
+    $fieldClass = self::getFieldClassOfTypeId($typeId);
 
-    return (bool) Conn::table(Table::MODULES_FIELDS)
+    if (!$fieldClass) {
+      throw new \Exception("Field não configurado corretamente no código fonte.");
+    }
+
+    $q1 = null;
+    $q3 = null;
+    $hasBeforeSetOption = method_exists($fieldClass, 'beforeSetOption');
+    $hasAfterSetOption = method_exists($fieldClass, 'afterSetOption');
+
+    if ($hasBeforeSetOption) {
+      $q1 = call_user_func([$fieldClass, 'beforeSetOption'], $id, $option, $value);
+    } else {
+      $q1 = true;
+    }
+
+    $q2 = (bool) Conn::table(Table::MODULES_FIELDS)
       ::update(["options" => "JSON_SET(`options`, '$.$option', '$value')"])
       ::where('id', $id)
       ::send();
+
+    if ($hasAfterSetOption) {
+      $q3 = call_user_func([$fieldClass, 'afterSetOption'], $id, $option, $value);
+    } else {
+      $q3 = true;
+    }
+
+    return $q1 && $q2 && $q3;
   }
 
   /**

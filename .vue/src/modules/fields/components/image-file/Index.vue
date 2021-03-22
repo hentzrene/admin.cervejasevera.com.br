@@ -1,9 +1,6 @@
 <template lang="pug">
 grid-item.mb-2(row-end=4, col-end=2, col-end-sm=1)
-  .grey--text.text--lighten-1.font-weight-bold.text-caption.d-flex.align-center.mb-1
-    span {{ label }}
-    v-btn.ml-1(icon, x-small)
-      v-icon(small) fas fa-cog
+  .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
   tooltip(:tip="label", top)
     v-img.cursor-pointer.grey.d-flex.align-center.rounded-lg(
       @click="dialog = true",

@@ -32,7 +32,7 @@ class FieldType
   public static function getAll(): array
   {
     $q = Conn::table(Table::MODULES_FIELDS_TYPES)
-      ::select(['id', 'name', '`key`'])
+      ::select(['id', 'name', '`key`', '`foreign`'])
       ::where('active', 1)
       ::orderBy('name', 'ASC')
       ::send();
