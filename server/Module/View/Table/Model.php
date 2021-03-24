@@ -12,6 +12,8 @@ use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class Model
 {
+  const MAX_ITEMS_PER_PAGE = 100;
+
   /**
    * Obter item;
    *
@@ -62,7 +64,10 @@ class Model
     $module = addslashes($module);
     $fields = [];
     $page = Req::get('page') ? (int) Req::get('page') : 1;
-    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : PHP_INT_MAX;
+
+    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : self::MAX_ITEMS_PER_PAGE;
+    if ($itemsPerPage > self::MAX_ITEMS_PER_PAGE) $itemsPerPage = self::MAX_ITEMS_PER_PAGE;
+
     $offset = ($page - 1) * $itemsPerPage;
     $search = Req::get('search') ? addslashes(Req::get('search')) : null;
     $returnTotalItems = (int) Req::get('returnTotalItems');

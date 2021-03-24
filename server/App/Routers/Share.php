@@ -2,7 +2,7 @@
 
 use App\ShareTags;
 
-if (APP !== 'admin' && APP !== 'setup' && APP !== 'rest') {
+if (APP !== 'admin' && APP !== 'setup' && APP !== 'admin-rest') {
   foreach (ShareTags::app() as $path => $tags) {
     $router->get($path, function () use ($tags) {
       if (is_callable($tags)) $tags = $tags();

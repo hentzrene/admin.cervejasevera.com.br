@@ -1,9 +1,9 @@
 <?php
-$router->group('rest');
+$router->group('admin');
 
 $router->namespace('Module\Field\Subcategory');
 
-$router->get('/modules-subcategories', 'Controller:getAllItems');
-$router->post('/modules-subcategories', 'Controller:addItem');
-$router->put('/modules-subcategories/{subcategoryId}/title', 'Controller:setItemTitle');
-$router->delete('/modules-subcategories/{subcategoryId}', 'Controller:removeItem');
+$router->get('/rest/modules-subcategories', 'Controller:getAllItems');
+$router->post('/rest/modules-subcategories', 'Controller:addItem');
+$router->put('/rest/modules-subcategories/{subcategoryId}/title', 'Controller:setItemTitle');
+$router->delete('/rest/modules-subcategories/{subcategoryId}', 'Controller:removeItem');

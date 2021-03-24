@@ -1,9 +1,9 @@
 <?php
 $router->namespace('Core\Controller\Module');
-$router->group('rest');
-$router->get('/{module}', 'Route:getAll');
-$router->get('/{module}/{moduleItem}', 'Route:get');
-$router->post('/{module}', 'Route:add');
-$router->delete('/{module}/{moduleItem}', 'Route:remove');
-$router->put('/{module}/{moduleItem}', 'Route:update');
-$router->put('/{module}/{moduleItem}/{prop}', 'Route:setProp');
+$router->group("admin");
+$router->get('/rest/{module}', 'Route:getAll');
+$router->get('/rest/{module}/{moduleItem}', 'Route:get');
+$router->post('/rest/{module}', 'Route:add');
+$router->delete('/rest/{module}/{moduleItem}', 'Route:remove');
+$router->put('/rest/{module}/{moduleItem}', 'Route:update');
+$router->put('/rest/{module}/{moduleItem}/{prop}', 'Route:setProp');

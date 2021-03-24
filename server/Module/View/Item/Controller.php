@@ -9,7 +9,8 @@ class Controller
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(Model::get($module, true));
+      Response::set('status', 'error');
+      Response::status(401);
     } else {
       Response::rawBody(Model::get($module));
     }

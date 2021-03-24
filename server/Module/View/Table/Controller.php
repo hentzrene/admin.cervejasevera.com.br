@@ -9,7 +9,8 @@ class Controller
   public static function get(string $module, int $moduleItem)
   {
     if (!ON) {
-      Response::rawBody(Model::get($module, $moduleItem, true));
+      Response::set('status', 'error');
+      Response::status(401);
     } else {
       Response::rawBody(Model::get($module, $moduleItem));
     }
@@ -20,7 +21,8 @@ class Controller
   public static function getAll(string $module)
   {
     if (!ON) {
-      Response::rawBody(Model::getAll($module, true));
+      Response::set('status', 'error');
+      Response::status(401);
     } else {
       Response::rawBody(Model::getAll($module));
     }
@@ -33,10 +35,10 @@ class Controller
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
-      Response::send();
+    } else {
+      Response::set('id', Model::add($module));
     }
 
-    Response::set('id', Model::add($module));
     Response::send();
   }
 
@@ -49,6 +51,7 @@ class Controller
       Model::remove($module, $moduleItem);
       Response::set('status', 'success');
     }
+
     Response::send();
   }
 

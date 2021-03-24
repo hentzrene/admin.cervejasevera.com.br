@@ -15,11 +15,11 @@ if (APP === 'robots') {
   require __DIR__ . '/server/Resource/autoload.php';
 
   if (!INSTALLED) {
-    if (APP === 'rest' && $_GET['route'] !== '/rest/setup') {
+    if (APP === 'admin-rest' && $_GET['route'] !== '/admin/rest/setup') {
       throw new Exception('Database not configured.');
     }
 
-    if (APP !== 'rest' && APP !== 'setup' && $_GET['route'] !== '/setup') {
+    if (APP !== 'admin-rest' && APP !== 'setup' && $_GET['route'] !== '/setup') {
       header('Location: /admin/setup');
       die(302);
     }

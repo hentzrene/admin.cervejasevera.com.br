@@ -78,7 +78,7 @@ export default {
     data: Object,
   },
   data: () => ({
-    loading: false,
+    loading: true,
     search: "",
     selecteds: [],
     totalItems: 0,
@@ -166,10 +166,11 @@ export default {
 
               this.items.push(item_);
             }
+
+            this.loading = false;
           },
         })
-        .catch(() => this.$router.replace("/"))
-        .finally(() => (this.loading = false));
+        .catch(() => this.$router.replace("/"));
     },
     add() {
       this.loading = true;

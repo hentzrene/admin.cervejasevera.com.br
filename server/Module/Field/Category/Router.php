@@ -1,9 +1,9 @@
 <?php
-$router->group('rest');
+$router->group('admin');
 
 $router->namespace('Module\Field\Category');
 
-$router->get('/modules-categories', 'Controller:getAllItems');
-$router->post('/modules-categories', 'Controller:addItem');
-$router->put('/modules-categories/{categoryId}/title', 'Controller:setItemTitle');
-$router->delete('/modules-categories/{categoryId}', 'Controller:removeItem');
+$router->get('/rest/modules-categories', 'Controller:getAllItems');
+$router->post('/rest/modules-categories', 'Controller:addItem');
+$router->put('/rest/modules-categories/{categoryId}/title', 'Controller:setItemTitle');
+$router->delete('/rest/modules-categories/{categoryId}', 'Controller:removeItem');

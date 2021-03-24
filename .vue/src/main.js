@@ -19,20 +19,20 @@ const config = JSON.parse(document.getElementById("config").textContent);
 Vue.config.productionTip = false;
 
 Vue.use(VuexRest, {
-  base: server + "/rest"
+  base: server + "/admin/rest",
 });
 
 Vue.mixin({
   data: () => ({
     server,
     files: server + "/admin",
-    ...config
-  })
+    ...config,
+  }),
 });
 
 new Vue({
   router,
   vuetify,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");

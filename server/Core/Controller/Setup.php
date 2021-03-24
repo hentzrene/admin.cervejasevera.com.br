@@ -12,7 +12,7 @@ class Setup
   {
     if (ModelSetup::exec(Req::getAll())) {
       Response::set('status', 'succes');
-      Response::set('success', 'Banco de dados configudado.');
+      Response::set('success', 'Banco de dados configurado.');
     } else {
       Response::set('status', 'error');
       Response::set('error', 'Não foi possível configurar o banco de dados.');
