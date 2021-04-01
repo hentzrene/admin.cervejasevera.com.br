@@ -23,13 +23,10 @@ class Content
   {
     $q = Conn::table("mod_$moduleKey")
       ::select($columns)
-      ::orderBy('id', 'DESC')
       ::where('id', $itemId)
-      ::and('active', 1)
-      ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
-      ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1)
+      ::orderBy('id', 'DESC')
       ::send();
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    return $q ? $q->fetch_object() : (object) [];
   }
 }
