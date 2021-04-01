@@ -152,7 +152,10 @@ export default {
                 if (!field) {
                   item_[key] = item[key];
                 } else {
-                  const f = formatForDisplay_[field.typeKey];
+                  const f =
+                    formatForDisplay_[
+                      field.typeKey.replace(/([A-Z])/g, "-$1").toLowerCase()
+                    ];
 
                   if (!f) item_[key] = item[key];
                   else

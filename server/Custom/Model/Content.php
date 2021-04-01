@@ -2,36 +2,34 @@
 
 namespace Model;
 
+use Core\Model\Utility\Conn;
+
 class Content
 {
-
-  /**
-   * Obter dados de uma galeria.
-   *
-   * @param int $gallerieId
-   * @return array
-   */
-  public static function getGallerie(int $gallerieId): object
+  public static function getAllItems(string $moduleKey, array $columns): array
   {
-    $gallerie = self::get(['titulo' => 'title'], $gallerieId);
-
-    $imgs = Conn::table('admin_fotos')
-      ::select(['caminho' => "img"])
-      ::where('cod_item', $gallerieId)
+    $q = Conn::table("mod_$moduleKey")
+      ::select($columns)
+      ::where('active', 1)
+      ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
+      ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1)
+      ::orderBy('id', 'DESC')
       ::send();
 
-    if (!$imgs) {
-      throw new \Exception('NO CONTENT');
-    }
+    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+  }
 
-    $imgs = $imgs->fetch_all(MYSQLI_NUM);
+  public static function getItem(string $moduleKey, array $columns, int $itemId)
+  {
+    $q = Conn::table("mod_$moduleKey")
+      ::select($columns)
+      ::orderBy('id', 'DESC')
+      ::where('id', $itemId)
+      ::and('active', 1)
+      ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
+      ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1)
+      ::send();
 
-    $imgs = array_map(function ($row) {
-      return $row[0];
-    }, $imgs);
-
-    $gallerie->imgs = $imgs;
-
-    return $gallerie;
+    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
   }
 }
