@@ -1,6 +1,6 @@
 <?php
 
-namespace Controller;
+namespace Custom\Controller;
 
 use Model\Content as Cont;
 

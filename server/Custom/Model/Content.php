@@ -1,6 +1,6 @@
 <?php
 
-namespace Model;
+namespace Custom\Model;
 
 use Core\Model\Utility\Conn;
 
