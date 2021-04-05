@@ -32,6 +32,8 @@ class Request
     $input = file_get_contents("php://input");
     self::$body = json_decode($input ? $input : '{}');
 
+    if (!self::$body) self::$body = (object) [];
+
     foreach ($_GET as $key => $value) {
       self::$body->{$key} = $value;
     }
