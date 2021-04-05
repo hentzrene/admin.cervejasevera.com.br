@@ -1,7 +1,8 @@
 <?php
 
-namespace Core\Model;
+namespace Custom\Model;
 
+use Core\Model\Configuration;
 use \PHPMailer\PHPMailer\PHPMailer;
 use \PHPMailer\PHPMailer\Exception;
 

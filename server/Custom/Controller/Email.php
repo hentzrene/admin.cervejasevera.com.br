@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Controller;
+namespace Custom\Controller;
 
-use Core\Model\Email as ModelEmail;
+use Custom\Model\Email as ModelEmail;
 
 class Email
 {
