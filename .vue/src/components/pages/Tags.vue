@@ -3,7 +3,7 @@ module-template.page-tags(title="Tags", max-width="800px")
   v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
     v-form.pt-4.d-flex.flex-column(ref="form")
       v-textarea(
-        :value="configuration.usanalyticser",
+        :value="configuration.analytics",
         :disabled="loading",
         :loading="loading",
         :rows="10",
