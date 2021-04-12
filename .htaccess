@@ -14,12 +14,6 @@ RewriteCond %{REQUEST_URI} ^/admin/setup/?
 RewriteRule ^ - [E=APP:setup]
 RewriteCond %{REQUEST_URI} ^/admin/rest(/.*)?
 RewriteRule ^ - [E=APP:admin-rest]
-RewriteCond %{REQUEST_URI} ^/robots.txt$
-RewriteRule ^ - [E=APP:robots]
-RewriteCond %{REQUEST_URI} ^/sitemap.xml$
-RewriteRule ^ - [E=APP:sitemap]
-RewriteCond %{REQUEST_URI} ^/manifest.json$
-RewriteRule ^ - [E=APP:manifest]
 
 RewriteCond %{SCRIPT_FILENAME} -f
 RewriteCond %{SCRIPT_FILENAME} \.(png|PNG|jpg|JPG|jpeg|JPEG)$

@@ -4,10 +4,11 @@ use Core\Model\Account\Auth;
 use Core\Model\Utility\Request;
 
 define('APP', $_SERVER['REDIRECT_APP']);
+define('ROUTE', $_GET['route']);
 
-if (APP === 'robots') {
+if (ROUTE === '/robots.txt') {
   require __DIR__ . '/server/App/Robots.php';
-} else if (APP === 'sitemap') {
+} else if (ROUTE === '/sitemap.xml') {
   require __DIR__ . '/server/App/Sitemap.php';
 } else {
   define('INSTALLED', file_exists(__DIR__ . '/server/Core/DB.php'));
@@ -26,7 +27,7 @@ if (APP === 'robots') {
   } else {
     require __DIR__ . '/server/Core/DB.php';
 
-    if (APP === 'manifest') {
+    if (ROUTE === '/manifest.json') {
       require __DIR__ . '/server/App/Manifest.php';
       die();
     }

@@ -5,9 +5,6 @@ use Core\Model\Utility\Response;
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Cuiaba');
 error_reporting(E_ALL & ~E_NOTICE);
-// header('Cache-Control: no-cache, no-store, must-revalidate'); // HTTP 1.1.
-// header('Pragma: no-cache'); // HTTP 1.0.
-// header('Expires: 0'); // Proxies.
 ini_set('display_errors', 1);
 
 define('IMAGE_RESIZER_PROCESS', (int) $_GET['resize']);

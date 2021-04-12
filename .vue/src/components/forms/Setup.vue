@@ -3,6 +3,7 @@ v-form(ref="form")
   v-text-field(
     :rules="[rules.required]",
     :loading="loading",
+    :disabled="loading",
     value="localhost",
     type="text",
     label="HOST",
@@ -14,6 +15,7 @@ v-form(ref="form")
   v-text-field(
     :rules="[rules.required]",
     :loading="loading",
+    :disabled="loading",
     type="text",
     label="BANCO DE DADOS",
     name="database",
@@ -24,6 +26,7 @@ v-form(ref="form")
   v-text-field(
     :rules="[rules.required]",
     :loading="loading",
+    :disabled="loading",
     type="text",
     label="USUÁRIO",
     name="user",
@@ -34,6 +37,7 @@ v-form(ref="form")
   v-text-field(
     :rules="[rules.required]",
     :loading="loading",
+    :disabled="loading",
     type="password",
     label="SENHA",
     name="password",
