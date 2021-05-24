@@ -2,6 +2,12 @@
 module-template(title="Módulos")
   template(#toolbar)
     toolbar-button(
+      @click="dialogMenu = true",
+      tip="Menu",
+      icon="fas fa-bars",
+      dark
+    )
+    toolbar-button(
       :to="$route.path + '/adicionar'",
       tip="Adicionar",
       icon="fas fa-plus",
@@ -32,7 +38,12 @@ module-template(title="Módulos")
         small
       )
         v-icon(small) fas fa-trash
-  v-dialog(v-model="dialog", max-width="400", persistent)
+    template(#item.menuTitle="{ item }")
+      div
+        span {{ item.menuTitle }}
+        v-btn(@click.stop="editMenuTitle(item)", color="blue", icon, small)
+          v-icon(small) fas fa-exchange-alt
+  v-dialog(v-model="dialogConfirm", max-width="400", persistent)
     v-card(dark)
       v-card-title.d-flex.justify-center Confirmar remoção
       v-card-text
@@ -45,11 +56,19 @@ module-template(title="Módulos")
           color="secondary",
           depressed
         ) Confirmar
+  menu-config-list(v-model="dialogMenu", :menus="menus")
+  menu-edit(
+    v-model="dialogEditMenu",
+    :menus="menus",
+    :module-item="moduleItem"
+  )
 </template>
 
 <script>
 import ToolbarButton from "@/components/buttons/Toolbar";
 import ModuleTemplate from "@/components/templates/Module";
+import MenuConfigList from "./menu-config/List";
+import MenuEdit from "./MenuEdit";
 
 export default {
   data: () => ({
@@ -58,9 +77,13 @@ export default {
       { text: "Id", value: "id", align: "left" },
       { text: "Nome", value: "name" },
       { text: "View", value: "viewName" },
+      { text: "Menu", value: "menuTitle" },
       { text: "", value: "action", align: "right" },
     ],
-    dialog: null,
+    dialogConfirm: false,
+    dialogMenu: false,
+    dialogEditMenu: false,
+    moduleItem: null,
   }),
   computed: {
     items() {
@@ -69,24 +92,31 @@ export default {
     sm() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    menus() {
+      return this.$rest("modulesMenu").list;
+    },
   },
   methods: {
     remove(id) {
       this.confirmation().then(() => this.$rest("modules").delete({ id }));
     },
     confirmation() {
-      this.dialog = true;
+      this.dialogConfirm = true;
 
       return new Promise((resolve, reject) => {
         this.$once("confirm", () => {
-          this.dialog = false;
+          this.dialogConfirm = false;
           resolve();
         });
         this.$once("cancel", () => {
-          this.dialog = false;
+          this.dialogConfirm = false;
           reject();
         });
       });
+    },
+    editMenuTitle(item) {
+      this.dialogEditMenu = true;
+      this.moduleItem = item;
     },
   },
   created() {
@@ -96,6 +126,7 @@ export default {
     }
 
     this.loading = true;
+    this.$rest("modulesMenu").get();
     this.$rest("modules")
       .get()
       .finally(() => (this.loading = false));
@@ -103,6 +134,8 @@ export default {
   components: {
     ToolbarButton,
     ModuleTemplate,
+    MenuConfigList,
+    MenuEdit,
   },
 };
 </script>

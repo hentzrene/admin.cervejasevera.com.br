@@ -14,7 +14,9 @@ v-navigation-drawer(
     router-link.white--text.h-100(to="/")
       img.logo(src="/admin/img/logo.svg", contain)
   v-divider
-  div(v-if="!modules.length").pa-2.mx-2.mt-10.white--text.font-weight-bold.primary.rounded-pill.text-body-2.text-center Nenhum módulo adicionado.
+  .pa-2.mx-2.mt-10.white--text.font-weight-bold.primary.rounded-pill.text-body-2.text-center(
+    v-if="!modules.length"
+  ) Nenhum módulo adicionado.
   template(v-else)
     v-list-item-group.mt-2(v-model="current")
       v-list(dense, nav)
@@ -24,22 +26,17 @@ v-navigation-drawer(
               v-icon {{ icon }}
             v-list-item-content
               v-list-item-title.body-2 {{ text }}
-          v-list-group(
-            v-else,
-            :key="i",
-            :prepend-icon="icon",
-            no-action,
-            color="black"
-          )
-            template(v-slot:activator)
-              v-list-item.pa-0
-                v-list-item-title.body-2 {{ text }}
-            v-list-item(
-              v-for="({ to, text }, i) in items",
+          v-list-group(v-else, :key="i", no-action, color="white")
+            template(#activator)
+              v-list-item-title.body-2.text-uppercase.font-weight-bold {{ text }}
+            v-list-item.pl-8(
+              v-for="({ text, to, icon }, i) in items",
               :key="i",
               :to="to",
               link
             )
+              v-list-item-icon
+                v-icon {{ icon }}
               v-list-item-content
                 v-list-item-title.body-2 {{ text }}
 </template>
@@ -56,11 +53,35 @@ export default {
   },
   computed: {
     nav() {
-      return this.modules.map(({ name, key, icon }) => ({
+      let withMenu = [];
+      let withoutMenu = [];
+
+      for (let m of this.modules)
+        if (m.menuId) withMenu.push(m);
+        else withoutMenu.push(m);
+
+      withMenu = withMenu.reduce((r, v) => {
+        const menu = r.find(({ text }) => text === v.menuTitle);
+
+        if (!menu) {
+          r.push({
+            text: v.menuTitle,
+            items: [{ text: v.name, to: "/" + v.key, icon: v.icon }],
+          });
+        } else {
+          menu.items.push({ text: v.name, to: "/" + v.key, icon: v.icon });
+        }
+
+        return r;
+      }, []);
+
+      withoutMenu = withoutMenu.map(({ name, key, icon }) => ({
         text: name,
         to: "/" + key,
         icon,
       }));
+
+      return [...withoutMenu, ...withMenu];
     },
     modules() {
       return this.$rest("modules").list;
@@ -87,5 +108,11 @@ export default {
 .v-navigation-drawer__content .v-item-group {
   height: calc(100% - 100px) !important;
   overflow-y: scroll;
+}
+
+.v-navigation-drawer__content
+  .v-list-group__header__append-icon
+  .fa-chevron-down {
+  font-size: 14px !important;
 }
 </style>

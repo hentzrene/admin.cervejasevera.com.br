@@ -119,6 +119,8 @@ class Module
           'view_options' => 'viewOptions',
           'view_key' => 'viewKey',
           'view_name' => 'viewName',
+          'menu_id' => 'menuId',
+          'menu_title' => 'menuTitle',
           'removable'
         ])
         ::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1)
@@ -133,6 +135,8 @@ class Module
           'view_options' => 'viewOptions',
           'view_key' => 'viewKey',
           'view_name' => 'viewName',
+          'menu_id' => 'menuId',
+          'menu_title' => 'menuTitle',
           'removable'
         ])
         ::send();
@@ -212,6 +216,21 @@ class Module
 
     return (bool) Conn::table(Table::MODULES)
       ::update(["name" => "'$value'"])
+      ::where('id', $id)
+      ::send();
+  }
+
+  /**
+   * Definir menu.
+   *
+   * @param integer $id
+   * @param string $value
+   * @return boolean
+   */
+  public static function setMenu(int $id, ?int $value): bool
+  {
+    return (bool) Conn::table(Table::MODULES)
+      ::update(["modules_menu_id" => $value ? $value : 'NULL'])
       ::where('id', $id)
       ::send();
   }

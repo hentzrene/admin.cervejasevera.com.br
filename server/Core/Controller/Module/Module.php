@@ -73,6 +73,23 @@ class Module
     Response::send();
   }
 
+  public function setMenu($d)
+  {
+    if (!ON || !ModelModule::isAllowed((int) $d['moduleId'], ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      ModelModule::setMenu(
+        (int) $d['moduleId'],
+        Req::get('value') ? (int) Req::get('value') : null
+      );
+      Response::set('status', 'success');
+      Response::set('success', 'Menu alterado com sucesso.');
+    }
+
+    Response::send();
+  }
+
   public function setIcon($d)
   {
     if (!ON || !ModelModule::isAllowed((int) $d['moduleId'], ACCOUNT_ID)) {

@@ -24,6 +24,8 @@ class Table
 
   const MODULES_FIELDS_TYPES = "modules_fields_types";
 
+  const MODULES_MENU = "modules_menu";
+
   const MODULES_VIEWS = "modules_views";
 
   const SESSIONS = "sessions";

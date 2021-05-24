@@ -22,6 +22,7 @@ $router->post('/rest/modules', 'Module:add');
 $router->put('/rest/modules/{moduleId}/name', 'Module:setName');
 $router->put('/rest/modules/{moduleId}/icon', 'Module:setIcon');
 $router->put('/rest/modules/{moduleId}/view-options', 'Module:setViewOptions');
+$router->put('/rest/modules/{moduleId}/menu', 'Module:setMenu');
 $router->delete('/rest/modules/{moduleId}', 'Module:remove');
 
 $router->get('/rest/modules-basic', 'Module:getBasicOfAll');
@@ -35,3 +36,8 @@ $router->put('/rest/modules-fields/{fieldId}/name', 'Field:setName');
 $router->put('/rest/modules-fields/{fieldId}/type-id', 'Field:setTypeId');
 $router->put('/rest/modules-fields/{fieldId}/options', 'Field:setOption');
 $router->delete('/rest/modules-fields/{fieldId}', 'Field:remove');
+
+$router->get('/rest/modules-menu', 'Menu:getAllItems');
+$router->post('/rest/modules-menu', 'Menu:addItem');
+$router->put('/rest/modules-menu/{menuId}/title', 'Menu:setItemTitle');
+$router->delete('/rest/modules-menu/{menuId}', 'Menu:removeItem');
