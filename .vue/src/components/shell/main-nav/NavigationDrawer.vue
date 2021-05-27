@@ -81,6 +81,14 @@ export default {
         icon,
       }));
 
+      withoutMenu = withoutMenu.sort((a, b) => a.text.localeCompare(b.text));
+      withMenu = withMenu
+        .map((menu) => {
+          menu.items = menu.items.sort((a, b) => a.text.localeCompare(b.text));
+          return menu;
+        })
+        .sort((a, b) => a.text.localeCompare(b.text));
+
       return [...withoutMenu, ...withMenu];
     },
     modules() {
