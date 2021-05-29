@@ -15,6 +15,7 @@
 /.vue/dist
 /.vue/package-lock.json
 /.vue/node_modules
+/.vue-app
 # local env files
 .env.local
 .env.*.local
