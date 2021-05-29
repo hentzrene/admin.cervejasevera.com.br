@@ -19,6 +19,8 @@ $router->get('/projects', 'Content:getAllProjects');
 $router->get('/videos', 'Content:getAllVideos');
 $router->get('/videos/{itemId}', 'Content:getVideo');
 $router->get('/jean-piaget', 'Content:getJeanPiaget');
+$router->get('/about', 'Content:getAbout');
+$router->get('/pedagogical-proposal', 'Content:getPedagogicalProposal');
 $router->get('/covid', 'Content:getAllCovid');
 
 $router->post('/email/contact-us', 'Email:contactUs');
