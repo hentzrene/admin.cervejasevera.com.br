@@ -12,6 +12,7 @@ $router->get('/webcanal', 'Content:getWebCanal');
 $router->get('/articles', 'Content:getAllArticles');
 $router->get('/articles/{itemId}', 'Content:getArticle');
 $router->get('/communications', 'Content:getAllCommunications');
+$router->get('/communications/{itemId}', 'Content:getCommunication');
 $router->get('/galleries', 'Content:getAllGalleries');
 $router->get('/galleries/{itemId}', 'Content:getGallery');
 $router->get('/projects', 'Content:getAllProjects');

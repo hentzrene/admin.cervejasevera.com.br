@@ -75,6 +75,32 @@ class Content
     Response::send();
   }
 
+  public function getAbout()
+  {
+    $item = new Item(
+      'about',
+      ['text', 'img'],
+      1
+    );
+
+    Response::rawBody($item->data);
+
+    Response::send();
+  }
+
+  public function getPedagogicalProposal()
+  {
+    $item = new Item(
+      'pedagogical_proposal',
+      ['text', 'img'],
+      1
+    );
+
+    Response::rawBody($item->data);
+
+    Response::send();
+  }
+
   public function getAllVideos()
   {
     $collection = new Collection(
@@ -181,6 +207,21 @@ class Content
     );
 
     Response::rawBody($collection->data);
+
+    Response::send();
+  }
+
+  public function getCommunication($d)
+  {
+    $item = new Item('articles', [
+      'id',
+      'title',
+      'scheduled',
+      'text'
+    ], (int) $d['itemId']);
+
+
+    Response::rawBody($item->data);
 
     Response::send();
   }
