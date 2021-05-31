@@ -16,7 +16,7 @@ class Content
   {
     $item = new Item(
       'informations',
-      ['img', 'name', 'local', 'tel', 'email', 'operation', 'map'],
+      ['img', 'name', 'local', 'tel', 'email', 'operation', 'map', 'local_link'],
       1
     );
 
