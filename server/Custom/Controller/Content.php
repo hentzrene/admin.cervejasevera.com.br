@@ -4,7 +4,7 @@ namespace Custom\Controller;
 
 use Core\Model\Utility\Request as Req;
 use Core\Model\Utility\Response;
-use Custom\Model\Collection;
+use Custom\Model\Collection\Collection;
 use Custom\Model\CollectionInit\CollectionInit;
 use Custom\Model\CollectionInit\JoinSet\Item as JoinSetItem;
 use Custom\Model\CollectionInit\JoinSet\JoinSet;
