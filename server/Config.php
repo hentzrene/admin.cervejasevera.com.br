@@ -38,9 +38,15 @@ if (!IMAGE_RESIZER_PROCESS) {
   );
 
   set_exception_handler(function ($e) {
+    $file = $e->getFile();
+    $line = $e->getLine();
+    $message = $e->getMessage();
+    $code = $e->getCode();
+
     Response::set('status', 'error');
-    Response::set('error', $e->getMessage());
-    Response::set('errno', $e->getCode());
+    Response::set('error', $message);
+    Response::set('fileLine', "$file:$line");
+    Response::set('errno', $code);
     Response::set('date', date('d/m/Y H:i:s'));
     Response::status(500);
     Response::send();
