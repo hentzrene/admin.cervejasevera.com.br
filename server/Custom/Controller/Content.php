@@ -322,4 +322,21 @@ class Content
 
     Response::send();
   }
+
+  public function getAllUsefulLinks()
+  {
+    $collection = new Collection(
+      'useful_links',
+      ['title', 'link'],
+      new CollectionInit([
+        'join' => new JoinSet([
+          new JoinSetItem('category', 'categories')
+        ])
+      ])
+    );
+
+    Response::rawBody($collection->data);
+
+    Response::send();
+  }
 }

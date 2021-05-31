@@ -22,5 +22,6 @@ $router->get('/jean-piaget', 'Content:getJeanPiaget');
 $router->get('/about', 'Content:getAbout');
 $router->get('/pedagogical-proposal', 'Content:getPedagogicalProposal');
 $router->get('/covid', 'Content:getAllCovid');
+$router->get('/useful-links', 'Content:getAllUsefulLinks');
 
 $router->post('/email/contact-us', 'Email:contactUs');
