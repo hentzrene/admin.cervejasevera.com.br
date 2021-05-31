@@ -55,6 +55,7 @@ class Conn
   {
     Conn::$sql = '';
     Conn::$where = false;
+    Conn::$on = false;
     Conn::$table = $table;
 
     return new Table();
@@ -68,7 +69,6 @@ class Conn
 
     Conn::$where = false;
     Conn::$sql = 'SELECT';
-
 
     if (is_string($columns)) {
       Conn::$sql .= " $columns";
@@ -84,7 +84,6 @@ class Conn
     } else {
       return null;
     }
-
 
     Conn::$sql .= ' FROM ' . Conn::$table;
 
@@ -129,7 +128,7 @@ class Conn
 
   public static function where(string $column, string $value, $op = '='): ?Object
   {
-    if (!Conn::$table || !Conn::$sql) {
+    if (!Conn::$sql) {
       return null;
     }
 
@@ -141,9 +140,7 @@ class Conn
 
   public static function and(string $column, string $value, $op = '='): ?Object
   {
-    if (!Conn::$table || !Conn::$sql || !Conn::$where) {
-      var_dump(Conn::$sql);
-      die();
+    if (!Conn::$sql || (!Conn::$where && !Conn::$on)) {
       return null;
     }
 
@@ -154,7 +151,7 @@ class Conn
 
   public static function or(string $column, string $value, $op = '='): ?Object
   {
-    if (!Conn::$table || !Conn::$sql || !Conn::$where) {
+    if (!Conn::$sql || (!Conn::$where && !Conn::$on)) {
       return null;
     }
 
@@ -165,7 +162,7 @@ class Conn
 
   public static function limit(int $limit, int $offset = 0): ?Object
   {
-    if (!Conn::$table || !Conn::$sql) {
+    if (!Conn::$sql) {
       return null;
     }
 
@@ -176,7 +173,7 @@ class Conn
 
   public static function orderBy(string $column, string $direction): ?Object
   {
-    if (!Conn::$table || !Conn::$sql) {
+    if (!Conn::$sql) {
       return null;
     }
 
@@ -239,7 +236,7 @@ class Conn
 
   public static function send()
   {
-    if (!Conn::$table || !Conn::$sql) {
+    if (!Conn::$sql) {
       return null;
     }
 
