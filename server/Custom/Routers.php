@@ -25,3 +25,4 @@ $router->get('/covid', 'Content:getAllCovid');
 $router->get('/useful-links', 'Content:getAllUsefulLinks');
 
 $router->post('/email/contact-us', 'Email:contactUs');
+$router->post('/email/work-with-us', 'Email:workWithUs');
