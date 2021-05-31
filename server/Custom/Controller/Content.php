@@ -53,7 +53,7 @@ class Content
   {
     $item = new Item(
       'education',
-      ['id', 'title', 'text', 'img as mainImg'],
+      ['id', 'title', 'text', 'img' => 'mainImg'],
       (int) $d['itemId']
     );
 
@@ -140,7 +140,10 @@ class Content
       [
         'id',
         'title',
-        'SUBSTRING(text, 1, 70) as text',
+        fn ($mod) => ([
+          'column' => "SUBSTRING($mod.text, 1, 70)",
+          'as' => 'text'
+        ]),
         'img'
       ],
       new CollectionInit([
@@ -235,7 +238,10 @@ class Content
       [
         'id',
         'title',
-        'SUBSTRING(text, 1, 70) as text',
+        fn ($mod) => ([
+          'column' => "SUBSTRING($mod.text, 1, 70)",
+          'as' => 'text'
+        ]),
         'img',
         'scheduled'
       ],
@@ -257,7 +263,7 @@ class Content
       'id',
       'title',
       'source',
-      'img as mainImg',
+      'img' => 'mainImg',
       'video',
       'scheduled',
       'text'

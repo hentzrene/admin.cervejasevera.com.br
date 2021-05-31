@@ -30,7 +30,11 @@ class Collection
 
     $columnsWithTable = [];
     foreach ($columns as $k => $v) {
-      if (!is_int($k)) {
+      if ($v instanceof \Closure) {
+        $c = $v("mod_$moduleKey");
+
+        $columnsWithTable[$c['column']] = $c['as'];
+      } else if (!is_int($k)) {
         $columnsWithTable["mod_$moduleKey.$k"] = $v;
       } else {
         $columnsWithTable[$k] = "mod_$moduleKey.$v";
