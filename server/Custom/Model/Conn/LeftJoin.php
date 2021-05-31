@@ -2,8 +2,13 @@
 
 namespace Custom\Model\Conn;
 
-class Select
+class LeftJoin
 {
+  static function on(string $column, string $value, string $op = '=')
+  {
+    return Conn::on($column, $value, $op);
+  }
+
   static function where(string $column, string $value, string $op = '=')
   {
     return Conn::where($column, $value, $op);
@@ -17,11 +22,6 @@ class Select
   static function orderBy(string $column, string $direction)
   {
     return Conn::orderBy($column, $direction);
-  }
-
-  static function leftJoin(string $table)
-  {
-    return Conn::leftJoin($table);
   }
 
   static function send()

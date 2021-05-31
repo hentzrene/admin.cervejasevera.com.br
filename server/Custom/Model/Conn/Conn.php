@@ -12,6 +12,8 @@ class Conn
 
   private static $where = false;
 
+  private static $on = false;
+
   public static function init(): void
   {
     Conn::$conn = new \Mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
@@ -100,6 +102,29 @@ class Conn
 
 
     return new SelectWhereId();
+  }
+
+  public static function leftJoin(string $table): ?Object
+  {
+    if (!Conn::$sql) {
+      return null;
+    }
+
+    Conn::$sql .= " LEFT JOIN $table";
+
+    return new LeftJoin;
+  }
+
+  public static function on(string $column, string $value, $op = '='): ?Object
+  {
+    if (!Conn::$sql) {
+      return null;
+    }
+
+    Conn::$on = true;
+    Conn::$sql .= " ON $column $op $value";
+
+    return new On;
   }
 
   public static function where(string $column, string $value, $op = '='): ?Object
