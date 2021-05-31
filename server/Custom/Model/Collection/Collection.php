@@ -1,6 +1,6 @@
 <?php
 
-namespace Custom\Model;
+namespace Custom\Model\Collection;
 
 use Custom\Model\Conn\Conn;
 use Custom\Model\CollectionInit\CollectionInit;
