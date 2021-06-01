@@ -8,30 +8,35 @@ use \PHPMailer\PHPMailer\Exception;
 
 class Email
 {
-  public static function contactUs(array $d)
+  public static function contactUs(string $name, string $email, string $text)
   {
-    $name = $d['name'];
-    $phone = $d['phone'];
-    $subject = $d['subject'];
-    $text = $d['text'];
-    $email = $d['email'];
+    $message = "$text<br>
+          <hr>
+          <br>
+          <strong>Nome: $name </strong><br>
+          <strong>E-mail: $email </strong>";
 
-    $message = "$text<br><hr>";
-
-    if ($name) $message .= "<strong>Nome:</strong> $name<br>";
-    if ($subject) $message .= "<strong>Assunto:</strong> $subject<br>";
-    if ($phone) $message .= "<strong>Telefone:</strong> $phone<br>";
-    if ($email) $message .= "<strong>E-mail:</strong> $email<br>";
-
-
-    self::send('CONTATO REALIZADO PELO SITE!!!', $message, Configuration::getConfig('email')->recipient);
+    self::send('jeanpiagetsinop.com.br - Mensagem do formulário Fale Conosco!', $message);
   }
 
+  public static function workWithUs(string $name, string $email, string $tel, array $file)
+  {
+    $message = "Contato realizado pelo formulário \"Trabalhe Conosco\".<br>
+          Segue currículo em anexo.
+          <hr>
+          <br>
+          <strong>Nome: $name </strong><br>
+          <strong>E-mail: $email </strong><br>
+          <strong>Telefone: $tel</strong>";
 
-  private static function send(string $subject, string $message, string $recipient, ?array $file = null)
+    self::send('jeanpiagetsinop.com.br - Mensagem do formulário Trabalhe Conosco!', $message, null, $file);
+  }
+
+  public static function send(string $subject, string $message, ?string $recipient = null, ?array $file = null)
   {
     $mail = new PHPMailer(true);
     $config = Configuration::getConfig('email');
+    $recipient = $recipient ?? $config->recipient;
 
     try {
       // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
@@ -55,7 +60,21 @@ class Email
       $mail->Body = utf8_decode($message);
       $mail->AltBody = utf8_decode('Erro: Esse cliente de email não suporta HTML');
 
-      if ($file && $file['type'] === 'application/pdf' && $file['size'] <= 5120000) {
+      if ($file) {
+        $acceptedAttachmentFormats = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+
+        if ($file['size'] > 5120000) {
+          throw new \Exception('O tamanho máximo de anexo permitido é 50MB.');
+        }
+
+        if (!in_array($file['type'], $acceptedAttachmentFormats)) {
+          throw new \Exception('Os únicos arquivos permitidos são os doc, docx e pdf.');
+        }
+
         $mail->AddAttachment(
           $file['tmp_name'],
           $file['name']

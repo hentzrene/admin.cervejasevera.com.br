@@ -1,5 +1,5 @@
 <meta name="url" content="<?= URL; ?>" />
-<meta name='copyright' content='© <?= date('Y') ?> <?= SHARE_TAG_TITLE ?>'>
+<meta name='copyright' content='© <?= date('Y') ?> <?= SHARE_TAG_NAME ?>'>
 <meta name='description' content='<?= SHARE_TAG_DESCRIPTION ?>'>
 <meta name='keywords' content='<?= SHARE_TAG_KEYWORDS ?>'>
 <meta itemprop="name" content="<?= SHARE_TAG_TITLE ?>">

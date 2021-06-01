@@ -4,7 +4,7 @@ namespace Custom\Model;
 
 use Core\Model\Module\Field;
 use Core\Model\Module\Module;
-use Core\Model\Utility\Conn;
+use Custom\Model\Conn\Conn;
 
 class Item
 {

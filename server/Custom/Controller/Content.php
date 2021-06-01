@@ -4,8 +4,10 @@ namespace Custom\Controller;
 
 use Core\Model\Utility\Request as Req;
 use Core\Model\Utility\Response;
-use Custom\Model\Collection;
-use Custom\Model\CollectionInit;
+use Custom\Model\Collection\Collection;
+use Custom\Model\CollectionInit\CollectionInit;
+use Custom\Model\CollectionInit\JoinSet\Item as JoinSetItem;
+use Custom\Model\CollectionInit\JoinSet\JoinSet;
 use Custom\Model\Item;
 
 class Content
@@ -23,6 +25,21 @@ class Content
     Response::send();
   }
 
+  public function getCommunication($d)
+  {
+    $item = new Item('articles', [
+      'id',
+      'title',
+      'scheduled',
+      'text'
+    ], (int) $d['itemId']);
+
+
+    Response::rawBody($item->data);
+
+    Response::send();
+  }
+
   public function getAllArticles()
   {
     $collection = new Collection(
@@ -30,7 +47,10 @@ class Content
       [
         'id',
         'title',
-        'SUBSTRING(text, 1, 70) as text',
+        fn ($mod) => ([
+          'column' => "SUBSTRING($mod.text, 1, 70)",
+          'as' => 'text'
+        ]),
         'img',
         'scheduled'
       ],
@@ -52,7 +72,7 @@ class Content
       'id',
       'title',
       'source',
-      'img as mainImg',
+      'img' => 'mainImg',
       'video',
       'scheduled',
       'text'
@@ -63,6 +83,23 @@ class Content
     $Item->withAttachments('file');
 
     Response::rawBody($Item->data);
+
+    Response::send();
+  }
+
+  public function getAllUsefulLinks()
+  {
+    $collection = new Collection(
+      'useful_links',
+      ['title', 'link'],
+      new CollectionInit([
+        'join' => new JoinSet([
+          new JoinSetItem('category', 'categories')
+        ])
+      ])
+    );
+
+    Response::rawBody($collection->data);
 
     Response::send();
   }
