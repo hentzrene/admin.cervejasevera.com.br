@@ -6,7 +6,7 @@ v-dialog(
 )
   v-card.pa-4(dark)
     .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
-      div Coleção
+      div Coleção com chave
       div
         v-btn.mr-2.text-none(
           @click="remove",
@@ -32,14 +32,22 @@ v-dialog(
         hide-default-footer
       )
         template(#item.item="{ item }")
-          v-textarea.field-collection-list-item.mt-1.py-2(
-            :value="item.value",
-            :rows="1",
-            outlined,
-            dense,
-            auto-grow,
-            @input="(data) => (items_[item.id] = data)"
-          )
+          .field-collectionwithkey-list-item.mt-1.py-2
+            v-textarea(
+              :value="item.value[0]",
+              :rows="1",
+              outlined,
+              dense,
+              @input="(data) => (items_[item.id][0] = data)"
+            )
+            v-icon.px-1(x-small) fas fa-equals
+            v-textarea(
+              :value="item.value[1]",
+              :rows="1",
+              outlined,
+              dense,
+              @input="(data) => (items_[item.id][1] = data)"
+            )
     .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum item foi adicionado.
     v-btn.text-none.mt-2(@click="save", color="secondary", block, depressed) Salvar
   v-overlay(v-model="loading")
@@ -57,7 +65,7 @@ export default {
       required: true,
     },
     items: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
@@ -89,7 +97,7 @@ export default {
   },
   methods: {
     add() {
-      this.items_.push("");
+      this.items_.push(["", ""]);
     },
     remove() {
       this.selecteds.map(({ id }) => {
@@ -105,7 +113,7 @@ export default {
       const form = this.$refs.form;
       if (!form.validate()) return;
 
-      const value = JSON.stringify(this.items_);
+      const value = JSON.stringify(Object.fromEntries(this.items_));
 
       this.loading = true;
 
@@ -119,6 +127,7 @@ export default {
         })
         .then(() => this.$emit("saved"))
         .finally(() => {
+          this.items_ = Object.entries(JSON.parse(value));
           this.selecteds = [];
           this.loading = false;
         });
@@ -126,11 +135,11 @@ export default {
   },
   watch: {
     items() {
-      this.items_ = this.items;
+      this.items_ = Object.entries(this.items);
     },
   },
   mounted() {
-    this.items_ = this.items;
+    this.items_ = Object.entries(this.items);
   },
   components: {
     Loading,
@@ -139,10 +148,19 @@ export default {
 </script>
 
 <style>
-.field-collection-list-item .v-text-field__details {
+.field-collectionwithkey-list-item {
+  display: grid;
+  grid-template-columns: calc(50% - 9.25px) max-content calc(50% - 9.25px);
+}
+@media screen and (max-width: 600px) {
+  .field-collectionwithkey-list-item {
+    grid-template-columns: auto;
+  }
+}
+.field-collectionwithkey-list-item .v-text-field__details {
   display: none;
 }
-.field-collection-list-item .error--text .v-text-field__details {
+.field-collectionwithkey-list-item .error--text .v-text-field__details {
   display: block;
 }
 </style>

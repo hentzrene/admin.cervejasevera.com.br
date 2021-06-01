@@ -39,7 +39,7 @@ export default {
       return parseInt(this.$rest("modules").item.id);
     },
     parsedValue() {
-      return JSON.parse(this.value || "[]");
+      return JSON.parse(this.value || "{}");
     },
   },
   beforeCreate() {
