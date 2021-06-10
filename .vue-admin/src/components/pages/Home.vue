@@ -2,7 +2,7 @@
 v-sheet.mx-auto.pa-4.d-flex.align-center(
   color="transparent",
   max-width="960px",
-  height="100%"
+  min-height="100%"
 )
   loading.mx-auto(v-if="loading")
   .pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto(
