@@ -1,6 +1,5 @@
 {
-  "name": "mrx",
-  "version": "0.1.0",
+  "name": "mrx-cms",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,12 +9,8 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^24.0.0",
     "@ckeditor/ckeditor5-vue2": "^1.0.5",
-    "@toast-ui/vue-image-editor": "^1.3.0",
     "axios": "github:axios/axios",
     "vue": "^2.6.11",
-    "vue-coverflow": "^2.2.0",
-    "vue-flux": "^6.3.0",
-    "vue-gallery-slideshow": "^1.5.2",
     "vue-router": "^3.1.5",
     "vue-runtime-helpers": "^1.1.2",
     "vue-the-mask": "^0.11.1",

@@ -1,7 +1,6 @@
 {
-  "name": "mrx/mrx-admin-main",
-  "description": "mrx",
-  "minimum-stability": "alpha",
+  "name": "sneverton/mrx-cms",
+  "description": "Sistema de gerenciamento de conte�do headless.",
   "license": "proprietary",
   "authors": [
     {
@@ -11,18 +10,19 @@
     }
   ],
   "config": {
-    "vendor-dir": "Resource"
+    "vendor-dir": "server/Resource/"
   },
   "autoload": {
     "psr-4": {
-      "\\": "Resource/"
+      "\\": "server/Resource/"
     },
     "files": [
-      "Config.php",
-      "Logger.php"
+      "server/Config.php",
+      "server/Logger.php"
     ]
   },
   "require": {
+    "php": "^7.4",
     "coffeecode/router": "1.0.7",
     "phpmailer/phpmailer": "^6.1",
     "intervention/image": "^2.5",
