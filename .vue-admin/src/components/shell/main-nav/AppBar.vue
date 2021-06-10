@@ -2,6 +2,7 @@
 v-app-bar(color="primary lighten-2", fixed, app, dense)
   router-link.h-100.white--text(v-if="sm", to="/")
     img.py-1(:src="`/admin/img/logo.svg`", height="100%", contain)
+  .grey--text.text--lighten-3.text-center.text-caption MRX CMS Headless {{ version }}
   v-spacer
   v-menu(
     v-model="menu",
@@ -101,6 +102,9 @@ export default {
     },
     userInitial() {
       return this.user.name.slice(0, 1);
+    },
+    version() {
+      return process.env.VUE_APP_PROJECT_VERSION;
     },
   },
   methods: {

@@ -10,7 +10,9 @@ v-sheet.d-flex.justify-center.align-center.pa-3(
     outlined
   )
     img.page-login-logo.mb-3(src="/admin/img/logo.svg")
-    .title.grey--text.text--lighten-3.text-center.mb-4 Painel de Administração
+    .grey--text.text--lighten-3.text-center.mb-4
+      .title Painel de Administração
+      .text-body-1 {{ version }}
     login-form(@send="send", :loading="loading")
 </template>
 
@@ -21,8 +23,10 @@ export default {
   data: () => ({
     loading: false,
   }),
-  created() {
-    if (this.$auth.on) this.$router.replace("/");
+  computed: {
+    version() {
+      return process.env.VUE_APP_PROJECT_VERSION;
+    },
   },
   methods: {
     send(data) {
@@ -35,6 +39,9 @@ export default {
         })
         .finally(() => (this.loading = false));
     },
+  },
+  created() {
+    if (this.$auth.on) this.$router.replace("/");
   },
   components: {
     LoginForm,
