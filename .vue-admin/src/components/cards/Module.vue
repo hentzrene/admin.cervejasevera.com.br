@@ -6,7 +6,7 @@ v-card.d-flex.align-center.flex-column.justify-center(
   outlined
 )
   v-icon(size="78", color="grey lighten-3") {{ icon }}
-  span.font-weight-bold.mt-2.grey--text.text--lighten-5 {{ title }}
+  span.font-weight-bold.mt-2.grey--text.text--lighten-5.text-center {{ title }}
 </template>
 
 <script>
