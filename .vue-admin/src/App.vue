@@ -51,6 +51,12 @@ export default {
         if (error.response.status === 303) {
           this.$router.push(new URL(error.response.data.redirect).pathname);
           return this.$store.dispatch("endRequest", {});
+        } else if (
+          error.response.status === 403 ||
+          error.response.status === 401
+        ) {
+          this.$router.replace("/entrar");
+          return this.$store.dispatch("endRequest", {});
         } else {
           return (
             this.$store.dispatch("endRequest", error.response.data || {}) &&
