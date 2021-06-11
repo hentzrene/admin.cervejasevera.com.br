@@ -26,7 +26,7 @@ v-card.pa-3(color="primary", max-width="400")
         solo
       )
     .field-item-switches.d-flex
-      tooltip(tip="Único", top)
+      tooltip(v-if="uniqueOption", tip="Único", top)
         v-btn(@click="data.unique = !data.unique", icon)
           v-icon(color="cyan", :disabled="!data.unique") fas fa-fingerprint
       tooltip(tip="Privado", top)
@@ -57,6 +57,10 @@ export default {
     types: {
       type: Array,
       required: true,
+    },
+    uniqueOption: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({

@@ -12,7 +12,12 @@ div
           x-small
         )
           v-icon fas fa-plus
-    field-list(v-if="fields.length", :items="fields", ref="fieldList")
+    field-list(
+      v-if="fields.length",
+      :items="fields",
+      ref="fieldList",
+      :unique-option="false"
+    )
     .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
 </template>
 

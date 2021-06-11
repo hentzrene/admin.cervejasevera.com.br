@@ -7,7 +7,8 @@ div
       @changekey="$emit('changefieldkey')",
       :types="fieldsTypes",
       :key="i",
-      :data="field"
+      :data="field",
+      :unique-option="false"
     )
   .pt-8.text-body-2.text-center.font-weight-bold.red--text(v-if="repeteadKey") Não pode existir alguma chave de campo repetida.
 </template>
@@ -20,6 +21,10 @@ export default {
     items: {
       type: Array,
       default: () => [],
+    },
+    uniqueOption: {
+      type: Boolean,
+      default: true,
     },
   },
   data: () => ({
