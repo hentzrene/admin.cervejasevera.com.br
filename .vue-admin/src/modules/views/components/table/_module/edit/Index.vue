@@ -30,6 +30,8 @@ div
         filter,
         outlined
       ) {{ name }}
+      v-chip(value="showFrom", filter, outlined) Começo
+      v-chip(value="showUp", filter, outlined) Fim
       v-btn(
         @click="sendListHeaders",
         :loading="sendingListHeaders",

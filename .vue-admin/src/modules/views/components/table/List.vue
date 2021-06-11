@@ -44,7 +44,10 @@ module-template(:title="data.name")
       dark
     )
       template(v-for="(h, i) in listHeaders", v-slot:[`item.${h}`]="{ item }")
-        div(v-if="typeof item[h] === 'object'", v-html="item[h].innerHTML")
+        div(
+          v-if="item[h] && typeof item[h] === 'object'",
+          v-html="item[h].innerHTML"
+        )
         span(v-else) {{ item[h] }}
       template(#item.action="{ item }")
         .d-flex.justify-end
@@ -99,12 +102,25 @@ export default {
       if (!this.listHeaders || !this.fields) return [];
 
       const headers = this.listHeaders.map((h) => {
-        return {
-          text: this.fields.find(({ key }) => key == h).name,
+        const r = {
           value: h,
           align: "left",
           sortable: false,
         };
+
+        switch (h) {
+          case "showFrom":
+            r.text = "Começo";
+            break;
+          case "showUp":
+            r.text = "Fim";
+            break;
+          default:
+            r.text = this.fields.find(({ key }) => key == h).name;
+            break;
+        }
+
+        return r;
       });
 
       headers.unshift({
@@ -154,7 +170,14 @@ export default {
               for (let key in item) {
                 field = this.fields.find((f) => f.key === key);
                 if (!field) {
-                  item_[key] = item[key];
+                  if ((key === "showFrom" || key === "showUp") && item[key]) {
+                    item_[key] = new Date(item[key]).toLocaleString("pt-BR", {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                    });
+                  } else {
+                    item_[key] = item[key];
+                  }
                 } else {
                   const f =
                     formatForDisplay_[

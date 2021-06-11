@@ -18,6 +18,9 @@ module-template(
             label="Começo",
             type="datetime-local",
             name="showFrom",
+            :value="item.showFrom && item.showFrom.replace(' ', 'T')",
+            :clearable="true",
+            clear-icon="fas fa-times",
             outlined,
             dense,
             hide-details
@@ -26,6 +29,9 @@ module-template(
             label="Fim",
             type="datetime-local",
             name="showUp",
+            :value="item.showUp && item.showUp.replace(' ', 'T')",
+            :clearable="true",
+            clear-icon="fas fa-times",
             outlined,
             dense,
             hide-details
@@ -106,7 +112,7 @@ export default {
       );
 
       this.$rest(this.data.key)
-        .put({ id: this.itemId, data })
+        .put({ id: this.itemId, save: () => false, data })
         .finally(() => (this.updatingRangeDateActived = false));
     },
   },
