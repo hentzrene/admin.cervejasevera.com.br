@@ -8,7 +8,7 @@ div
       :types="fieldsTypes",
       :key="i",
       :data="field",
-      :unique-option="false"
+      :unique-option="uniqueOption"
     )
   .pt-8.text-body-2.text-center.font-weight-bold.red--text(v-if="repeteadKey") Não pode existir alguma chave de campo repetida.
 </template>
