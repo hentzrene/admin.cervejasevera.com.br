@@ -46,14 +46,14 @@ export default {
 
     http.interceptors.response.use(
       (response) =>
-        this.$store.dispatch("endRequest", response.data) && response,
+        this.$store.dispatch("endRequest", response.data || {}) && response,
       (error) => {
         if (error.response.status === 303) {
           this.$router.push(new URL(error.response.data.redirect).pathname);
           return this.$store.dispatch("endRequest", {});
         } else {
           return (
-            this.$store.dispatch("endRequest", error.response.data) &&
+            this.$store.dispatch("endRequest", error.response.data || {}) &&
             Promise.reject(error)
           );
         }
