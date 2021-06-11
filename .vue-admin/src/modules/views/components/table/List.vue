@@ -43,6 +43,9 @@ module-template(:title="data.name")
       fixed-header,
       dark
     )
+      template(v-for="(h, i) in listHeaders", v-slot:[`item.${h}`]="{ item }")
+        div(v-if="typeof item[h] === 'object'", v-html="item[h].innerHTML")
+        span(v-else) {{ item[h] }}
       template(#item.action="{ item }")
         .d-flex.justify-end
           v-btn(
@@ -83,18 +86,19 @@ export default {
     selecteds: [],
     totalItems: 0,
     items: [],
+    action: "item.action",
   }),
   computed: {
-    viewOptions() {
-      return this.data.viewOptions;
-    },
     fields() {
       return this.data.fields;
     },
+    listHeaders() {
+      return this.data.viewOptions.listHeaders;
+    },
     headers() {
-      if (!this.viewOptions.listHeaders || !this.fields) return [];
+      if (!this.listHeaders || !this.fields) return [];
 
-      const viewOptions = this.viewOptions.listHeaders.map((h) => {
+      const headers = this.listHeaders.map((h) => {
         return {
           text: this.fields.find(({ key }) => key == h).name,
           value: h,
@@ -103,14 +107,14 @@ export default {
         };
       });
 
-      viewOptions.unshift({
+      headers.unshift({
         text: "Id",
         value: "id",
         align: "left",
         sortable: false,
         filterable: false,
       });
-      viewOptions.push({
+      headers.push({
         text: "",
         value: "action",
         align: "right",
@@ -118,7 +122,7 @@ export default {
         filterable: false,
       });
 
-      return viewOptions;
+      return headers;
     },
     sm() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -129,7 +133,7 @@ export default {
       return this.$rest(this.data.key)
         .get({
           params: {
-            fields: "id,active," + this.data.viewOptions.listHeaders.join(","),
+            fields: "id,active," + this.listHeaders.join(","),
             itemsPerPage,
             page,
             search: this.search,
