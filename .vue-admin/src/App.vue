@@ -40,7 +40,8 @@ export default {
       },
       (error) =>
         this.$store.dispatch("connectionStatusChange", { ok: false, error }) &&
-        Promise.reject(error)
+        Promise.reject(error),
+      { synchronous: true }
     );
 
     http.interceptors.response.use(
@@ -56,7 +57,8 @@ export default {
             Promise.reject(error)
           );
         }
-      }
+      },
+      { synchronous: true }
     );
   },
   created() {
