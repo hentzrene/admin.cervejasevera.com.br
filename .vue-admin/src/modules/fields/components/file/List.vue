@@ -222,29 +222,36 @@ export default {
 
       this.uploading = true;
 
-      for (const file of files) {
-        await this.$rest("modulesFiles")
-          .upload({
-            file,
-            prop: "file",
-            data: {
-              title: file.name,
-            },
-            params: {
-              itemId: this.itemId,
-              moduleId: this.moduleId,
-              fieldId: this.fieldId,
-            },
-            onUploadProgress,
-          })
-          .then(({ file, title, id }) => {
-            this.progress = 0;
-            this.files.push({ path: file, title, id });
-          });
+      try {
+        for (const file of files) {
+          await this.$rest("modulesFiles")
+            .upload({
+              file,
+              prop: "file",
+              data: {
+                title: file.name,
+              },
+              params: {
+                itemId: this.itemId,
+                moduleId: this.moduleId,
+                fieldId: this.fieldId,
+              },
+              onUploadProgress,
+            })
+            .then(({ file, title, id }) => {
+              this.progress = 0;
+              this.files.push({ path: file, title, id });
+            })
+            .finally(() => (this.uploading = false));
+        }
+
+        this.uploading = false;
+      } catch (e) {
+        console.error(e);
+        this.uploading = false;
       }
 
       this.$refs.file.$refs.input.value = "";
-      this.uploading = false;
     },
   },
   created() {
