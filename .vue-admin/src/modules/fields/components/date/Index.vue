@@ -2,7 +2,7 @@
 grid-item.field-date(col-end=2, col-end-sm=1)
   v-text-field(
     :label="label",
-    :value="value | toDateTimeHTML",
+    :value="_value",
     :name="name",
     type="datetime-local",
     dense,
@@ -16,10 +16,20 @@ import mixin from "../../mixin";
 import { toDateTimeHTML } from "@/components/filters.js";
 
 export default {
-  filters: {
-    toDateTimeHTML: (str) => str && toDateTimeHTML(new Date(Date.now())),
-  },
   mixins: [mixin],
+  computed: {
+    moduleKey() {
+      return this.$rest("modules").item.key;
+    },
+    item() {
+      return this.$rest(this.moduleKey).item;
+    },
+    _value() {
+      if (this.value) return toDateTimeHTML(this.value);
+      else if (this.item.alteredAt) return null;
+      else return toDateTimeHTML(new Date());
+    },
+  },
 };
 </script>
 
