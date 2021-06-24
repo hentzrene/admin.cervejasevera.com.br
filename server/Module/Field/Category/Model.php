@@ -2,6 +2,8 @@
 
 namespace Module\Field\Category;
 
+use Core\Model\Module\Field;
+use Core\Model\Module\Module;
 use Enum\Table;
 use Core\Model\Utility\Conn;
 
@@ -54,6 +56,62 @@ class Model
       ::update(['title' => "'$value'"])
       ::where('id', $categoryId)
       ::send();
+  }
+
+  /**
+   * Vincular módulo.
+   *
+   * @param integer $moduleId
+   * @param integer $fieldId
+   * @param string $link
+   * @return array
+   */
+  public static function setLinkModule(int $moduleId, int $fieldId, string $link): bool
+  {
+    $moduleKey = Module::getKeyById($moduleId);
+    $fieldKey = Field::getKey($fieldId);
+    $link = addslashes($link);
+
+    $q1 = Conn::query(
+      "ALTER TABLE mod_$moduleKey
+      DROP FOREIGN KEY mod_{$moduleKey}_$fieldKey;"
+    );
+
+    $q2 = Conn::query(
+      "ALTER TABLE mod_$moduleKey
+      ADD CONSTRAINT mod_{$moduleKey}_$fieldKey FOREIGN KEY ($fieldKey) REFERENCES mod_$link(id)"
+    );
+
+    $q3 = Field::setOption($fieldId, 'linkModule', $link);
+
+    return $q1 && $q2 && $q3;
+  }
+
+  /**
+   * Desvincular módulo.
+   *
+   * @param integer $moduleId
+   * @param integer $fieldId
+   * @return array
+   */
+  public static function setUnlinkModule(int $moduleId, int $fieldId): bool
+  {
+    $moduleKey = Module::getKeyById($moduleId);
+    $fieldKey = Field::getKey($fieldId);
+
+    $q1 = Conn::query(
+      "ALTER TABLE mod_$moduleKey
+      DROP FOREIGN KEY mod_{$moduleKey}_$fieldKey;"
+    );
+
+    $q2 = Conn::query(
+      "ALTER TABLE mod_$moduleKey
+      ADD CONSTRAINT mod_{$moduleKey}_$fieldKey FOREIGN KEY ($fieldKey) REFERENCES categories(id)"
+    );
+
+    $q3 = Field::setOption($fieldId, 'linkModule', null);
+
+    return $q1 && $q2 && $q3;
   }
 
   /**
