@@ -9,12 +9,14 @@ template-dialog-any(
     template-dialog-header-button(
       @click="removeItem",
       :disabled="!tableSelecteds.length",
-      icon="fas fa-trash"
+      icon="fas fa-trash",
+      text="Remover"
     ) Remover
     template-dialog-header-button(
       @click="addDialog = true",
-      icon="fas fa-plus"
-    ) Adicionar
+      icon="fas fa-plus",
+      text="Adicionar"
+    )
   v-row
     v-col(cols=12, sm=6)
       select-field-category(
@@ -149,8 +151,9 @@ export default {
       });
     },
     updateItemTitle(subcategoryId) {
-      const currentItemTitle = this.items.find(({ id }) => id == subcategoryId)
-        .title;
+      const currentItemTitle = this.items.find(
+        ({ id }) => id == subcategoryId
+      ).title;
       if (!this.itemTitle || currentItemTitle === this.itemTitle) return;
 
       this.loading = true;
