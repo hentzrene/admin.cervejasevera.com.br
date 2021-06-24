@@ -57,9 +57,9 @@ class Field
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      ModelField::setOption((int) $d['fieldId'], Req::get('option'), (int) Req::get('value'));
+      ModelField::setOption((int) $d['fieldId'], Req::get('option'), Req::get('value'));
       Response::set('status', 'success');
-      Response::set('success', 'Tipo alterado com sucesso.');
+      Response::set('success', 'Opção alterada com sucesso.');
     }
 
     Response::send();
