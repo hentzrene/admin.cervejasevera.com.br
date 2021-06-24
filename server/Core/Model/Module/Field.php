@@ -208,10 +208,10 @@ class Field
    *
    * @param integer $id
    * @param string $option
-   * @param integer $value
+   * @param $value
    * @return boolean
    */
-  public static function setOption(int $id, string $option, int $value): bool
+  public static function setOption(int $id, string $option, $value): bool
   {
     $option = addslashes($option);
     $value = addslashes($value);
