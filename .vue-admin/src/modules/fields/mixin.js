@@ -9,5 +9,10 @@ export default {
       type: String,
       required: true
     }
+  },
+  computed: {
+    isAdminUser() {
+      return this.$store.state.user.type == 1;
+    }
   }
 };
