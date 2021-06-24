@@ -321,4 +321,20 @@ class Field
 
     return $q ? $q->fetch_row()[0] : null;
   }
+
+  /**
+   * Obter chave do campo por seu id.
+   *
+   * @param string $id
+   * @return void
+   */
+  public static function getKey(int $id): ?string
+  {
+    $q =  Conn::table(Table::MODULES_FIELDS)
+      ::select(['`key`'])
+      ::where('id', $id)
+      ::send();
+
+    return $q ? $q->fetch_row()[0] : null;
+  }
 }
