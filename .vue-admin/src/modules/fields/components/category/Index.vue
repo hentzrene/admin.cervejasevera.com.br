@@ -10,13 +10,14 @@ grid-item(col-end=2, col-end-sm=1)
       outlined,
       dark
     )
-    v-btn.ml-1(v-if="isAdminUser", @click="listDialog = true", icon, small)
+    v-btn.ml-1(@click="listDialog = true", icon, small)
       v-icon(small) fas fa-cog
   list(
     v-model="listDialog",
     :field-id="fieldId",
     :categories="categories",
-    :link-module="linkModule"
+    :link-module="linkModule",
+    :is-admin-user="isAdminUser"
   )
 </template>
 

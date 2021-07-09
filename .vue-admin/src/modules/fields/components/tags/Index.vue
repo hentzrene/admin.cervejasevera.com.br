@@ -12,7 +12,7 @@ grid-item(col-end=2, col-end-sm=1)
       multiple,
       chips
     )
-    v-btn.ml-1(v-if="isAdminUser", @click="listDialog = true", icon, small)
+    v-btn.ml-1(@click="listDialog = true", icon, small)
       v-icon(small) fas fa-cog
   input(:name="name", :value="valueParsed", type="hidden")
   list(v-model="listDialog", :field-id="fieldId", :tags="tags")

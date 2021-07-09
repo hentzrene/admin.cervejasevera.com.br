@@ -7,6 +7,7 @@ template-dialog-any(
 )
   template(#actions)
     template-dialog-header-button(
+      v-if="isAdminUser",
       @click="linkModule ? unlink() : (linkModuleDialog = true)",
       :icon="linkModule ? 'fas fa-unlink' : 'fas fa-link'",
       :text="(linkModule ? 'Desvincular' : 'Vincular') + ' Módulo'",
@@ -82,6 +83,10 @@ export default {
     categories: {
       type: Array,
       default: () => [],
+    },
+    isAdminUser: {
+      type: Boolean,
+      default: false,
     },
     linkModule: String,
   },
