@@ -18,7 +18,7 @@ v-dialog(
           v-icon(left, small) fas fa-trash
           span Remover
         v-btn.text-none(
-          @click="$refs.file.$refs.input.click()",
+          @click="$refs.fileLabel.click()",
           color="secondary",
           depressed,
           small
@@ -75,15 +75,26 @@ v-dialog(
     ) {{ progress }}%
   v-overlay(v-model="loading")
     loading
-  v-text-field.ma-0.pa-0(
-    v-model="file",
-    :name="inputName",
-    ref="file",
+  label(:for="'fileInput_' + fieldId", ref="fileLabel")
+  input.ma-0.pa-0(
+    @input="upload",
+    :id="'fileInput_' + fieldId",
+    :value="file",
+    ref="fileInput",
     type="file",
     multiple,
     hide-details,
     hidden
   )
+  //- v-text-field.ma-0.pa-0(
+  //-   v-model="file",
+  //-   :name="inputName",
+  //-   ref="file",
+  //-   type="file",
+  //-   multiple,
+  //-   hide-details,
+  //-   hidden
+  //- )
 </template>
 
 <script>
@@ -211,10 +222,8 @@ export default {
           })
         );
     },
-  },
-  watch: {
-    async file() {
-      const files = this.$refs.file.$refs.input.files,
+    async upload({ target }) {
+      const files = target.files,
         onUploadProgress = ({ loaded, total }) =>
           (this.progress = new Intl.NumberFormat("pt-BR", {
             maximumFractionDigits: 0,
@@ -251,7 +260,7 @@ export default {
         this.uploading = false;
       }
 
-      this.$refs.file.$refs.input.value = "";
+      this.$refs.fileInput.value = "";
     },
   },
   created() {
