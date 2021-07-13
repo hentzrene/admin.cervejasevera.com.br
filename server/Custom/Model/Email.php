@@ -16,7 +16,7 @@ class Email
           <strong>Nome: $name </strong><br>
           <strong>E-mail: $email </strong>";
 
-    self::send('jeanpiagetsinop.com.br - Mensagem do formulário Fale Conosco!', $message);
+    self::send('Mensagem do formulário Fale Conosco!', $message);
   }
 
   public static function workWithUs(string $name, string $email, string $tel, array $file)
@@ -29,7 +29,7 @@ class Email
           <strong>E-mail: $email </strong><br>
           <strong>Telefone: $tel</strong>";
 
-    self::send('jeanpiagetsinop.com.br - Mensagem do formulário Trabalhe Conosco!', $message, null, $file);
+    self::send('Mensagem do formulário Trabalhe Conosco!', $message, null, $file);
   }
 
   public static function send(string $subject, string $message, ?string $recipient = null, ?array $file = null)

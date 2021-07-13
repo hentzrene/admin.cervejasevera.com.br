@@ -1,8 +1,6 @@
 <?php
 
-namespace Custom\Model\CollectionInit;
-
-use Custom\Model\CollectionInit\JoinSet\JoinSet;
+namespace Custom\Model\Core;
 
 class CollectionInit
 {
@@ -12,14 +10,14 @@ class CollectionInit
 
   public ?string $order = null;
 
-  public int $returnTotalItems = 0;
+  public ?string $direction = null;
 
-  public ?JoinSet $join = null;
+  public int $returnTotalItems = 0;
 
   public function __construct(
     array $configuration = []
   ) {
-    $possibleOptions = array_keys(get_class_vars('Custom\Model\CollectionInit\CollectionInit'));
+    $possibleOptions = array_keys(get_class_vars(self::class));
 
     foreach ($configuration as $k => $v) {
       if (in_array($k, $possibleOptions)) {
