@@ -1,44 +1,44 @@
 <template lang="pug">
-v-dialog(
-  :value="value",
+template-dialog-any(
   @input="(data) => $emit('input', data)",
+  :value="value",
+  title="Galeria",
   max-width="880px"
 )
-  v-card.pa-4(dark)
-    .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
-      div Galeria
-      div
-        v-btn.mr-2.text-none(
-          @click="highlight",
-          color="secondary",
-          :disabled="selecteds.length !== 1",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-star
-          span Destacar
-        v-btn.mr-2.text-none(
-          @click="remove",
-          color="secondary",
-          :disabled="!selecteds.length",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-trash
-          span Remover
-        v-btn.text-none(
-          @click="$refs.imageFileLabel.click()",
-          color="secondary",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-upload
-          span Enviar
-    v-item-group.view-field-list.d-flex.flex-wrap(
-      v-model="selecteds",
-      v-if="imgs.length",
-      multiple
+  template(#actions)
+    template-dialog-header-button(
+      @click="order",
+      icon="fas fa-save",
+      text="Salvar"
     )
+    template-dialog-header-button(
+      @click="highlight",
+      :disabled="selecteds.length !== 1",
+      icon="fas fa-star",
+      text="Destacar"
+    )
+    template-dialog-header-button(
+      @click="remove",
+      :disabled="!selecteds.length",
+      icon="fas fa-trash",
+      text="Remover"
+    )
+    template-dialog-header-button(
+      @click="$refs.imageFileLabel.click()",
+      icon="fas fa-upload",
+      text="Enviar"
+    )
+  v-progress-linear.mb-1(
+    :indeterminate="loadingOrder",
+    :class="!loadingOrder && 'opacity-0'",
+    color="secondary"
+  )
+  v-item-group.view-field-list-wrap.d-flex.flex-wrap(
+    v-model="selecteds",
+    v-if="imgs.length",
+    multiple
+  )
+    draggable.view-field-list.d-flex.flex-wrap(v-model="imgs")
       v-item(
         v-slot="{ active, toggle }",
         v-for="({ path, id }, i) in imgs",
@@ -49,12 +49,12 @@ v-dialog(
           v-ripple,
           @click="toggle",
           :class="active ? 'active cyan' : 'grey'",
-          :src="files.replace('/admin', '') + path",
+          :src="files.replace('/admin', '') + path + '?resize=1&h=80'",
           contain
         )
           v-overlay(v-if="path === highlightedImage", absolute, opacity="0.2")
             v-icon(color="yellow", size="40") fas fa-star
-    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
+  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
   v-overlay(v-model="uploading")
     v-progress-circular.font-weight-bold.accent--text(
       :value="progress",
@@ -80,7 +80,10 @@ v-dialog(
 </template>
 
 <script>
+import TemplateDialogAny from "../../templates/DialogAny";
+import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Loading from "@/components/tools/Loading";
+import draggable from "vuedraggable";
 
 export default {
   props: {
@@ -100,6 +103,7 @@ export default {
     uploading: false,
     progress: 0,
     loading: false,
+    loadingOrder: false,
     imgs: [],
     selecteds: [],
     useDefaultUI: true,
@@ -130,7 +134,15 @@ export default {
             fieldId: this.fieldId,
           },
         })
-        .then((imgs) => (this.imgs = imgs));
+        .then((imgs) => {
+          this.imgs = imgs
+            .map(({ id, path, order }) => ({
+              id,
+              path,
+              order: parseInt(order),
+            }))
+            .sort((a, b) => a.order - b.order);
+        });
     },
     remove() {
       this.loading = true;
@@ -200,12 +212,31 @@ export default {
         this.uploading = false;
       });
     },
+    order() {
+      this.loadingOrder = true;
+
+      const ordered = this.imgs.map(({ id, path }, i) => ({
+        id,
+        path,
+        order: i,
+      }));
+
+      this.$rest("modulesImages")
+        .put({
+          id: "order",
+          data: { images: ordered },
+        })
+        .then(() => (this.loadingOrder = false));
+    },
   },
   created() {
     this.get();
   },
   components: {
     Loading,
+    draggable,
+    TemplateDialogAny,
+    TemplateDialogHeaderButton,
   },
 };
 </script>
@@ -237,5 +268,8 @@ export default {
 }
 .v-progress-circular__overlay {
   transition: none !important;
+}
+.opacity-0 {
+  opacity: 0;
 }
 </style>

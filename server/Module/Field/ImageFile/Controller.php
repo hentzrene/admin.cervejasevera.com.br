@@ -50,6 +50,19 @@ class Controller
     Response::send();
   }
 
+  public function updateOrder()
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      Model::updateOrder(Req::get('images'));
+      Response::set('status', 'success');
+    }
+
+    Response::send();
+  }
+
   public function removeItem($d)
   {
     if (!ON) {

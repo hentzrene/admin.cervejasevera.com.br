@@ -27,7 +27,7 @@ class Model
   public static function getAllItems(int $fieldId, int $itemId): array
   {
     $q = Conn::table(Table::IMAGES)
-      ::select(['id', 'path'])
+      ::select(['id', 'path', '`order`'])
       ::where('modules_fields_id', $fieldId)
       ::and('item_id', $itemId)
       ::send();
@@ -104,6 +104,18 @@ class Model
       'file' => $path,
       'id' => Conn::$conn->insert_id
     ] : NULL;
+  }
+
+  public static function updateOrder(array $images)
+  {
+    foreach ($images as $img) {
+      Conn::table(Table::IMAGES)
+        ::update(['`order`' => $img->order])
+        ::where('id', $img->id)
+        ::send();
+    }
+
+    return true;
   }
 
   /**
