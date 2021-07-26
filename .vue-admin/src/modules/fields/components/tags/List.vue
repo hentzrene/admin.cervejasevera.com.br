@@ -1,65 +1,59 @@
 <template lang="pug">
-v-dialog(
-  :value="value",
+template-dialog-any(
   @input="(data) => $emit('input', data)",
+  :value="value",
+  title="Tags",
   max-width="500px"
 )
-  v-card.pa-4(dark)
-    .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
-      div Tags
-      div
-        v-btn.mr-2.text-none(
-          @click="remove",
-          color="secondary",
-          :disabled="!selecteds.length",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-trash
-          span Remover
-        v-btn.text-none(
-          @click="addDialog = true",
-          color="secondary",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-plus
-          span Adicionar
-    v-data-table(
-      :headers="headers",
-      :items="tags",
-      :mobile-breakpoint="0",
-      v-if="tags.length",
-      v-model="selecteds",
-      no-data-text="Não há registros.",
-      sort-by="id",
-      sort-desc,
-      show-select,
-      disable-pagination,
-      hide-default-footer
+  template(#actions)
+    template-dialog-header-button(
+      @click="remove",
+      :disabled="!selecteds.length",
+      icon="fas fa-trash",
+      text="Remover"
     )
-      template(#item.title="{ item }")
-        v-edit-dialog.primary.lighten-4(
-          @save="editTitle(item.id)",
-          :return-value.sync="editTagTitle",
-          dark
-        ) {{ item.title }}
-          template(#input)
-            v-text-field(
-              :value="item.title",
-              @input="(data) => (editTagTitle = data)",
-              :rules="[rules.required]",
-              label="Renomear",
-              single-line,
-              counter
-            )
-    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
+    template-dialog-header-button(
+      @click="addDialog = true",
+      icon="fas fa-plus",
+      text="Adicionar"
+    )
+  v-data-table(
+    :headers="headers",
+    :items="tags",
+    :mobile-breakpoint="0",
+    v-if="tags.length",
+    v-model="selecteds",
+    no-data-text="Não há registros.",
+    sort-by="id",
+    sort-desc,
+    show-select,
+    disable-pagination,
+    hide-default-footer
+  )
+    template(#item.title="{ item }")
+      v-edit-dialog.primary.lighten-4(
+        @save="editTitle(item.id)",
+        :return-value.sync="editTagTitle",
+        dark
+      ) {{ item.title }}
+        template(#input)
+          v-text-field(
+            :value="item.title",
+            @input="(data) => (editTagTitle = data)",
+            :rules="[rules.required]",
+            label="Renomear",
+            single-line,
+            counter
+          )
+  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
   v-overlay(v-if="value", v-model="loading")
     loading
   add(v-model="addDialog", :field-id="fieldId")
 </template>
 
 <script>
+import TemplateDialogAny from "../../templates/DialogAny";
+import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Add from "./Add";
 import Loading from "@/components/tools/Loading";
 import { required } from "@/components/forms/rules.js";
@@ -139,6 +133,8 @@ export default {
     },
   },
   components: {
+    TemplateDialogAny,
+    TemplateDialogHeaderButton,
     Loading,
     Add,
   },
