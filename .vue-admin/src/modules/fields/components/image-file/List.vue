@@ -225,6 +225,9 @@ export default {
         .put({
           id: "order",
           data: { images: ordered },
+          params: {
+            moduleId: this.moduleId,
+          },
         })
         .then(() => (this.loadingOrder = false));
     },
