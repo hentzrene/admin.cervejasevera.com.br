@@ -78,10 +78,18 @@ const dateDiff = (d1, d2, type = "days") => {
   return (utc2 - utc1) / div;
 };
 
+const formatToURL = str =>
+  str
+    .normalize("NFD")
+    .replace(/\s+/g, "-")
+    .replace(/([\u0300-\u036f]|[^0-9a-zA-Z-])/g, "")
+    .toLocaleLowerCase();
+
 export {
   getTelLinkFromPhone,
   getWhatsappLinkFromPhone,
   getYoutubeCode,
   toFriendlyURL,
-  dateDiff
+  dateDiff,
+  formatToURL
 };
