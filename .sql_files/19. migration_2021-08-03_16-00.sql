@@ -12,5 +12,5 @@ VALUES
     'Link da Página',
     'link',
     'VARCHAR(255)',
-    '{"pattern": "{id}"}',
+    '{"pattern": "{id}"}'
   );
