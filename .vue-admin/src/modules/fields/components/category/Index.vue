@@ -6,6 +6,7 @@ grid-item(col-end=2, col-end-sm=1)
       :label="label",
       :name="name",
       :items="categoriesSelect",
+      no-data-text="Nenhuma categoria adicionada",
       dense,
       outlined,
       dark
