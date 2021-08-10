@@ -29,6 +29,43 @@ class Controller
     Response::send();
   }
 
+  public function setLinkModule()
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      if (Model::setLinkModule(
+        (int) Req::get('moduleId'),
+        (int) Req::get('fieldId'),
+        Req::get('link')
+      )) {
+        Response::set('status', 'success');
+        Response::set('success', 'Módulo vinculado.');
+      }
+    }
+
+    Response::send();
+  }
+
+  public function setUnlinkModule()
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      if (Model::setUnlinkModule(
+        (int) Req::get('moduleId'),
+        (int) Req::get('fieldId')
+      )) {
+        Response::set('status', 'success');
+        Response::set('success', 'Módulo desvinculado.');
+      }
+    }
+
+    Response::send();
+  }
+
   public function addItem()
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
@@ -56,7 +93,7 @@ class Controller
     } else {
       if (Model::setItemTitle((int) $d['tagId'], Req::get('value'))) {
         Response::set('status', 'success');
-        Response::set('success', 'Categoria alterada.');
+        Response::set('success', 'Tag alterada.');
       }
     }
 

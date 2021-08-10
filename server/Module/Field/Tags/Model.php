@@ -2,6 +2,7 @@
 
 namespace Module\Field\Tags;
 
+use Core\Model\Module\Field;
 use Enum\Table;
 use Core\Model\Utility\Conn;
 
@@ -54,6 +55,37 @@ class Model
       ::update(['title' => "'$value'"])
       ::where('id', $tagId)
       ::send();
+  }
+
+  /**
+   * Vincular módulo.
+   *
+   * @param integer $moduleId
+   * @param integer $fieldId
+   * @param string $link
+   * @return array
+   */
+  public static function setLinkModule(int $moduleId, int $fieldId, string $link): bool
+  {
+    $link = addslashes($link);
+
+    $q = Field::setOption($fieldId, 'linkModule', $link);
+
+    return $q;
+  }
+
+  /**
+   * Desvincular módulo.
+   *
+   * @param integer $moduleId
+   * @param integer $fieldId
+   * @return array
+   */
+  public static function setUnlinkModule(int $moduleId, int $fieldId): bool
+  {
+    $q = Field::setOption($fieldId, 'linkModule', null);
+
+    return $q;
   }
 
   /**

@@ -7,6 +7,13 @@ template-dialog-any(
 )
   template(#actions)
     template-dialog-header-button(
+      v-if="isAdminUser",
+      @click="linkModule ? unlink() : (linkModuleDialog = true)",
+      :icon="linkModule ? 'fas fa-unlink' : 'fas fa-link'",
+      :text="(linkModule ? 'Desvincular' : 'Vincular') + ' Módulo'",
+      :disabled="linkModule ? false : Boolean(tags.length)"
+    )
+    template-dialog-header-button(
       @click="remove",
       :disabled="!selecteds.length",
       icon="fas fa-trash",
@@ -45,16 +52,22 @@ template-dialog-any(
             single-line,
             counter
           )
-  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
+  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma tag foi adicionada.
   v-overlay(v-if="value", v-model="loading")
     loading
   add(v-model="addDialog", :field-id="fieldId")
+  link-module(
+    v-model="linkModuleDialog",
+    :field-id="fieldId",
+    :link-module="linkModule"
+  )
 </template>
 
 <script>
 import TemplateDialogAny from "../../templates/DialogAny";
 import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Add from "./Add";
+import LinkModule from "./LinkModule";
 import Loading from "@/components/tools/Loading";
 import { required } from "@/components/forms/rules.js";
 
@@ -69,9 +82,15 @@ export default {
       type: Array,
       default: () => [],
     },
+    isAdminUser: {
+      type: Boolean,
+      default: false,
+    },
+    linkModule: String,
   },
   data: () => ({
     addDialog: false,
+    linkModuleDialog: false,
     loading: false,
     headers: [
       {
@@ -131,12 +150,31 @@ export default {
         })
         .then(() => (this.loading = false));
     },
+    unlink() {
+      this.loading = true;
+
+      this.$rest("modulesCategories")
+        .put({
+          id: "unlink-module",
+          data: {
+            link: null,
+          },
+          params: {
+            fieldId: this.fieldId,
+            moduleId: this.moduleId,
+          },
+        })
+        .finally(() => {
+          this.$router.go();
+        });
+    },
   },
   components: {
     TemplateDialogAny,
     TemplateDialogHeaderButton,
     Loading,
     Add,
+    LinkModule,
   },
 };
 </script>

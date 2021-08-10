@@ -15,7 +15,13 @@ grid-item(col-end=2, col-end-sm=1)
     v-btn.ml-1(@click="listDialog = true", icon, small)
       v-icon(small) fas fa-cog
   input(:name="name", :value="valueParsed", type="hidden")
-  list(v-model="listDialog", :field-id="fieldId", :tags="tags")
+  list(
+    v-model="listDialog",
+    :field-id="fieldId",
+    :tags="tags",
+    :link-module="linkModule",
+    :is-admin-user="isAdminUser"
+  )
 </template>
 
 <script>
@@ -27,6 +33,10 @@ export default {
   props: {
     fieldId: {
       type: Number,
+      required: true,
+    },
+    fieldOptions: {
+      type: Object,
       required: true,
     },
   },
@@ -41,11 +51,16 @@ export default {
     itemId() {
       return this.$route.params.sub;
     },
+    linkModule() {
+      return this.fieldOptions.linkModule;
+    },
     tags() {
-      return this.$rest("modulesTags").getters.filterByProperty(
-        "fieldId",
-        this.fieldId
-      );
+      return this.linkModule
+        ? this.$rest(this.linkModule).list
+        : this.$rest("modulesTags").getters.filterByProperty(
+            "fieldId",
+            this.fieldId
+          );
     },
     tagsSelect() {
       const tags = this.tags.map(({ title, id }) => ({
@@ -67,12 +82,16 @@ export default {
     },
   },
   created() {
-    this.$rest("modulesTags").get({
-      params: {
-        moduleId: this.moduleId,
-      },
-      keepCache: true,
-    });
+    if (this.linkModule) {
+      this.$rest(this.linkModule).get({ params: { fields: "id,title" } });
+    } else {
+      this.$rest("modulesTags").get({
+        params: {
+          moduleId: this.moduleId,
+        },
+        keepCache: true,
+      });
+    }
   },
   mounted() {
     this.value_ = this.value ? JSON.parse(this.value) : [];
