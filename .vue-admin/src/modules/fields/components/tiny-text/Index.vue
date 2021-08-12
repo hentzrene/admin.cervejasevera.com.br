@@ -1,8 +1,8 @@
 <template lang="pug">
 grid-item(col-end=2, col-end-sm=1)
   v-text-field(
+    v-model="value_",
     :label="label",
-    :value="value",
     :name="name",
     dense,
     outlined,
@@ -14,6 +14,17 @@ grid-item(col-end=2, col-end-sm=1)
 import mixin from "../../mixin";
 
 export default {
+  data: () => ({
+    value_: null,
+  }),
   mixins: [mixin],
+  watch: {
+    value(v) {
+      this.value_ = v;
+    },
+  },
+  mounted() {
+    this.value_ = this.value;
+  },
 };
 </script>
