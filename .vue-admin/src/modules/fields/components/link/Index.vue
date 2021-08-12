@@ -45,13 +45,25 @@ export default {
     moduleItem() {
       return this.$rest(this.moduleKey).item;
     },
+    itemProp() {
+      return (prop) => {
+        if (prop === "id") return this.moduleItem["id"];
+
+        const field = this.$parent.$children.find(({ name }) => name === prop);
+
+        if (!field) return "";
+
+        return field.value_ || "";
+      };
+    },
     value_() {
-      const r = this.fieldOptions.pattern.replace(
-        /({([^}]+)})/g,
-        (match, p1, p2) => {
-          return this.moduleItem[p2] || "";
-        }
-      );
+      const pattern = this.fieldOptions.pattern;
+
+      if (!pattern) return;
+
+      const r = pattern.replace(/({([^}]+)})/g, (match, p1, p2) => {
+        return this.itemProp(p2) || "";
+      });
 
       return location.origin + "/" + formatToURL(r);
     },
