@@ -44,11 +44,15 @@ module-template(:title="data.name")
       dark
     )
       template(v-for="(h, i) in listHeaders", v-slot:[`item.${h}`]="{ item }")
-        div(
-          v-if="item[h] && typeof item[h] === 'object'",
-          v-html="item[h].innerHTML"
-        )
-        span(v-else) {{ item[h] }}
+        template(v-if="typeof item[h] === 'string'")
+          span {{ item[h] }}
+        template(v-else-if="item[h] && typeof item[h] === 'object'")
+          div(v-if="item[h].innerHTML", v-html="item[h].innerHTML")
+          component(
+            v-else-if="item[h].component",
+            :is="item[h].component",
+            :value="item[h].value"
+          )
       template(#item.action="{ item }")
         .d-flex.justify-end
           v-btn(
