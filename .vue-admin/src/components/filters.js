@@ -5,7 +5,7 @@ import { dateDiff } from "./utils";
  *
  * @param {string} str
  */
-const toInitials = str => str.replace(/([^\s])[^\s]+\s?/g, "$1.");
+const toInitials = (str) => str.replace(/([^\s])[^\s]+\s?/g, "$1.");
 
 /**
  * Reduzir tamanho de str para menor que limit não quebrando as palavras e depois
@@ -34,7 +34,7 @@ const limitString = (str, limit) => {
  * Verificar se date é um objeto `Date` ou se possível criar um usando date como parâmetro.
  * @param {string | Date} date
  */
-const verifyDate = date => {
+const verifyDate = (date) => {
   if (typeof date === "string") return new Date(date);
   else if (date instanceof Date) return date;
   else throw new Error(`${date} não é um objeto data ou uma string.`);
@@ -45,7 +45,7 @@ const RTF = new Intl.RelativeTimeFormat("pt-BR", { numeric: "auto" });
  * Transformar a data d no formato local.
  * @param {string | date} d
  */
-const toLocaleDate = d => {
+const toLocaleDate = (d) => {
   d = verifyDate(d);
   const hj = new Date();
   let diff = dateDiff(hj, d, "days");
@@ -72,7 +72,7 @@ const toLocaleDate = d => {
  * Transformar a data d no formato de date para HTML.
  * @param {string | date} d
  */
-const toDateHTML = d =>
+const toDateHTML = (d) =>
   verifyDate(d)
     .toLocaleDateString()
     .replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
@@ -81,7 +81,7 @@ const toDateHTML = d =>
  * Transformar a data d no formato de datetime para HTML.
  * @param {string | date} d
  */
-const toDateTimeHTML = d =>
+const toDateTimeHTML = (d) =>
   verifyDate(d)
     .toLocaleString()
     .replace(/(\d{2})\/(\d{2})\/(\d{4}) (.+)/, "$3-$2-$1T$4")
@@ -91,7 +91,7 @@ const toDateTimeHTML = d =>
  * Transformar a data d no formato de datetime para MySQL.
  * @param {string | date} d
  */
-const toDateMysql = d =>
+const toDateMysql = (d) =>
   verifyDate(d)
     .toLocaleString()
     .replace(/(\d{2})\/(\d{2})\/(\d{4}) (.+)/, "$3-$2-$1 $4")
@@ -101,14 +101,14 @@ const toDateMysql = d =>
  * Transformar a data d no formato de datetime para MySQL.
  * @param {string | date} d
  */
-const toTime = d =>
+const toTime = (d) =>
   verifyDate(d).toLocaleTimeString("pt-BR", { timeStyle: "short" });
 
 /**
  * Reduzir nome para apenas primeiro nome e sobrenome.
  * @param {string} v
  */
-const simplifyName = v => v.replace(/([^\s])\s.+\s([^\s])/, "$1 $2");
+const simplifyName = (v) => v.replace(/([^\s])\s.+\s([^\s])/, "$1 $2");
 
 export {
   toInitials,
@@ -118,5 +118,5 @@ export {
   toDateTimeHTML,
   toDateMysql,
   toTime,
-  simplifyName
+  simplifyName,
 };

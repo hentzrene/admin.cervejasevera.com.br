@@ -11,10 +11,10 @@ const store = {
     lastRequestStatus: null,
     lastRequestError: null,
     lastRequestSuccess: null,
-    user: {}
+    user: {},
   },
   mutations,
-  actions
+  actions,
 };
 
 Vue.use(Vuex);

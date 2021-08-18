@@ -1,3 +1,3 @@
 export default {
-  function: (state, data) => data(state)
-}
+  function: (state, data) => data(state),
+};

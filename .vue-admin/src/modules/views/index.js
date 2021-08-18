@@ -9,7 +9,7 @@ const views = { custom, table, item },
 require
   .context("./components", true, /^\.\/[^/]+$/)
   .keys()
-  .map(path => {
+  .map((path) => {
     const view = path.match(/^\.\/[^/]+$/)[0].slice(2);
 
     if (
@@ -32,7 +32,7 @@ for (let view in views) {
   if (view === "custom") {
     components = [
       ...components,
-      ...views[view].flatMap(({ routes }) => routes)
+      ...views[view].flatMap(({ routes }) => routes),
     ];
   } else {
     components = [...components, ...views[view].routes];

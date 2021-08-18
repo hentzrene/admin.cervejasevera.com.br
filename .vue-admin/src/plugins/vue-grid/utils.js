@@ -4,7 +4,7 @@ const breakpoint = {
   lg: "lgAndUp",
   md: "mdAndUp",
   sm: "smAndUp",
-  xs: "xsOnly"
+  xs: "xsOnly",
 };
 
 const regExp = new RegExp(`(${Object.keys(breakpoint).join("|")})$`, "g");
@@ -34,12 +34,12 @@ const mixin = {
       }
 
       return style;
-    }
-  }
+    },
+  },
 };
 
 // mountProps
-const mountProps = props => {
+const mountProps = (props) => {
   const _props = {};
 
   for (let p of props) {

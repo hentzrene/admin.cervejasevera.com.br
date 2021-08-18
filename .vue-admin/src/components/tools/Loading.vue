@@ -5,7 +5,7 @@ svg.mrx-loading(viewBox="0 0 105 76")
   )
 </template>
 
-<style >
+<style>
 .mrx-loading {
   fill: var(--v-secondary-base);
   height: 100px;

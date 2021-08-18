@@ -5,7 +5,7 @@ export default {
     {
       name: "{name} / Alterar",
       path: `/{key}`,
-      component: Index
-    }
-  ]
+      component: Index,
+    },
+  ],
 };

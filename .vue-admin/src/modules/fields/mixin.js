@@ -2,17 +2,17 @@ export default {
   props: {
     label: {
       type: String,
-      required: true
+      required: true,
     },
     value: String,
     name: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     isAdminUser() {
       return this.$store.state.user.type == 1;
-    }
-  }
+    },
+  },
 };

@@ -7,21 +7,21 @@ const error = {
   onUploadProgress:
     "A propiedade options.onUploadProgress deve ser uma função.",
   save: "A propiedade options.save deve ser booleana ou uma função.",
-  keepCache: "A propiedade options.save deve ser booleana."
+  keepCache: "A propiedade options.save deve ser booleana.",
 };
 
 const validations = {
-  id: v => typeof v === "string" || typeof v === "number",
-  prop: v => typeof v === "string",
-  data: v => typeof v === "object",
-  params: v => typeof v === "object",
-  file: v => v instanceof File,
-  onUploadProgress: v => typeof v === "function",
-  save: v => typeof v === "boolean" || typeof v === "function",
-  keepCache: v => typeof v === "boolean"
+  id: (v) => typeof v === "string" || typeof v === "number",
+  prop: (v) => typeof v === "string",
+  data: (v) => typeof v === "object",
+  params: (v) => typeof v === "object",
+  file: (v) => v instanceof File,
+  onUploadProgress: (v) => typeof v === "function",
+  save: (v) => typeof v === "boolean" || typeof v === "function",
+  keepCache: (v) => typeof v === "boolean",
 };
 
-const validateOptions = options => {
+const validateOptions = (options) => {
   if (typeof options !== "object") {
     throw new TypeError("O parâmetro <options> deve ser um objeto.");
   }

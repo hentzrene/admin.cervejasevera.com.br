@@ -1,6 +1,6 @@
-const getTelLinkFromPhone = phone => "tel:+55" + phone.replace(/[^0-9]/g, "");
+const getTelLinkFromPhone = (phone) => "tel:+55" + phone.replace(/[^0-9]/g, "");
 
-const getWhatsappLinkFromPhone = phone =>
+const getWhatsappLinkFromPhone = (phone) =>
   "https://wa.me/55" + phone.replace(/[^0-9]/g, "");
 
 /**
@@ -8,7 +8,7 @@ const getWhatsappLinkFromPhone = phone =>
  *
  * @param {string} url
  */
-const getYoutubeCode = url => {
+const getYoutubeCode = (url) => {
   url = new URL(url);
 
   let code;
@@ -23,7 +23,7 @@ const getYoutubeCode = url => {
   return code;
 };
 
-const toFriendlyURL = str =>
+const toFriendlyURL = (str) =>
   str
     .normalize("NFKD")
     .replace(/\s/g, "-")
@@ -37,10 +37,10 @@ const _UTC_DAY = ["getFullYear", "getMonth", "getDate"];
 const _UTC_HOUR = [..._UTC_DAY, "getHours"];
 const _UTC_MIN = [..._UTC_HOUR, "getMinutes"];
 const _UTC_SEC = [..._UTC_MIN, "getSeconds"];
-const _utcSec = d => Date.UTC(..._UTC_SEC.map(f => d[f]()));
-const _utcMin = d => Date.UTC(..._UTC_MIN.map(f => d[f]()));
-const _utcHour = d => Date.UTC(..._UTC_HOUR.map(f => d[f]()));
-const _utcDay = d => Date.UTC(..._UTC_DAY.map(f => d[f]()));
+const _utcSec = (d) => Date.UTC(..._UTC_SEC.map((f) => d[f]()));
+const _utcMin = (d) => Date.UTC(..._UTC_MIN.map((f) => d[f]()));
+const _utcHour = (d) => Date.UTC(..._UTC_HOUR.map((f) => d[f]()));
+const _utcDay = (d) => Date.UTC(..._UTC_DAY.map((f) => d[f]()));
 
 /**
  * Obter a diferença entre duas data de acordo com o parâmetro type.
@@ -78,7 +78,7 @@ const dateDiff = (d1, d2, type = "days") => {
   return (utc2 - utc1) / div;
 };
 
-const formatToURL = str =>
+const formatToURL = (str) =>
   str
     .normalize("NFD")
     .replace(/\s+/g, "-")
@@ -91,5 +91,5 @@ export {
   getYoutubeCode,
   toFriendlyURL,
   dateDiff,
-  formatToURL
+  formatToURL,
 };

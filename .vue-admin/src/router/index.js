@@ -22,88 +22,88 @@ const routes = [
   {
     name,
     path: "/",
-    component: Home
+    component: Home,
   },
   {
     name: `Instalar - ${name}`,
     path: "/setup",
-    component: Setup
+    component: Setup,
   },
   {
     name: `Entrar - ${name}`,
     path: "/entrar",
-    component: Login
+    component: Login,
   },
   {
     name: "Contas",
     path: "/accounts",
-    component: AccountList
+    component: AccountList,
   },
   {
     name: "Adicionar conta",
     path: "/accounts/adicionar",
-    component: AccountAdd
+    component: AccountAdd,
   },
   {
     name: "Alterar conta",
     path: "/accounts/:account",
-    component: AccountItem
+    component: AccountItem,
   },
   {
     name: "E-mail",
     path: `/email`,
-    component: Email
+    component: Email,
   },
   {
     name: "Tags",
     path: `/tags`,
-    component: Tags
+    component: Tags,
   },
   {
     name: "Módulos",
     path: `/modules`,
-    component: ModuleList
+    component: ModuleList,
   },
   {
     name: "Adicionar módulo",
     path: `/modules/adicionar`,
-    component: ModuleAdd
+    component: ModuleAdd,
   },
   {
     name: "Alterar módulo",
     path: `/modules/:module`,
-    component: ModuleEdit
+    component: ModuleEdit,
   },
   {
     name: "Error404",
     path: "/error404",
-    component: Error404
+    component: Error404,
   },
   {
     name: `Módulo - ${name}`,
     path: "/:module",
-    component: Module
+    component: Module,
   },
   {
     name: `Módulo - ${name}`,
     path: "/:module/:sub",
-    component: Module
+    component: Module,
   },
   {
     path: "*",
     beforeEnter: (to, from, next) => {
       next("/error404");
-    }
-  }
+    },
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
-router.afterEach(to => {
+router.afterEach((to) => {
   document.title = to.name;
   window.scrollTo(0, 0);
 });

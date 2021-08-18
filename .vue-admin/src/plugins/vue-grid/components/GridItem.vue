@@ -23,7 +23,6 @@ export default {
 };
 </script>
 
-
 <style>
 .grid-item {
   grid-column-start: span var(--col-start);

@@ -13,8 +13,8 @@ module.exports = {
       // the source template
       template: "public/index.html",
       // output as dist/index.html
-      filename: "index.html"
-    }
+      filename: "index.html",
+    },
   },
   configureWebpack: {
     plugins: [
@@ -22,11 +22,11 @@ module.exports = {
       new CKEditorWebpackPlugin({
         // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
         language: "en",
-        addMainLanguageTranslationsToAllAssets: true
-      })
-    ]
+        addMainLanguageTranslationsToAllAssets: true,
+      }),
+    ],
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.plugins.delete("html");
     config.plugins.delete("preload");
     config.plugins.delete("prefetch");
@@ -65,10 +65,10 @@ module.exports = {
       .tap(() => {
         return styles.getPostCssConfig({
           themeImporter: {
-            themePath: require.resolve("@ckeditor/ckeditor5-theme-lark")
+            themePath: require.resolve("@ckeditor/ckeditor5-theme-lark"),
           },
-          minify: true
+          minify: true,
         });
       });
-  }
+  },
 };

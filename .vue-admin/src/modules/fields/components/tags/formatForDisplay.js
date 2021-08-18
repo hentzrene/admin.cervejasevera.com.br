@@ -7,11 +7,11 @@ export default async ({ component, value, moduleId }) => {
     .$rest("modulesTags")
     .get({
       params: {
-        moduleId
+        moduleId,
       },
-      keepCache: true
+      keepCache: true,
     })
-    .then(r => {
+    .then((r) => {
       const tag = r.find(({ id }) => id == value);
       return tag ? tag.title : "";
     });

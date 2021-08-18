@@ -13,7 +13,7 @@ const VuexRest = {
   install: (Vue, { base }) => {
     http.defaults.baseURL = base || "/";
 
-    Vue.prototype.$rest = function(module) {
+    Vue.prototype.$rest = function (module) {
       if (typeof module !== "string")
         throw new TypeError("O parâmetro <module> deve ser uma string.");
 
@@ -35,18 +35,18 @@ const VuexRest = {
       const rest = {
         item,
         list,
-        getters: {}
+        getters: {},
       };
 
       for (let getter of getters)
         rest.getters[getter] = store.getters[`${"_rest_" + module}/${getter}`];
 
       for (let action of actions)
-        rest[action] = data => callAction(action, data);
+        rest[action] = (data) => callAction(action, data);
 
       return rest;
     };
-  }
+  },
 };
 
 export { http };

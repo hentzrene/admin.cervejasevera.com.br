@@ -25,7 +25,7 @@ const actions = {
 
     if (data) {
       if (save && typeof save === "function")
-        commit("function", state => save(state, data));
+        commit("function", (state) => save(state, data));
       else if (id) commit("updateItem", { id, data, keepCache, cacheItemKey });
       else commit("updateList", { data, keepCache, cacheItemKey });
     }
@@ -39,18 +39,18 @@ const actions = {
 
     const res = await http.post(url, data);
     if (save && typeof save === "function")
-      commit("function", state => save(state));
+      commit("function", (state) => save(state));
     else if (res.data) commit("updateList", { data: res.data });
     return res.data;
   },
   put: async ({ state, commit }, { id, prop, data, params, save = true }) => {
     if (id && prop) {
-      let data_ = state.list.find(v => v.id == id);
+      let data_ = state.list.find((v) => v.id == id);
       if (data_) data_ = data_[prop];
 
       if (data == data_) return;
     } else if (id) {
-      const data_ = state.list.find(v => v.id == id);
+      const data_ = state.list.find((v) => v.id == id);
       if (data == data_) return;
     }
 
@@ -65,12 +65,12 @@ const actions = {
     await http.put(url, data);
 
     if (save && typeof save === "function")
-      commit("function", state => save(state));
+      commit("function", (state) => save(state));
     else if (id && prop) {
       commit("setProperty", {
         id,
         prop,
-        data: typeof data === "object" ? data.value : data
+        data: typeof data === "object" ? data.value : data,
       });
     } else if (id) {
       commit("updateItem", { id, data });
@@ -85,11 +85,11 @@ const actions = {
     let url = createURL(state.group, {
       id,
       prop,
-      params
+      params,
     });
 
     const config = {
-      onUploadProgress
+      onUploadProgress,
     };
 
     const _data = new FormData();
@@ -109,12 +109,12 @@ const actions = {
       );
     } else {
       if (save && typeof save === "function")
-        commit("function", state => save(state, res.data));
+        commit("function", (state) => save(state, res.data));
       else if (id && prop) {
         commit("setProperty", {
           id,
           prop,
-          data: res.data.file
+          data: res.data.file,
         });
       } else if (id) {
         commit("updateItem", { id, data: res.data.file });
@@ -128,11 +128,11 @@ const actions = {
     await http.delete(url);
 
     if (save && typeof save === "function")
-      commit("function", state => save(state));
+      commit("function", (state) => save(state));
     else if (id) commit("remove", id);
 
     return true;
-  }
+  },
 };
 
 export default actions;

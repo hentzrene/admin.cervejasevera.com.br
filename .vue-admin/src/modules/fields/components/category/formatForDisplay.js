@@ -9,11 +9,11 @@ export default async ({ component, value, moduleId }) => {
     .$rest("modulesCategories")
     .get({
       params: {
-        moduleId
+        moduleId,
       },
-      keepCache: true
+      keepCache: true,
     })
-    .then(r => {
+    .then((r) => {
       const category = r.find(({ id }) => id == value);
       return category ? category.title : "";
     });

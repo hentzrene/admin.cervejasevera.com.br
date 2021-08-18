@@ -6,12 +6,12 @@ export default {
     {
       name: "{name}",
       path: `/{key}`,
-      component: List
+      component: List,
     },
     {
       name: "{name} / Alterar",
       path: `/{key}/:sub`,
-      component: Item
-    }
-  ]
+      component: Item,
+    },
+  ],
 };

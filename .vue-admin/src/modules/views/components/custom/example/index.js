@@ -10,17 +10,17 @@ export default {
     {
       name: "Exemplos",
       path: `/${key}`,
-      component: List
+      component: List,
     },
     {
       name: "Adicionar exemplo",
       path: `/${key}/adicionar`,
-      component: Add
+      component: Add,
     },
     {
       name: "Alterar exemplo",
       path: `/${key}/:example`,
-      component: Item
-    }
-  ]
+      component: Item,
+    },
+  ],
 };

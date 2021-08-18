@@ -1,10 +1,10 @@
 import { http } from "@/plugins/vuex-rest";
 import Vue from "vue";
 
-const SimpleAuth = Vue => {
+const SimpleAuth = (Vue) => {
   const state = Vue.observable({
     on: false,
-    checking: true
+    checking: true,
   });
 
   Vue.prototype.$auth = {
@@ -51,7 +51,7 @@ const SimpleAuth = Vue => {
     },
     get checking() {
       return state.checking;
-    }
+    },
   };
 };
 
