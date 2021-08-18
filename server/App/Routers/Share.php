@@ -4,8 +4,8 @@ use App\ShareTags;
 
 if (APP !== 'admin' && APP !== 'setup' && APP !== 'admin-rest') {
   foreach (ShareTags::app() as $path => $tags) {
-    $router->get($path, function () use ($tags) {
-      if (is_callable($tags)) $tags = $tags();
+    $router->get($path, function ($d) use ($tags) {
+      if (is_callable($tags)) $tags = $tags($d);
 
       define('SHARE_TAG_NAME', $tags['name'] ? $tags['name'] : ShareTags::$defaultTags->name);
       define('SHARE_TAG_TITLE', $tags['title'] ? $tags['title'] : ShareTags::$defaultTags->title);
