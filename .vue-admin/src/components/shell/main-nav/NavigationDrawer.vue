@@ -22,21 +22,21 @@ v-navigation-drawer(
       v-list(dense, nav)
         template(v-for="({ text, to, icon, items }, i) in nav")
           v-list-item(v-if="!items", :key="i", :to="to", link)
-            v-list-item-icon
-              v-icon {{ icon }}
+            v-list-item-icon.mr-3
+              v-icon(size="20") {{ icon }}
             v-list-item-content
               v-list-item-title.body-2 {{ text }}
           v-list-group(v-else, :key="i", no-action, color="white")
             template(#activator)
               v-list-item-title.body-2.text-uppercase.font-weight-bold {{ text }}
-            v-list-item.pl-8(
+            v-list-item.pl-4(
               v-for="({ text, to, icon }, i) in items",
               :key="i",
               :to="to",
               link
             )
-              v-list-item-icon
-                v-icon {{ icon }}
+              v-list-item-icon.mr-3
+                v-icon(size="20") {{ icon }}
               v-list-item-content
                 v-list-item-title.body-2 {{ text }}
 </template>

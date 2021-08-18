@@ -33,7 +33,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               block,
               tile
             )
-              v-icon(left) fas fa-users
+              v-icon(left, small) fas fa-users
               span Contas
             v-divider
             v-btn.text-none(
@@ -44,7 +44,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               block,
               tile
             )
-              v-icon(left) fas fa-cogs
+              v-icon(left, small) fas fa-cogs
               span Módulos
             v-divider
             v-btn.text-none(
@@ -55,7 +55,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               block,
               tile
             )
-              v-icon(left) fas fa-envelope
+              v-icon(left, small) fas fa-envelope
               span E-mail
             v-divider
             v-btn.text-none(
@@ -66,7 +66,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               block,
               tile
             )
-              v-icon(left) fas fa-code
+              v-icon(left, small) fas fa-code
               span Tags
             v-divider
           v-btn.text-none(
@@ -78,7 +78,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
             block,
             tile
           )
-            v-icon(left) fas fa-sign-out-alt
+            v-icon(left, small) fas fa-sign-out-alt
             span Sair
   v-app-bar-nav-icon(
     v-if="sm",
