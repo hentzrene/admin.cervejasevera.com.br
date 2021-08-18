@@ -9,7 +9,8 @@ v-sheet.d-flex.justify-center.align-center.pa-3(
     color="primary lighten-2",
     outlined
   )
-    img.page-login-logo.mb-3(src="/admin/img/logo.svg")
+    .d-flex.justify-center
+      img.page-login-logo.mb-3(src="/admin/img/logo.svg")
     .grey--text.text--lighten-3.text-center.mb-4
       .title Painel de Administração
       .text-body-1 {{ version }}
