@@ -1,9 +1,15 @@
-Components para Grid Layout no Vue.js
+## Introdução
 
-## Instalando
+Plugin Vue de componentes para utilizar Grid Layout.
 
-Usando npm:
 
-```bash
-$ npm install @scriptn/vue-grid
+```js
+// src/main.js
+
+import Vue from 'vue'
+import VueGrid from "@sneverton/vue-grid";
+
+Vue.use(VueGrid);
+
+new Vue().$mount('#app')
 ```

@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(col-end=2, col-end-sm=1).d-flex
+grid-item(col-end="span 2", col-end-sm="span 1").d-flex
   v-menu(offset-y :close-on-content-click="false")
     template(#activator="{ on, attrs }")
       v-btn(v-bind="attrs" v-on="on" :color="value_" fab depressed x-small).mt-1.mr-2

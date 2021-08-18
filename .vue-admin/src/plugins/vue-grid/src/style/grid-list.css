@@ -1,0 +1,49 @@
+@import url(./gap.css);
+@import url(./alignment.css);
+
+.grid-list {
+  display: grid;
+  gap: var(--grid-gap, 20px);
+  width: 100%;
+  justify-content: center;
+}
+
+.grid-col-width {
+  grid-template-columns: repeat(auto-fit, var(--grid-col-width));
+}
+.grid-row-height {
+  grid-auto-rows: var(--grid-row-height);
+}
+
+@media screen and (min-width: 600.001px) {
+  .grid-col-width-sm {
+    grid-template-columns: repeat(auto-fit, var(--grid-col-width-sm));
+  }
+  .grid-row-height-sm {
+    grid-auto-rows: var(--grid-row-height-sm);
+  }
+}
+@media screen and (min-width: 960.001px) {
+  .grid-col-width-md {
+    grid-template-columns: repeat(auto-fit, var(--grid-col-width-md));
+  }
+  .grid-row-height-md {
+    grid-auto-rows: var(--grid-row-height-md);
+  }
+}
+@media screen and (min-width: 1280.001px) {
+  .grid-col-width-lg {
+    grid-template-columns: repeat(auto-fit, var(--grid-col-width-lg));
+  }
+  .grid-row-height-lg {
+    grid-auto-rows: var(--grid-row-height-lg);
+  }
+}
+@media screen and (min-width: 1920.001px) {
+  .grid-col-width-xl {
+    grid-template-columns: repeat(auto-fit, var(--grid-col-width-xl));
+  }
+  .grid-row-height-xl {
+    grid-auto-rows: var(--grid-row-height-xl);
+  }
+}

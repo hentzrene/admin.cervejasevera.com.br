@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item.field-source-code(col-end=2)
+grid-item.field-source-code(col-end="span 2")
   v-textarea.rounded-0(
     :label="label",
     :value="value",

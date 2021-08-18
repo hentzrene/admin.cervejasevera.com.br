@@ -4,10 +4,11 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VuexRest from "./plugins/vuex-rest";
+import VueGrid from "./plugins/vue-grid/src";
 import CKEditor from "@ckeditor/ckeditor5-vue2";
 import "./plugins/simple-auth";
-import "./plugins/vue-grid";
 
+Vue.use(VueGrid);
 Vue.use(CKEditor);
 
 const server =

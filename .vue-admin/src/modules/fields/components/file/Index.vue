@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item.mb-2(row-end=2, col-end=2, col-end-sm=1)
+grid-item.mb-2(row-end="span 2", col-end="span 2", col-end-sm="span 1")
   .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
   tooltip(:tip="label", top)
     v-responsive.grey.d-flex.align-center.rounded-lg.primary.cursor-pointer(

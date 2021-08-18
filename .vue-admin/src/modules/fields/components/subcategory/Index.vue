@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(col-end=2, col-end-sm=1)
+grid-item(col-end="span 2", col-end-sm="span 1")
   .d-flex
     v-select(
       v-model="value_",

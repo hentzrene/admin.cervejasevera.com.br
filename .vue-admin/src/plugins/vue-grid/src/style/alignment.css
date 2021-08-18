@@ -1,0 +1,54 @@
+.grid-justify {
+  justify-content: var(--grid-justify);
+}
+.grid-align-items {
+  align-items: var(--grid-align-items);
+}
+.grid-align-content {
+  align-content: var(--grid-align-content);
+}
+
+@media screen and (min-width: 600.001px) {
+  .grid-justify-sm {
+    justify-content: var(--grid-justify-sm);
+  }
+  .grid-align-items-sm {
+    align-items: var(--grid-align-items-sm);
+  }
+  .grid-align-content-sm {
+    align-content: var(--grid-align-content-sm);
+  }
+}
+@media screen and (min-width: 960.001px) {
+  .grid-justify-md {
+    justify-content: var(--grid-justify-md);
+  }
+  .grid-align-items-md {
+    align-items: var(--grid-align-items-md);
+  }
+  .grid-align-content-md {
+    align-content: var(--grid-align-content-md);
+  }
+}
+@media screen and (min-width: 1280.001px) {
+  .grid-justify-lg {
+    justify-content: var(--grid-justify-lg);
+  }
+  .grid-align-items-lg {
+    align-items: var(--grid-align-items-lg);
+  }
+  .grid-align-content-lg {
+    align-content: var(--grid-align-content-lg);
+  }
+}
+@media screen and (min-width: 1920.001px) {
+  .grid-justify-xl {
+    justify-content: var(--grid-justify-xl);
+  }
+  .grid-align-items-xl {
+    align-items: var(--grid-align-items-xl);
+  }
+  .grid-align-content-xl {
+    align-content: var(--grid-align-content-xl);
+  }
+}

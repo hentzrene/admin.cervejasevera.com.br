@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(col-end=2)
+grid-item(col-end="span 2")
   .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
   div(:class="[disabled ? 'disabled' : '', 'view-big-text-field']")
     ckeditor.elevation-1(

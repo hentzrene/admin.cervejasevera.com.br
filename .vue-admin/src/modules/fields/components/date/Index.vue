@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item.field-date(col-end=2, col-end-sm=1)
+grid-item.field-date(col-end="span 2", col-end-sm="span 1")
   v-text-field(
     :label="label",
     :value="_value",

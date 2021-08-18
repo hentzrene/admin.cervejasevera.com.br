@@ -1,5 +1,5 @@
 <template lang="pug">
-grid-item(col-end=2)
+grid-item(col-end="span 2")
   v-textarea(
     :label="label",
     :value="value",
