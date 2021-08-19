@@ -10,3 +10,8 @@ INSERT INTO
   `modules_fields_types` (`name`, `key`, `sql_type`)
 VALUES
   ('Data', 'date', 'DATE');
+
+INSERT INTO
+  `modules_fields_types` (`name`, `key`, `sql_type`)
+VALUES
+  ('Tempo', 'time', 'TIME');
