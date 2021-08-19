@@ -32,4 +32,20 @@ const price = (v) =>
     ? true
     : "Preço inválido.";
 
-export { required, email, phone, alphaNumUnderline, url, price };
+const regexp = (v) => {
+  if (!v) return true;
+
+  let k;
+
+  try {
+    v.replace(/\/([^/]+)\/(.+)?/, (m, p1, p2) => {
+      k = new RegExp(p1, p2);
+    });
+  } catch {
+    return false;
+  }
+
+  return !!k;
+};
+
+export { required, email, phone, alphaNumUnderline, url, price, regexp };
