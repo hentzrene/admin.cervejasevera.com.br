@@ -1,5 +1,1 @@
-export default ({ value }) =>
-  value &&
-  new Date(value).toLocaleString("pt-BR", {
-    timeStyle: "short",
-  });
+export default ({ value }) => value && value.slice(0, 5);
