@@ -25,19 +25,7 @@ class ShareTags
 
     return [
       '/' => [
-        'title' => 'Início - ' . self::$defaultTags->name,
-      ],
-      '/biografia' => [
-        'title' => 'Biografia - ' . self::$defaultTags->name,
-      ],
-      '/agenda' => [
-        'title' => 'Agenda - ' . self::$defaultTags->name,
-      ],
-      '/shows' => [
-        'title' => 'Shows - ' . self::$defaultTags->name,
-      ],
-      '/contato' => [
-        'title' => 'Contato - ' . self::$defaultTags->name,
+        'title' => 'MRX Websites - ' . self::$defaultTags->name,
       ],
     ];
   }
