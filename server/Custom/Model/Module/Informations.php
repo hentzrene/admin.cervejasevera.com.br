@@ -13,6 +13,10 @@ class Informations extends ModuleWrap
 
   public function get(): object
   {
-    return $this->module->get(['img', 'icon', 'name'])->data;
+    return $this->module->get([
+      'img', 'icon', 'name', 'instagram',
+      'facebook', 'instagram', 'twitter',
+      'youtube', 'tel', 'email'
+    ])->data;
   }
 }
