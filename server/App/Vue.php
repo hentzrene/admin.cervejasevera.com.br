@@ -1,3 +1,9 @@
+<?php
+
+use Core\Model\Configuration;
+
+$config = Configuration::getConfig('tags');
+?>
 <!DOCTYPE html>
 <html lang=pt-BR>
 
@@ -14,6 +20,8 @@
     <title></title>
   <?php endif; ?>
 
+  <?= $config->head_after_begin  ?>
+
   <?php if (MANIFEST) : ?>
     <link rel=manifest href="<?= BASE ?>/manifest.json">
   <?php endif; ?>
@@ -22,7 +30,6 @@
   if (SHARE_TAGS_DEFINEDS) include __DIR__ . '/Document/Share.php';
   if (INSTALLED) {
     include __DIR__ . '/Document/Icons.php';
-    include __DIR__ . '/Document/ScriptTags.php';
   }
   ?>
 
@@ -46,9 +53,13 @@
   <?php foreach (array_reverse(STYLES) as $file) : ?>
     <link href=<?= $file ?> rel=stylesheet>
   <?php endforeach; ?>
+
+  <?= $config->head_before_end  ?>
 </head>
 
 <body>
+  <?= $config->body_after_begin  ?>
+
   <script id="config" type="application/json">
     {
       "installed": <?= INSTALLED ? 'true' : 'false' ?>
@@ -58,6 +69,8 @@
   <?php foreach (array_reverse(SCRIPTS) as $file) : ?>
     <script src=<?= $file ?>></script>
   <?php endforeach; ?>
+
+  <?= $config->body_before_end  ?>
 </body>
 
 </html>

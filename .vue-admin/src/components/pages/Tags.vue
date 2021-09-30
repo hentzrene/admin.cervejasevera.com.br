@@ -3,32 +3,42 @@ module-template.page-tags(title="Tags", max-width="800px")
   v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
     v-form.pt-4.d-flex.flex-column(ref="form")
       v-textarea(
-        :value="configuration.analytics",
+        :value="configuration.head_after_begin",
         :disabled="loading",
         :loading="loading",
         :rows="10",
-        label="Analytics",
-        name="analytics",
+        label="HEAD - Depois de começar",
+        name="head_after_begin",
         outlined,
         dense
       )
       v-textarea(
-        :value="configuration.ads",
+        :value="configuration.head_before_end",
         :disabled="loading",
         :loading="loading",
         :rows="10",
-        label="Ads",
-        name="ads",
+        label="HEAD - Antes do fim",
+        name="head_before_end",
         outlined,
         dense
       )
       v-textarea(
-        :value="configuration.facebookPixel",
+        :value="configuration.body_after_begin",
         :disabled="loading",
         :loading="loading",
         :rows="10",
-        label="Facebook Pixel",
-        name="facebookPixel",
+        label="BODY - Depois de começar",
+        name="body_after_begin",
+        outlined,
+        dense
+      )
+      v-textarea(
+        :value="configuration.body_before_end",
+        :disabled="loading",
+        :loading="loading",
+        :rows="10",
+        label="BODY - Antes do fim",
+        name="body_before_end",
         outlined,
         dense
       )
