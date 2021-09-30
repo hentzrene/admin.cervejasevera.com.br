@@ -28,6 +28,7 @@ Vue.mixin({
     server,
     files: server + "/admin",
     ...config,
+    version: process.env.VERSION,
   }),
 });
 

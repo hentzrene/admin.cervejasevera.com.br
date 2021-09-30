@@ -2,7 +2,7 @@
 v-app-bar(color="primary lighten-2", fixed, app, dense)
   router-link.h-100.white--text(v-if="sm", to="/")
     img.py-2(:src="`/admin/img/logo.svg`", height="100%", contain)
-  .grey--text.text--lighten-3.text-center.text-caption.ml-3 MRX CMS Headless {{ version }}
+  .grey--text.text--lighten-3.text-center.text-caption.ml-3 MRX CMS Headless v{{ version }}
   v-spacer
   v-menu(
     v-model="menu",
@@ -26,7 +26,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
           v-divider
           template(v-if="user.type == 1")
             v-btn.text-none(
-              @click="$router.push('/accounts') && (menu = false)",
+              to="/accounts",
               color="white",
               depressed,
               text,
@@ -37,7 +37,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               span Contas
             v-divider
             v-btn.text-none(
-              @click="$router.push('/modules') && (menu = false)",
+              to="/modules",
               color="white",
               depressed,
               text,
@@ -48,7 +48,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               span Módulos
             v-divider
             v-btn.text-none(
-              @click="$router.push('/email') && (menu = false)",
+              to="/email",
               color="white",
               depressed,
               text,
@@ -59,7 +59,7 @@ v-app-bar(color="primary lighten-2", fixed, app, dense)
               span E-mail
             v-divider
             v-btn.text-none(
-              @click="$router.push('/tags') && (menu = false)",
+              to="/tags",
               color="white",
               depressed,
               text,
@@ -103,8 +103,10 @@ export default {
     userInitial() {
       return this.user.name.slice(0, 1);
     },
-    version() {
-      return process.env.VUE_APP_PROJECT_VERSION;
+  },
+  watch: {
+    $route() {
+      this.menu = false;
     },
   },
   methods: {

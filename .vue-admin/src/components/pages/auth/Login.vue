@@ -13,7 +13,7 @@ v-sheet.d-flex.justify-center.align-center.pa-3(
       img.page-login-logo.mb-3(src="/admin/img/logo.svg")
     .grey--text.text--lighten-3.text-center.mb-4
       .title Painel de Administração
-      .text-body-1 {{ version }}
+      .text-body-1 v{{ version }}
     login-form(@send="send", :loading="loading")
 </template>
 
@@ -24,11 +24,6 @@ export default {
   data: () => ({
     loading: false,
   }),
-  computed: {
-    version() {
-      return process.env.VUE_APP_PROJECT_VERSION;
-    },
-  },
   methods: {
     send(data) {
       this.loading = true;
