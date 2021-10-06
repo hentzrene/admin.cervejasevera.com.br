@@ -2,7 +2,7 @@
 
 use Core\Model\Configuration;
 
-$config = Configuration::getConfig('tags');
+$config = INSTALLED ? Configuration::getConfig('tags') : (object) [];
 ?>
 <!DOCTYPE html>
 <html lang=pt-BR>
@@ -19,6 +19,7 @@ $config = Configuration::getConfig('tags');
   <?php else : ?>
     <title></title>
   <?php endif; ?>
+
 
   <?= $config->head_after_begin  ?>
 
