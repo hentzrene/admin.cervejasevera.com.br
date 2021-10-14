@@ -143,6 +143,62 @@ class Model
     ];
   }
 
+  /**
+   * Exportar itens.
+   *
+   * @param string $module
+   * @param object $data
+   * @return void
+   */
+  public static function export(string $module, object $data): bool
+  {
+    $module = addslashes($module);
+    $exportFieldsKeys = array_map(function ($v) {
+      return addslashes($v);
+    }, $data->fields);
+
+    $fields = Field::getAll($module);
+
+    $header = array_map(
+      fn ($v) => $v['name'],
+      array_filter(
+        $fields,
+        fn ($v) => in_array($v['key'], $exportFieldsKeys)
+      )
+    );
+
+    if (in_array('id', $exportFieldsKeys)) array_unshift($header, 'Id');
+
+    $list = Conn::table("mod_$module")
+      ::select($exportFieldsKeys)
+      ::where('active', 1)
+      ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
+      ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1)
+      ::send();
+
+    $list = !$list ? [] : $list->fetch_all(MYSQLI_ASSOC);
+
+    if ($data->type === 'Excel') {
+      array_unshift($list, $header);
+
+      $spreadSheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+      $workSheet = $spreadSheet->getActiveSheet();
+
+      $workSheet->fromArray($list);
+
+      $spreadSheet->getProperties()
+        ->setTitle('export');
+
+      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+      $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadSheet, 'Xlsx');
+      $writer->save('php://output');
+
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   /**
    * Obter a quantidade de itens.

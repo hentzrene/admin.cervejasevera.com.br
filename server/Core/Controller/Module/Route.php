@@ -25,6 +25,12 @@ class Route
     self::callViewControllerMethod($viewClass, 'add', $d['module']);
   }
 
+  public function export($d)
+  {
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'export', $d['module'], Req::getAll());
+  }
+
   public function remove($d)
   {
     $viewClass = self::getViewClassOfModule($d['module']);

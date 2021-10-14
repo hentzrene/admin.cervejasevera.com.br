@@ -27,6 +27,7 @@
     "phpmailer/phpmailer": "^6.1",
     "intervention/image": "^2.5",
     "league/flysystem": "^2.0",
-    "illuminate/database": "^8.55"
+    "illuminate/database": "^8.55",
+    "phpoffice/phpspreadsheet": "^1.18"
   }
 }

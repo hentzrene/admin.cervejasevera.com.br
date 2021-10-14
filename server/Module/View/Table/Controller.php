@@ -30,6 +30,23 @@ class Controller
     Response::send();
   }
 
+
+  public static function export(string $module, object $data)
+  {
+    if (!ON) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      if (!Model::export($module, $data)) {
+        Response::status(400);
+        Response::set('status', 'error');
+        Response::set('error', 'Não foi possível realizar a exportação.');
+      }
+    }
+
+    Response::send();
+  }
+
   public static function add(string $module)
   {
     if (!ON) {

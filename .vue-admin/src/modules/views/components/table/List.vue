@@ -10,6 +10,7 @@ module-template(:title="data.name")
     )
     toolbar-button(@click="add", tip="Adicionar", icon="fas fa-plus", dark)
     print-button
+    export-button(:module-key="data.key", :fields="fields")
   div
     .pa-2.primary.lighten-1.module-search
       v-text-field(
@@ -78,6 +79,7 @@ module-template(:title="data.name")
 <script>
 import ToolbarButton from "@/components/buttons/Toolbar";
 import PrintButton from "@/components/buttons/Print";
+import ExportButton from "@/components/buttons/Export";
 import ModuleTemplate from "@/components/templates/Module";
 import formatForDisplay from "@/modules/fields/formatForDisplay.js";
 import Loading from "@/components/tools/Loading";
@@ -256,6 +258,7 @@ export default {
   components: {
     ToolbarButton,
     PrintButton,
+    ExportButton,
     ModuleTemplate,
     Loading,
   },
