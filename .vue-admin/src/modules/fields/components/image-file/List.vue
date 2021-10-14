@@ -9,7 +9,7 @@ template-dialog-any(
     template-dialog-header-button(
       @click="order",
       icon="fas fa-save",
-      text="Salvar"
+      text="Salvar Ordem"
     )
     template-dialog-header-button(
       @click="highlight",
