@@ -1,4 +1,4 @@
-export default async ({ component: { files }, value }) => {
+export default ({ component: { files }, value }) => {
   if (!value) return;
 
   const src = files.replace("/admin", "") + value + "?resize=1&w=106";

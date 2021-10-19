@@ -1,16 +1,21 @@
-const keys = require
-  .context("./components", true, /\.js$/)
-  .keys()
-  .filter((path) => /\.\/[^]+\/formatForDisplay.js/.test(path));
+import category from "./components/category/formatForDisplay.js";
+import date from "./components/date/formatForDisplay.js";
+import datetime from "./components/datetime/formatForDisplay.js";
+import imageFile from "./components/image-file/formatForDisplay.js";
+import link from "./components/link/formatForDisplay.js";
+import price from "./components/price/formatForDisplay.js";
+import switchBoolean from "./components/switch-boolean/formatForDisplay.js";
+import tags from "./components/tags/formatForDisplay.js";
+import time from "./components/time/formatForDisplay.js";
 
-const names = keys.map((path) =>
-  path.replace(/\.\/([^./]+)\/formatForDisplay.js/, "$1")
-);
-
-const imports = keys.map((path) =>
-  import("./components/" + path.slice(2)).then((m) => m.default)
-);
-
-export default Promise.all(imports).then((importsResolved) =>
-  Object.fromEntries(importsResolved.map((imp, i) => [names[i], imp]))
-);
+export default {
+  category,
+  date,
+  datetime,
+  imageFile,
+  link,
+  price,
+  switchBoolean,
+  tags,
+  time,
+};

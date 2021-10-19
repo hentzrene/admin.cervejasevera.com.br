@@ -1,7 +1,7 @@
 export default async ({ component, value, moduleId }) => {
   let tag = component.$rest("modulesTags").list.find(({ id }) => id == value);
 
-  if (tag) return Promise.resolve(tag.title);
+  if (tag) return tag.title;
 
   return component
     .$rest("modulesTags")

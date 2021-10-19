@@ -165,17 +165,19 @@ export default {
             this.totalItems = parseInt(totalItems);
             state.list = list;
 
-            const formatForDisplay_ = await formatForDisplay;
-
             this.items = [];
+
+            const fieldsTypeKeys = Object.fromEntries(
+              this.fields.map(({ key, typeKey }) => [key, typeKey])
+            );
+
             for (let item of list) {
               const item_ = {};
 
-              let field;
-
               for (let key in item) {
-                field = this.fields.find((f) => f.key === key);
-                if (!field) {
+                const fieldTypeKey = fieldsTypeKeys[key];
+
+                if (!fieldsTypeKeys[key]) {
                   if ((key === "showFrom" || key === "showUp") && item[key]) {
                     item_[key] = new Date(item[key]).toLocaleString("pt-BR", {
                       dateStyle: "short",
@@ -185,18 +187,18 @@ export default {
                     item_[key] = item[key];
                   }
                 } else {
-                  const f =
-                    formatForDisplay_[
-                      field.typeKey.replace(/([A-Z])/g, "-$1").toLowerCase()
-                    ];
-
-                  if (!f) item_[key] = item[key];
-                  else
-                    item_[key] = await f({
+                  if (!formatForDisplay[fieldTypeKey]) {
+                    item_[key] = item[key];
+                  } else {
+                    const v = formatForDisplay[fieldTypeKey]({
                       component: this,
                       value: item[key],
                       moduleId: this.data.id,
                     });
+
+                    if (v instanceof Promise) item_[key] = await v;
+                    else item_[key] = v;
+                  }
                 }
               }
 

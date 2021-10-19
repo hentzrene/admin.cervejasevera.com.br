@@ -1,6 +1,6 @@
 import Display from "./Display";
 
-export default async ({ value }) => {
+export default ({ value }) => {
   return {
     value,
     component: Display,

@@ -3,7 +3,7 @@ export default async ({ component, value, moduleId }) => {
     .$rest("modulesCategories")
     .list.find(({ id }) => id == value);
 
-  if (category) return Promise.resolve(category.title);
+  if (category) category.title;
 
   return component
     .$rest("modulesCategories")
