@@ -167,7 +167,10 @@ class Model
       )
     );
 
-    if (in_array('id', $exportFieldsKeys)) array_unshift($header, 'Id');
+    if (in_array('id', $exportFieldsKeys)) {
+      $key = array_search('id', $exportFieldsKeys);
+      array_splice($header, $key, 0, 'Id');
+    }
 
     $list = Conn::table("mod_$module")
       ::select($exportFieldsKeys)
