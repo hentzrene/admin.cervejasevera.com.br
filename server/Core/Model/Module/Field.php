@@ -284,7 +284,7 @@ class Field
    * @param integer $typeId
    * @return string
    */
-  private static function getFieldClassOfTypeId(int $typeId): string
+  public static function getFieldClassOfTypeId(int $typeId): string
   {
     $field = FieldType::get($typeId, ['`key`']);
     $fieldDir = null;

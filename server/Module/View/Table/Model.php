@@ -147,24 +147,26 @@ class Model
    * Exportar itens.
    *
    * @param string $module
-   * @param object $data
+   * @param object $options
    * @return void
    */
-  public static function export(string $module, object $data): bool
+  public static function export(string $module, object $options): bool
   {
     $module = addslashes($module);
     $exportFieldsKeys = array_map(function ($v) {
       return addslashes($v);
-    }, $data->fields);
+    }, $options->fields);
 
     $fields = Field::getAll($module);
 
+    $exportFieldsData = array_filter(
+      $fields,
+      fn ($v) => in_array($v['key'], $exportFieldsKeys)
+    );
+
     $header = array_map(
       fn ($v) => $v['name'],
-      array_filter(
-        $fields,
-        fn ($v) => in_array($v['key'], $exportFieldsKeys)
-      )
+      $exportFieldsData
     );
 
     if (in_array('id', $exportFieldsKeys)) {
@@ -181,7 +183,16 @@ class Model
 
     $list = !$list ? [] : $list->fetch_all(MYSQLI_ASSOC);
 
-    if ($data->type === 'Excel') {
+
+    foreach ($exportFieldsData as $exportFieldData) {
+      $fieldClass = Field::getFieldClassOfTypeId((int) $exportFieldData['typeId']);
+
+      if (method_exists($fieldClass, 'beforeTableExport')) {
+        $list = call_user_func([$fieldClass, 'beforeTableExport'], $module, $exportFieldData, $options, $list);
+      }
+    }
+
+    if ($options->type === 'Excel') {
       array_unshift($list, $header);
 
       $spreadSheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
