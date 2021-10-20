@@ -26,7 +26,7 @@ $config = INSTALLED ? Configuration::getConfig('tags') : (object) [];
     <script async src=https://kit.fontawesome.com/3adb9befaf.js crossorigin=anonymous></script>
   <?php endif; ?>
 
-  <?= $config->head_after_begin  ?>
+  <?= APP !== 'admin' ? $config->head_after_begin : ''  ?>
 
   <?php if (MANIFEST) : ?>
     <link rel=manifest href="<?= BASE ?>/manifest.json">
@@ -60,11 +60,11 @@ $config = INSTALLED ? Configuration::getConfig('tags') : (object) [];
     <link href=<?= $file ?> rel=stylesheet>
   <?php endforeach; ?>
 
-  <?= $config->head_before_end  ?>
+  <?= APP !== 'admin' ? $config->head_before_end : ''  ?>
 </head>
 
 <body>
-  <?= $config->body_after_begin  ?>
+  <?= APP !== 'admin' ? $config->body_after_begin : ''  ?>
 
   <script id="config" type="application/json">
     {
@@ -76,7 +76,7 @@ $config = INSTALLED ? Configuration::getConfig('tags') : (object) [];
     <script src=<?= $file ?>></script>
   <?php endforeach; ?>
 
-  <?= $config->body_before_end  ?>
+  <?= APP !== 'admin' ? $config->body_before_end : ''  ?>
 </body>
 
 </html>
