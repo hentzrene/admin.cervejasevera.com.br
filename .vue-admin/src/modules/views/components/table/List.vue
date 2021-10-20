@@ -194,6 +194,7 @@ export default {
                     const v = formatForDisplay[fieldTypeKey]({
                       component: this,
                       value: item[key],
+                      fieldData: this.fields.find((field) => field.key === key),
                       moduleId: this.data.id,
                     });
 
