@@ -169,4 +169,32 @@ class Model
       DROP FOREIGN KEY mod_{$moduleKey}_$key;"
     );
   }
+
+  public static function beforeTableExport(string $moduleKey, $fieldData, object $options, array $list): array
+  {
+    $linkModule = $fieldData['options']->linkModule;
+    if ($linkModule) {
+      $categoryMod = "mod_$linkModule";
+    } else {
+      $categoryMod =  'categories';
+    }
+
+    $q = Conn::table($categoryMod)
+      ::select(['id', 'title'])
+      ::send();
+
+    $categories  = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+
+    $categories = array_combine(
+      array_column($categories, 'id'),
+      array_column($categories, 'title'),
+    );
+
+    $list = array_map(function ($c) use ($categories, $fieldData) {
+      $c[$fieldData['key']] = $categories[$c[$fieldData['key']]];
+      return $c;
+    }, $list);
+
+    return $list;
+  }
 }
