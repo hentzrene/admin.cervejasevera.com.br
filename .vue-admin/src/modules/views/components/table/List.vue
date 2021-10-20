@@ -33,7 +33,7 @@ module-template(:title="data.name")
       :items="items",
       :loading="loading",
       :server-items-length="totalItems",
-      :items-per-page="100",
+      :items-per-page="itemsPerPage",
       height="calc(100vh - 226px)",
       sort-by="id",
       loading-text="Carregado dados.",
@@ -96,6 +96,7 @@ export default {
     totalItems: 0,
     items: [],
     action: "item.action",
+    itemsPerPage: 30,
   }),
   computed: {
     fields() {
@@ -151,12 +152,12 @@ export default {
     },
   },
   methods: {
-    get(page = 1, itemsPerPage = 100) {
+    get(page = 1, itemsPerPage = null) {
       return this.$rest(this.data.key)
         .get({
           params: {
             fields: "id,active," + this.listHeaders.join(","),
-            itemsPerPage,
+            itemsPerPage: itemsPerPage ? itemsPerPage : this.itemsPerPage,
             page,
             search: this.search,
             returnTotalItems: 1,
