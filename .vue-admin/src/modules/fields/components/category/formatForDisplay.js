@@ -1,20 +1,26 @@
-export default async ({ component, value, moduleId }) => {
-  let category = component
-    .$rest("modulesCategories")
-    .list.find(({ id }) => id == value);
+export default async ({ component, value, moduleId, fieldData }) => {
+  const linkModule = fieldData.options.linkModule;
 
-  if (category) category.title;
-
-  return component
-    .$rest("modulesCategories")
-    .get({
+  let mod, getOptions;
+  if (linkModule) {
+    mod = linkModule;
+    getOptions = { params: { fields: "id,title" } };
+  } else {
+    mod = "modulesCategories";
+    getOptions = {
       params: {
         moduleId,
       },
       keepCache: true,
-    })
-    .then((r) => {
-      const category = r.find(({ id }) => id == value);
-      return category ? category.title : "";
-    });
+    };
+  }
+
+  let category = component.$rest(mod).list.find(({ id }) => id == value);
+
+  if (category) return category.title;
+
+  let r = await component.$rest(mod).get(getOptions);
+  category = r.find(({ id }) => id == value);
+
+  return category ? category.title : "";
 };
