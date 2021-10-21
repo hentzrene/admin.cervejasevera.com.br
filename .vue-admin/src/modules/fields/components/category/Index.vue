@@ -1,7 +1,7 @@
 <template lang="pug">
 grid-item(col-end="span 2", col-end-sm="span 1")
   .d-flex
-    v-select(
+    v-autocomplete(
       v-model="value_",
       :label="label",
       :name="name",
