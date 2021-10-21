@@ -41,13 +41,6 @@ class Auth
     $email = addslashes($email);
 
     Conn::table(Table::SESSIONS)
-      ::deleteWhere(
-        'accounts_id',
-        $id
-      )
-      ::send();
-
-    Conn::table(Table::SESSIONS)
       ::insert(
         [
           'token',
