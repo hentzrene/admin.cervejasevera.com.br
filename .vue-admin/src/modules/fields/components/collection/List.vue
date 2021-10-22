@@ -35,7 +35,6 @@ v-dialog(
           v-textarea.field-collection-list-item.mt-1.py-2(
             :value="item.value",
             :rows="1",
-            outlined,
             dense,
             auto-grow,
             @input="(data) => (items_[item.id] = data)"
