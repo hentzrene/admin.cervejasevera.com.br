@@ -33,19 +33,19 @@ v-dialog(
       )
         template(#item.item="{ item }")
           .field-collectionwithkey-list-item.mt-1.py-2
-            v-textarea(
+            v-textarea.mb-2(
               :value="item.value[0]",
               :rows="1",
-              outlined,
               dense,
+              auto-grow,
+              outlined,
               @input="(data) => (items_[item.id][0] = data)"
             )
-            v-icon.px-1(x-small) fas fa-equals
             v-textarea(
               :value="item.value[1]",
               :rows="1",
-              outlined,
               dense,
+              auto-grow,
               @input="(data) => (items_[item.id][1] = data)"
             )
     .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum item foi adicionado.
@@ -149,14 +149,9 @@ export default {
 
 <style>
 .field-collectionwithkey-list-item {
-  display: grid;
-  grid-template-columns: calc(50% - 9.25px) max-content calc(50% - 9.25px);
+  grid-template-columns: auto;
 }
-@media screen and (max-width: 600px) {
-  .field-collectionwithkey-list-item {
-    grid-template-columns: auto;
-  }
-}
+
 .field-collectionwithkey-list-item .v-text-field__details {
   display: none;
 }
