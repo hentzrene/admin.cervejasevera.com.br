@@ -102,7 +102,8 @@ export default {
     },
     save() {
       const form = this.$refs.form;
-      if (!form.validate()) return;
+
+      if (form && !form.validate()) return;
 
       const value = JSON.stringify(this.items_);
 
