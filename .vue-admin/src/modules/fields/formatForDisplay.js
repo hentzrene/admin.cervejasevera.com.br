@@ -1,4 +1,5 @@
 import category from "./components/category/formatForDisplay.js";
+import collection from "./components/collection/formatForDisplay.js";
 import date from "./components/date/formatForDisplay.js";
 import datetime from "./components/datetime/formatForDisplay.js";
 import imageFile from "./components/image-file/formatForDisplay.js";
@@ -10,6 +11,7 @@ import time from "./components/time/formatForDisplay.js";
 
 export default {
   category,
+  collection,
   date,
   datetime,
   imageFile,
