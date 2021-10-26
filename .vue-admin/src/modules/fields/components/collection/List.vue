@@ -91,12 +91,9 @@ export default {
       this.items_.push("");
     },
     remove() {
-      this.selecteds.map(({ id }) => {
-        this.items_.splice(
-          this.items_.findIndex((v) => v.id == id),
-          1
-        );
-      });
+      this.items_ = this.items_.filter(
+        (v, i) => !this.selecteds.find(({ id }) => id === i)
+      );
 
       this.selecteds = [];
     },
