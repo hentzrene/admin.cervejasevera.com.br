@@ -95,7 +95,7 @@ class Model
     if ($search) {
       $tableHeaders = Module::getViewOptionsByKey($module)->listHeaders;
 
-      $inStr =  'INSTR(CONCAT_WS(\'|\', ' . implode(',', $tableHeaders) . "), '$search')";
+      $inStr =  'INSTR(LOWER(CONCAT_WS(\'|\', ' . implode(',', $tableHeaders) . ")), LOWER('$search'))";
 
       $list = Conn::table("mod_$module")
         ::select($fields)
