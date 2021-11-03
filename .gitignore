@@ -1,27 +1,8 @@
-/*
-
-!.gitignore
-!.sql_files
-!.vue-admin
-!admin
-!server
-!.editorconfig
-!.htaccess
-!php.ini
-!proxy.js
-!vetur.config.js
-!composer.json
-!composer.lock
-!image-resizer.php
-!index.php
-
-.vue-admin/dist
-.vue-admin/node_modules
-
-server/Resource
-server/Core/DB.php
-
+vendor
+node_modules
+dist
 .env
+./app/Core/DB.php
 
 # Log files
 npm-debug.log*

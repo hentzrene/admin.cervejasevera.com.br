@@ -9,16 +9,10 @@
       "role": "Developer"
     }
   ],
-  "config": {
-    "vendor-dir": "server/Resource/"
-  },
   "autoload": {
-    "psr-4": {
-      "\\": "server/Resource/"
-    },
     "files": [
-      "server/Config.php",
-      "server/Logger.php"
+      "app/Config.php",
+      "app/Logger.php"
     ]
   },
   "require": {
@@ -28,6 +22,7 @@
     "intervention/image": "^2.5",
     "league/flysystem": "^2.0",
     "illuminate/database": "^8.55",
-    "phpoffice/phpspreadsheet": "^1.18"
+    "phpoffice/phpspreadsheet": "^1.18",
+    "vlucas/phpdotenv": "^5.3"
   }
 }
