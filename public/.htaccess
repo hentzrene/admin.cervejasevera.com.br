@@ -28,7 +28,3 @@ Header always set Access-Control-Allow-Origin "http://192.168.1.106:8080"
 Header set Access-Control-Allow-Methods "OPTIONS,GET,HEAD,POST,PUT,DELETE"
 Header append Access-Control-Allow-Headers "Authorization,Content-Type,X-PINGOTHER"
 Header set Access-Control-Allow-Credentials "true"
-
-# <IfModule mime_module>
-#   AddHandler application/x-httpd-ea-php74 .php .php7 .phtml
-# </IfModule>
