@@ -1,5 +1,7 @@
 <template lang="pug">
 module-template(:title="`Alterar módulo \"${module.name}\"`")
+  template(slot="toolbar")
+    export-module-button(v-if="moduleId", :module-id="moduleId")
   v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
     v-form.pt-4(ref="form")
       v-row
@@ -37,6 +39,7 @@ module-template(:title="`Alterar módulo \"${module.name}\"`")
 <script>
 import ModuleTemplate from "@/components/templates/Module";
 import Loading from "@/components/tools/Loading";
+import ExportModuleButton from "@/components/buttons/ExportModule";
 import { viewEditModuleComponents as editComponents } from "@/modules/views";
 import { required } from "@/components/forms/rules";
 
@@ -92,6 +95,7 @@ export default {
   components: {
     ModuleTemplate,
     Loading,
+    ExportModuleButton,
     ...Object.fromEntries(
       Object.entries(editComponents).map((c) => {
         c[0] = c[0].toLowerCase() + "-edit";
