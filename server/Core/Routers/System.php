@@ -19,6 +19,7 @@ $router->namespace('Core\Controller\Module');
 $router->get('/rest/modules', 'Module:getAll');
 $router->get('/rest/modules/{moduleId}', 'Module:get');
 $router->post('/rest/modules', 'Module:add');
+$router->post('/rest/modules/{moduleId}/export', 'Module:export');
 $router->put('/rest/modules/{moduleId}/name', 'Module:setName');
 $router->put('/rest/modules/{moduleId}/icon', 'Module:setIcon');
 $router->put('/rest/modules/{moduleId}/view-options', 'Module:setViewOptions');

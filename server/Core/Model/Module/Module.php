@@ -28,6 +28,7 @@ class Module
         '`key`',
         'icon',
         'view_options' => 'viewOptions',
+        'view_id' => 'viewId',
         'view_key' => 'viewKey',
         'view_name' => 'viewName',
         'removable'
@@ -378,6 +379,32 @@ class Module
     }
 
     return $q1 && $q2;
+  }
+
+  /**
+   * Exportar.
+   *
+   * @return boolean
+   */
+  public static function export(int $id)
+  {
+    $module = self::get($id);
+
+    unset($module->id);
+    unset($module->viewKey);
+    unset($module->viewName);
+    unset($module->removable);
+
+    for ($i = 0; count($module->fields) > $i; $i++) {
+      $module->fields[$i]['type'] = $module->fields[$i]['typeId'];
+
+      unset($module->fields[$i]['id']);
+      unset($module->fields[$i]['typeId']);
+      unset($module->fields[$i]['typeKey']);
+      unset($module->fields[$i]['options']);
+    }
+
+    return $module;
   }
 
   /**
