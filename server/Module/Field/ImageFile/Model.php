@@ -11,7 +11,7 @@ use League\Flysystem\Local\LocalFilesystemAdapter as Local;
 
 class Model
 {
-  const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
+  const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg'];
 
   const MASK_SIZE = .20;
 
