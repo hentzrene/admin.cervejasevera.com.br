@@ -10,10 +10,16 @@ grid-item(col-end="span 2", col-end-sm="span 1")
       outlined,
       dark
     )
-    v-btn.ml-1(v-if="isAdminUser", @click="optionsDialog = true", icon, small)
+    v-btn.ml-1(
+      v-if="isAdminUser && fieldId",
+      @click="optionsDialog = true",
+      icon,
+      small
+    )
       v-icon(small) fas fa-cog
   options(
     v-model="optionsDialog",
+    v-if="fieldId",
     :field-id="fieldId",
     :field-options="fieldOptions"
   )
@@ -27,11 +33,10 @@ export default {
   props: {
     fieldId: {
       type: Number,
-      required: true,
     },
     fieldOptions: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
   },
   data: () => ({
@@ -44,8 +49,6 @@ export default {
 
       const regexpText = this.fieldOptions.regexp;
       if (!regexpText) return rules;
-
-      console.log(regexpText);
 
       let regexp;
       regexpText.replace(/\/([^/]+)\/(.+)?/, (m, p1, p2) => {
