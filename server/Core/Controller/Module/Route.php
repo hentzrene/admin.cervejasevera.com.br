@@ -31,6 +31,12 @@ class Route
     self::callViewControllerMethod($viewClass, 'export', $d['module'], Req::getAll());
   }
 
+  public function broadcast($d)
+  {
+    $viewClass = self::getViewClassOfModule($d['module']);
+    self::callViewControllerMethod($viewClass, 'broadcast', $d['module'], Req::getAll());
+  }
+
   public function remove($d)
   {
     $viewClass = self::getViewClassOfModule($d['module']);
