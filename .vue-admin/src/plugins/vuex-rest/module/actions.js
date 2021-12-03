@@ -32,8 +32,8 @@ const actions = {
 
     return data;
   },
-  post: async ({ state, commit }, { data, params, save = true }) => {
-    let url = createURL(state.group, { data, params });
+  post: async ({ state, commit }, { prop, data, params, save = true }) => {
+    let url = createURL(state.group, { prop, data, params });
 
     if (data && typeof data !== "object") data = { value: data };
 
