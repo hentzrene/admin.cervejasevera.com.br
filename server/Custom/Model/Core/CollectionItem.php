@@ -19,9 +19,12 @@ class CollectionItem
 
     $this->itemId = $itemId;
 
-    $this->data = DB::table("mod_$module->key")
+    $data = DB::table("mod_$module->key")
       ->select(...$columns)
       ->find($itemId);
+
+    if ($data) $this->data = $data;
+    else throw new \Exception('Não foi possível encontrar.');
   }
 
   /**

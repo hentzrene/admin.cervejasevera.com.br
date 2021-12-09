@@ -9,9 +9,11 @@ class Collection
 {
   public Module $module;
 
-  const MAX_ITEMS_PER_PAGE = 1000;
+  const MAX_ITEMS_PER_PAGE = 30;
 
   public object $data;
+
+  public ?object $init;
 
   public function __construct(
     Module $module,
@@ -22,6 +24,7 @@ class Collection
     $this->module = $module;
 
     if (!$init) $init = new CollectionInit();
+    $this->init = $init;
 
     $offset = ($init->page - 1) * ($init->itemsPerPage ? $init->itemsPerPage : self::MAX_ITEMS_PER_PAGE);
 
@@ -37,10 +40,10 @@ class Collection
       $list = $where($list);
     }
 
-    $list = $list->orderBy(
-      $init->order ? $init->order : "mod_{$this->module->key}.id",
-      $init->direction ? $init->direction : 'DESC'
-    )
+    $order = $init->order ? $init->order : "mod_{$this->module->key}.id";
+    $direction = $init->direction ? $init->direction : 'DESC';
+
+    $list = $list->orderByRaw("$order $direction")
       ->offset($offset)
       ->limit($limit)
       ->get();
@@ -48,7 +51,7 @@ class Collection
     if (!$init->returnTotalItems) {
       $this->data = $list;
     } else {
-      $totalItems = $this->getTotalItems($init->where);
+      $totalItems = $this->getTotalItems($where);
 
       $this->data = (object) [
         "list" => $list,
@@ -127,7 +130,12 @@ class Collection
       ->select('id', 'title')
       ->get();
 
-    $this->data->transform(function ($item) use ($categories, $fieldKey) {
+    $list = null;
+
+    if (!$this->init->returnTotalItems) $list = $this->data;
+    else $list = $this->data->list;
+
+    $list->transform(function ($item) use ($categories, $fieldKey) {
 
       foreach ($categories as $catg) {
         if ($catg->id == $item->{$fieldKey}) {
