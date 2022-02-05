@@ -106,12 +106,6 @@ export default {
     loadingOrder: false,
     imgs: [],
     selecteds: [],
-    useDefaultUI: true,
-    options: {
-      // for tui-image-editor component's "options" prop
-      cssMaxWidth: 700,
-      cssMaxHeight: 500,
-    },
   }),
   computed: {
     moduleKey() {
