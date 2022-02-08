@@ -34,76 +34,7 @@ class ShareTags
     return [
       '/' => [
         'title' => 'Início - ' . self::$defaultTags->name,
-      ],
-      '/sobre' => [
-        'title' => 'Sobre - ' . self::$defaultTags->name,
-      ],
-      '/noticias' => [
-        'title' => 'Notícias - ' . self::$defaultTags->name,
-      ],
-      '/noticias/{category}' => function ($d) {
-        $list = DB::table('mod_articles_categories')
-          ->select('id', 'title')
-          ->get();
-
-        $title = null;
-
-        foreach ($list as $category) {
-          if (ShareTags::normalize($category->title) === $d['category']) {
-            $title = $category->title;
-            break;
-          }
-        }
-
-        return [
-          'title' => "$title - " . self::$defaultTags->name,
-        ];
-      },
-      '/noticias/{category}/{item}' => function ($d) {
-        try {
-          $itemId =  ShareTags::getItemIdFromUrl($d['item']);
-          $item = ShareTags::getItemFromId($itemId, 'articles', ['title', 'img']);
-
-          $img = '';
-          if ($item->img) {
-            $img = ImageFileModel::getItem($item->img)->path;
-          }
-
-          return [
-            'title' => html_entity_decode("$item->title - " . self::$defaultTags->name),
-            'image' => BASE . $img,
-          ];
-        } catch (\Exception $err) {
-          Response::status(404);
-          Response::send();
-        }
-      },
-      '/videos' => [
-        'title' => 'Vídeos - ' . self::$defaultTags->name,
-      ],
-      '/videos/{item}' => function ($d) {
-        try {
-          $itemId =  ShareTags::getItemIdFromUrl($d['item']);
-          $item = ShareTags::getItemFromId($itemId, 'videos', ['title', 'link']);
-
-          preg_match(
-            "/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user|shorts)\/))([^\?&\"'>]+)/",
-            $item->link,
-            $matches
-          );
-
-          return [
-            'title' => html_entity_decode("$item->title - " . self::$defaultTags->name),
-            'image' => "http://img.youtube.com/vi/{$matches[1]}/hqdefault.jpg"
-          ];
-        } catch (\Exception $err) {
-          Response::status(404);
-          Response::send();
-        }
-      },
-      '/contato' => [
-        'title' => 'Contato - ' . self::$defaultTags->name,
-      ],
+      ]
     ];
   }
 
