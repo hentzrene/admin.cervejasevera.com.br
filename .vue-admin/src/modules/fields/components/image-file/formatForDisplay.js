@@ -1,9 +1,19 @@
-export default ({ component: { files }, value }) => {
+import Vue from "vue";
+
+export default ({ component, value, id }) => {
   if (!value) return;
 
-  const src = files.replace("/admin", "") + value + "?resize=1&w=106";
+  const r = Vue.observable({ innerHTML: null });
 
-  const img = `<img style="height: 60px; width: 106px; object-fit: contain; margin-top: 6px; border-radius: 4px;" src="${src}">`;
+  component.$rest("modulesImages").get({
+    id: `${id}/${value}`,
+    save: (state, { path }) => {
+      const src =
+        component.files.replace("/admin", "") + path + "?resize=1&w=106";
 
-  return { innerHTML: img };
+      r.innerHTML = `<img style="height: 60px; width: 106px; object-fit: contain; margin-top: 6px; border-radius: 4px;" src="${src}">`;
+    },
+  });
+
+  return r;
 };

@@ -13,6 +13,14 @@ class Informations extends ModuleWrap
 
   public function get(): object
   {
-    return $this->module->get(['img', 'icon', 'name'])->data;
+    $item = $this->module->get([
+      'img', 'name',
+    ]);
+
+    $item->withImages('img');
+
+    $item->data->img = $item->data->img['featured']->path;
+
+    return $item->data;
   }
 }

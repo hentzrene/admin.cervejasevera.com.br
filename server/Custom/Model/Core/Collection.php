@@ -86,14 +86,23 @@ class Collection
     $fieldId = $this->module->getFieldId($fieldKey);
 
     $imgs = DB::table('images')
-      ->select('path', 'item_id')
+      ->select('id', 'path', 'item_id')
       ->where('modules_fields_id', $fieldId)
       ->get();
 
-    $this->data->transform(function ($item) use ($imgs, $fieldKey) {
+    if (!$this->init->returnTotalItems) $list = $this->data;
+    else $list = $this->data->list;
+
+    $list->transform(function ($item) use ($imgs, $fieldKey) {
+      foreach ($imgs as $img) {
+        if ($img->id === $item->{$fieldKey}) {
+          $imgFeatured = $img->path;
+          break;
+        }
+      }
 
       $item->{$fieldKey} = [
-        'main' => $item->{$fieldKey},
+        'main' => $imgFeatured,
         'list' => []
       ];
 
@@ -127,7 +136,7 @@ class Collection
     }
 
     $categories = DB::table($table)
-      ->select('id', 'title')
+      ->select()
       ->get();
 
     $list = null;

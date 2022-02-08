@@ -38,14 +38,22 @@ class CollectionItem
     $fieldId = $this->module->getFieldId($fieldKey);
 
     $imgs = DB::table('images')
-      ->select('path')
+      ->select('id', 'path', 'title')
       ->where('modules_fields_id', $fieldId)
       ->where('item_id', $this->itemId)
-      ->get()
-      ->map(fn ($img) => $img->path);
+      ->get();
+
+    foreach ($imgs as $img) {
+      if ($img->id === $this->data->{$fieldKey}) {
+        $imgFeatured = $img;
+        break;
+      }
+    }
+
+    $imgs = $imgs->map(fn ($img) => $img->path);
 
     $this->data->{$fieldKey} = [
-      'featured' => $this->data->{$fieldKey},
+      'featured' => $imgFeatured,
       'list' => $imgs
     ];
 
@@ -71,7 +79,7 @@ class CollectionItem
     }
 
     $category = DB::table($table)
-      ->select('id', 'title')
+      ->select()
       ->find($this->data->category);
 
     $this->data->{$fieldKey} = $category;

@@ -4,7 +4,7 @@ grid-item.mb-2(row-end="span 4", col-end="span 2", col-end-sm="span 1")
   tooltip(:tip="label", top)
     v-img.cursor-pointer.grey.d-flex.align-center.rounded-lg(
       @click="dialog = true",
-      :src="files.replace('/admin', '') + value",
+      :src="files.replace('/admin', '') + (featuredImage && featuredImage.path)",
       :aspect-ratio="19 / 9",
       v-ripple,
       contain
@@ -19,7 +19,8 @@ grid-item.mb-2(row-end="span 4", col-end="span 2", col-end-sm="span 1")
   list(
     v-model="dialog",
     :input-name="name",
-    :highlighted-image="value",
+    :images="imgs",
+    :featured-image="featuredImage",
     :field-id="fieldId"
   )
 </template>
@@ -38,7 +39,43 @@ export default {
   },
   data: () => ({
     dialog: false,
+    imgs: [],
   }),
+  computed: {
+    moduleId() {
+      return this.$rest("modules").item.id;
+    },
+    itemId() {
+      return this.$route.params.sub || 1;
+    },
+    featuredImage() {
+      return this.imgs.find((img) => img.id === this.value);
+    },
+  },
+  methods: {
+    get() {
+      return this.$rest("modulesImages")
+        .get({
+          id: this.itemId,
+          params: {
+            moduleId: this.moduleId,
+            fieldId: this.fieldId,
+          },
+        })
+        .then((imgs) => {
+          this.imgs = imgs
+            .map(({ id, path, order }) => ({
+              id,
+              path,
+              order: parseInt(order),
+            }))
+            .sort((a, b) => a.order - b.order);
+        });
+    },
+  },
+  mounted() {
+    this.get();
+  },
   mixins: [mixin],
   components: {
     Tooltip,

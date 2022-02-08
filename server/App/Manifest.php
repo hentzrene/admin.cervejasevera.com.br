@@ -1,5 +1,6 @@
 <?php
 
+use Module\Field\ImageFile\Model as ImageFileModel;
 use Module\View\Item\Model as ItemModel;
 
 header("Content-type: application/json");
@@ -7,22 +8,32 @@ define('BASE', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']);
 
 $informations = ItemModel::get('informations');
 
+$icon = '';
+if ($informations->icon) {
+  $icon = ImageFileModel::getItem($informations->icon)->path;
+}
+
+$maskIcon = '';
+if ($informations->mask_icon) {
+  $maskIcon = ImageFileModel::getItem($informations->mask_icon)->path;
+}
+
 $manifest = [
   "short_name" => $informations->short_name,
   "name" => $informations->name,
   "icons" => [
     [
-      "src" => $informations->icon . '?resize=1&w=192&h=192',
+      "src" => $icon . '?resize=1&w=192&h=192',
       "sizes" => "192x192",
       "type" => "image/png"
     ],
     [
-      "src" => $informations->icon . '?resize=1&w=512&h=512',
+      "src" => $icon . '?resize=1&w=512&h=512',
       "sizes" => "512x512",
       "type" => "image/png"
     ],
     [
-      "src" => $informations->mask_icon . '?resize=1&w=512&h=512',
+      "src" => $maskIcon . '?resize=1&w=512&h=512',
       "sizes" => "512x512",
       "type" => "image/png",
       "purpose" => "maskable"
