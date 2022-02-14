@@ -39,7 +39,7 @@ export default {
       };
 
       const r = await fetch(
-        `${this.server}/admin/rest/modules/${this.moduleId}/export`,
+        `${this.server}/rest/modules/${this.moduleId}/export`,
         {
           method: "POST",
           body: JSON.stringify(body),
