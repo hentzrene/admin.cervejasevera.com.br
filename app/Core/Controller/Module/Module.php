@@ -59,6 +59,26 @@ class Module
     }
   }
 
+  public function export($d)
+  {
+    if (!ON) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      $export = ModelModule::export((int) $d['moduleId']);
+      if (!$export) {
+        Response::status(400);
+        Response::set('status', 'error');
+        Response::set('error', 'Não foi possível realizar a exportação.');
+      }
+    }
+
+
+    Response::rawBody($export);
+
+    Response::send();
+  }
+
   public function setName($d)
   {
     if (!ON || !ModelModule::isAllowed((int) $d['moduleId'], ACCOUNT_ID)) {

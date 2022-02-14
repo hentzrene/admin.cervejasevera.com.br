@@ -110,6 +110,8 @@ class Response
    */
   public static function send()
   {
+    header('Content-Type: application/json');
+
     http_response_code(self::$status);
     if (self::$status !== 404) {
       echo json_encode(!is_null(self::$body) ? self::$body : (object) []);

@@ -67,7 +67,6 @@ export default {
     },
     fieldId: {
       type: Number,
-      required: true,
     },
   },
   data: () => ({
@@ -82,8 +81,7 @@ export default {
       return this.$route.params.sub;
     },
     config() {
-      return {
-        extraPlugins: [this.upload],
+      const config = {
         plugins: [
           Alignment,
           Autoformat,
@@ -150,9 +148,11 @@ export default {
             "outdent",
             "indent",
             "|",
-            "imageInsert",
-            "mediaEmbed",
-            "|",
+            ...(() => {
+              const items = ["mediaEmbed", "|"];
+              if (this.fieldId) items.unshift("imageInsert");
+              return items;
+            })(),
             "insertTable",
             "blockQuote",
             "code",
@@ -165,15 +165,6 @@ export default {
             "redo",
             "|",
             "findAndReplace",
-          ],
-        },
-        image: {
-          toolbar: [
-            "imageTextAlternative",
-            "imageStyle:inline",
-            "imageStyle:block",
-            "imageStyle:side",
-            "linkImage",
           ],
         },
         table: {
@@ -189,6 +180,21 @@ export default {
           showPreviews: true,
         },
       };
+
+      if (this.fieldId) {
+        config.extraPlugins = [this.upload];
+        config.image = {
+          toolbar: [
+            "imageTextAlternative",
+            "imageStyle:inline",
+            "imageStyle:block",
+            "imageStyle:side",
+            "linkImage",
+          ],
+        };
+      }
+
+      return config;
     },
     upload() {
       const Vue = this;

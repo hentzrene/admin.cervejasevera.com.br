@@ -8,6 +8,13 @@ module-template(title="Módulos")
       dark
     )
     toolbar-button(
+      @click="$refs.importInput.click()",
+      tip="Importar",
+      icon="fas fa-file-import",
+      dark
+    )
+    input(@input="importFile", ref="importInput", type="file", hidden)
+    toolbar-button(
       :to="$route.path + '/adicionar'",
       tip="Adicionar",
       icon="fas fa-plus",
@@ -117,6 +124,25 @@ export default {
     editMenuTitle(item) {
       this.dialogEditMenu = true;
       this.moduleItem = item;
+    },
+    importFile({ target }) {
+      if (!target.files.length) return;
+
+      this.loading = true;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.$rest("modules")
+          .post({
+            data: JSON.parse(e.target.result),
+          })
+          .finally(() => {
+            target.value = "";
+            this.loading = false;
+          });
+      };
+
+      reader.readAsText(target.files[0]);
     },
   },
   created() {

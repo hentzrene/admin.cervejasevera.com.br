@@ -192,6 +192,8 @@ export default {
                     item_[key] = item[key];
                   } else {
                     const v = formatForDisplay[fieldTypeKey]({
+                      id: item.id,
+                      item,
                       component: this,
                       value: item[key],
                       fieldData: this.fields.find((field) => field.key === key),

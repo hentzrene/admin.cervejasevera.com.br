@@ -378,6 +378,7 @@
         },
         {
             "name": "illuminate/collections",
+<<<<<<< HEAD
             "version": "v8.69.0",
             "source": {
                 "type": "git",
@@ -388,6 +389,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/collections/zipball/05f286ec5fd2dd286e8384577047efc375c8954c",
                 "reference": "05f286ec5fd2dd286e8384577047efc375c8954c",
+=======
+            "version": "v8.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/collections.git",
+                "reference": "bfb57bc1863689058706eb41287b7ad523d74403"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/collections/zipball/bfb57bc1863689058706eb41287b7ad523d74403",
+                "reference": "bfb57bc1863689058706eb41287b7ad523d74403",
+>>>>>>> 1.x
                 "shasum": ""
             },
             "require": {
@@ -428,11 +441,19 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2021-10-22T18:01:46+00:00"
         },
         {
             "name": "illuminate/container",
             "version": "v8.69.0",
+=======
+            "time": "2021-11-15T14:44:56+00:00"
+        },
+        {
+            "name": "illuminate/container",
+            "version": "v8.71.0",
+>>>>>>> 1.x
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -483,6 +504,7 @@
         },
         {
             "name": "illuminate/contracts",
+<<<<<<< HEAD
             "version": "v8.69.0",
             "source": {
                 "type": "git",
@@ -493,6 +515,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/contracts/zipball/e76f4bce73a2a1656add24bd5210ebc4b8af49c0",
                 "reference": "e76f4bce73a2a1656add24bd5210ebc4b8af49c0",
+=======
+            "version": "v8.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/contracts.git",
+                "reference": "6b4e18cba3c349e7bb21f9b68dda67728b15cd46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/6b4e18cba3c349e7bb21f9b68dda67728b15cd46",
+                "reference": "6b4e18cba3c349e7bb21f9b68dda67728b15cd46",
+>>>>>>> 1.x
                 "shasum": ""
             },
             "require": {
@@ -527,6 +561,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2021-10-22T18:01:46+00:00"
         },
         {
@@ -541,6 +576,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/database/zipball/43c7ffb6299ae55b000b286cf1278afd268ef29f",
                 "reference": "43c7ffb6299ae55b000b286cf1278afd268ef29f",
+=======
+            "time": "2021-11-16T14:03:05+00:00"
+        },
+        {
+            "name": "illuminate/database",
+            "version": "v8.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/database.git",
+                "reference": "520497cfaa23b5dd305cd6d522b3c16e831286c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/520497cfaa23b5dd305cd6d522b3c16e831286c5",
+                "reference": "520497cfaa23b5dd305cd6d522b3c16e831286c5",
+>>>>>>> 1.x
                 "shasum": ""
             },
             "require": {
@@ -554,7 +605,11 @@
                 "symfony/console": "^5.1.4"
             },
             "suggest": {
+<<<<<<< HEAD
                 "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.2).",
+=======
+                "doctrine/dbal": "Required to rename columns and drop SQLite columns (^2.13.3|^3.1.4).",
+>>>>>>> 1.x
                 "fakerphp/faker": "Required to use the eloquent factory builder (^1.9.1).",
                 "illuminate/console": "Required to use the database commands (^8.0).",
                 "illuminate/events": "Required to use the observers with Eloquent (^8.0).",
@@ -595,20 +650,28 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2021-10-29T19:46:53+00:00"
         },
         {
             "name": "illuminate/macroable",
             "version": "v8.69.0",
+=======
+            "time": "2021-11-16T14:07:04+00:00"
+        },
+        {
+            "name": "illuminate/macroable",
+            "version": "v8.71.0",
+>>>>>>> 1.x
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
-                "reference": "300aa13c086f25116b5f3cde3ca54ff5c822fb05"
+                "reference": "aed81891a6e046fdee72edd497f822190f61c162"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/macroable/zipball/300aa13c086f25116b5f3cde3ca54ff5c822fb05",
-                "reference": "300aa13c086f25116b5f3cde3ca54ff5c822fb05",
+                "url": "https://api.github.com/repos/illuminate/macroable/zipball/aed81891a6e046fdee72edd497f822190f61c162",
+                "reference": "aed81891a6e046fdee72edd497f822190f61c162",
                 "shasum": ""
             },
             "require": {
@@ -641,10 +704,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2020-10-27T15:20:30+00:00"
+            "time": "2021-11-16T13:57:03+00:00"
         },
         {
             "name": "illuminate/support",
+<<<<<<< HEAD
             "version": "v8.69.0",
             "source": {
                 "type": "git",
@@ -655,6 +719,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/support/zipball/a8851b7001530d3c11626a81449ed9b63dd10db7",
                 "reference": "a8851b7001530d3c11626a81449ed9b63dd10db7",
+=======
+            "version": "v8.71.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/support.git",
+                "reference": "b6fcd178d690645ef2844f650c053c118d7d96f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/b6fcd178d690645ef2844f650c053c118d7d96f2",
+                "reference": "b6fcd178d690645ef2844f650c053c118d7d96f2",
+>>>>>>> 1.x
                 "shasum": ""
             },
             "require": {
@@ -709,7 +785,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2021-10-29T13:34:03+00:00"
+=======
+            "time": "2021-11-16T14:03:05+00:00"
+>>>>>>> 1.x
         },
         {
             "name": "intervention/image",
@@ -797,6 +877,7 @@
         },
         {
             "name": "league/flysystem",
+<<<<<<< HEAD
             "version": "2.3.0",
             "source": {
                 "type": "git",
@@ -807,6 +888,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/499313f8b65f9a4dae1c779cd974d59a6fcf0f15",
                 "reference": "499313f8b65f9a4dae1c779cd974d59a6fcf0f15",
+=======
+            "version": "2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem.git",
+                "reference": "8f037e8f3321d5fd4178dcd4d91498220cebd688"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/8f037e8f3321d5fd4178dcd4d91498220cebd688",
+                "reference": "8f037e8f3321d5fd4178dcd4d91498220cebd688",
+>>>>>>> 1.x
                 "shasum": ""
             },
             "require": {
@@ -823,7 +916,7 @@
                 "aws/aws-sdk-php": "^3.132.4",
                 "composer/semver": "^3.0",
                 "ext-fileinfo": "*",
-                "friendsofphp/php-cs-fixer": "^2.16",
+                "friendsofphp/php-cs-fixer": "^3.2",
                 "google/cloud-storage": "^1.23",
                 "phpseclib/phpseclib": "^2.0",
                 "phpstan/phpstan": "^0.12.26",
@@ -862,7 +955,11 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/thephpleague/flysystem/tree/2.3.0"
+=======
+                "source": "https://github.com/thephpleague/flysystem/tree/2.3.1"
+>>>>>>> 1.x
             },
             "funding": [
                 {
@@ -878,7 +975,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2021-09-22T06:09:19+00:00"
+=======
+            "time": "2021-11-04T20:29:23+00:00"
+>>>>>>> 1.x
         },
         {
             "name": "league/mime-type-detection",
@@ -1448,6 +1549,7 @@
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
                 "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/1.19.0"
+<<<<<<< HEAD
             },
             "time": "2021-10-31T15:09:20+00:00"
         },
@@ -1519,23 +1621,27 @@
                 }
             ],
             "time": "2021-08-28T21:27:29+00:00"
+=======
+            },
+            "time": "2021-10-31T15:09:20+00:00"
+>>>>>>> 1.x
         },
         {
             "name": "psr/container",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "autoload": {
@@ -1564,9 +1670,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.1"
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/http-client",

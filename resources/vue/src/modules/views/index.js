@@ -1,8 +1,9 @@
 import custom from "./components/custom";
 import table from "./components/table";
 import item from "./components/item";
+import newsletter from "./components/newsletter";
 
-const views = { custom, table, item },
+const views = { custom, table, item, newsletter },
   viewAddModuleComponents = {},
   viewEditModuleComponents = {};
 

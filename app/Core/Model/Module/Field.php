@@ -192,7 +192,7 @@ class Field
    * Obter opções.
    *
    * @param integer $id
-   * @return boolean
+   * @return object
    */
   public static function getOptions(int $id): object
   {

@@ -12,7 +12,13 @@ template-dialog-any(
       text="Salvar Ordem"
     )
     template-dialog-header-button(
-      @click="highlight",
+      @click="editDialog = true",
+      :disabled="selecteds.length !== 1",
+      icon="fas fa-pencil-alt",
+      text="Editar Título"
+    )
+    template-dialog-header-button(
+      @click="featured",
       :disabled="selecteds.length !== 1",
       icon="fas fa-star",
       text="Destacar"
@@ -35,13 +41,13 @@ template-dialog-any(
   )
   v-item-group.view-field-list-wrap.d-flex.flex-wrap(
     v-model="selecteds",
-    v-if="imgs.length",
+    v-if="images.length",
     multiple
   )
-    draggable.view-field-list.d-flex.flex-wrap(v-model="imgs")
+    draggable.view-field-list.d-flex.flex-wrap(v-model="images")
       v-item(
         v-slot="{ active, toggle }",
-        v-for="({ path, id }, i) in imgs",
+        v-for="({ path, id }, i) in images",
         :key="i",
         :value="id"
       )
@@ -49,10 +55,14 @@ template-dialog-any(
           v-ripple,
           @click="toggle",
           :class="active ? 'active cyan' : 'grey'",
-          :src="files + path + '?resize=1&h=80'",
+          :src="files.replace(prefixPath, '') + path + '?resize=1&h=80'",
           contain
         )
-          v-overlay(v-if="path === highlightedImage", absolute, opacity="0.2")
+          v-overlay(
+            v-if="featuredImage && id === featuredImage.id",
+            absolute,
+            opacity="0.2"
+          )
             v-icon(color="yellow", size="40") fas fa-star
   .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
   v-overlay(v-model="uploading")
@@ -77,9 +87,15 @@ template-dialog-any(
     hide-details,
     hidden
   )
+  edit(
+    v-if="selecteds[0]",
+    v-model="editDialog",
+    :img="findImgById(selecteds[0])"
+  )
 </template>
 
 <script>
+import Edit from "./Edit";
 import TemplateDialogAny from "../../templates/DialogAny";
 import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Loading from "@/components/tools/Loading";
@@ -92,10 +108,14 @@ export default {
       type: String,
       required: true,
     },
-    highlightedImage: String,
+    featuredImage: Object,
     fieldId: {
       type: Number,
       required: true,
+    },
+    images: {
+      type: Array,
+      default: () => [],
     },
   },
   data: () => ({
@@ -104,14 +124,9 @@ export default {
     progress: 0,
     loading: false,
     loadingOrder: false,
-    imgs: [],
+
     selecteds: [],
-    useDefaultUI: true,
-    options: {
-      // for tui-image-editor component's "options" prop
-      cssMaxWidth: 700,
-      cssMaxHeight: 500,
-    },
+    editDialog: false,
   }),
   computed: {
     moduleKey() {
@@ -125,25 +140,6 @@ export default {
     },
   },
   methods: {
-    get() {
-      return this.$rest("modulesImages")
-        .get({
-          id: this.itemId,
-          params: {
-            moduleId: this.moduleId,
-            fieldId: this.fieldId,
-          },
-        })
-        .then((imgs) => {
-          this.imgs = imgs
-            .map(({ id, path, order }) => ({
-              id,
-              path,
-              order: parseInt(order),
-            }))
-            .sort((a, b) => a.order - b.order);
-        });
-    },
     remove() {
       this.loading = true;
       Promise.all(
@@ -155,15 +151,15 @@ export default {
         )
       ).finally(() => {
         this.selecteds = [];
-        this.get().then(() => (this.loading = false));
+        this.$parent.$parent.get().then(() => (this.loading = false));
       });
     },
-    highlight() {
+    featured() {
       this.loading = true;
 
-      const path = this.imgs.find(({ id }) => id == this.selecteds[0])["path"];
+      const id = this.images.find(({ id }) => id == this.selecteds[0])["id"];
       const data = {};
-      data[this.inputName] = path;
+      data[this.inputName] = id;
 
       this.$rest(this.moduleKey)
         .put({
@@ -204,7 +200,7 @@ export default {
             })
             .then(({ file, id }) => {
               this.progress = 0;
-              this.imgs.push({ path: file, id });
+              this.images.push({ path: file, id });
             })
         )
       ).then(() => {
@@ -215,7 +211,7 @@ export default {
     order() {
       this.loadingOrder = true;
 
-      const ordered = this.imgs.map(({ id, path }, i) => ({
+      const ordered = this.images.map(({ id, path }, i) => ({
         id,
         path,
         order: i,
@@ -231,11 +227,17 @@ export default {
         })
         .then(() => (this.loadingOrder = false));
     },
+    findImgById(id) {
+      return this.images.find((img) => img.id === id);
+    },
   },
-  created() {
-    this.get();
+  watch: {
+    editDialog(v) {
+      if (!v) this.selecteds = [];
+    },
   },
   components: {
+    Edit,
     Loading,
     draggable,
     TemplateDialogAny,

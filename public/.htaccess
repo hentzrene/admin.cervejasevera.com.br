@@ -24,7 +24,7 @@ RewriteRule ^(.*)$ index.php?route=/$1 [L,QSA]
 Options All -Indexes
 DirectoryIndex index.php
 
-Header always set Access-Control-Allow-Origin "http://192.168.1.106:8080"
+Header always set Access-Control-Allow-Origin "http://192.168.1.65:8080"
 Header set Access-Control-Allow-Methods "OPTIONS,GET,HEAD,POST,PUT,DELETE"
 Header append Access-Control-Allow-Headers "Authorization,Content-Type,X-PINGOTHER"
 Header set Access-Control-Allow-Credentials "true"

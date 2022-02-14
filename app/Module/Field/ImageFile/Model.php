@@ -11,7 +11,7 @@ use League\Flysystem\Local\LocalFilesystemAdapter as Local;
 
 class Model
 {
-  const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
+  const CONVERT_MIME_TYPES = ['image/png', 'image/jpeg'];
 
   const MASK_SIZE = .20;
 
@@ -27,12 +27,26 @@ class Model
   public static function getAllItems(int $fieldId, int $itemId): array
   {
     $q = Conn::table(Table::IMAGES)
-      ::select(['id', 'path', '`order`'])
+      ::select(['id', 'path', '`order`', 'title'])
       ::where('modules_fields_id', $fieldId)
       ::and('item_id', $itemId)
       ::send();
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+  }
+
+  public static function getItem(int $id)
+  {
+    $q = Conn::table(Table::IMAGES)
+      ::select()
+      ::where('id', $id)
+      ::send();
+
+    if (!$q) {
+      throw new \Exception();
+    }
+
+    return $q->fetch_object();
   }
 
   /**
@@ -119,6 +133,25 @@ class Model
   }
 
   /**
+   * Alterar título.
+   *
+   * @param integer $id
+   * @param string $title
+   * @return boolean
+   */
+  public static function updateTitle(int $id, string $title): bool
+  {
+    $title = addslashes($title);
+
+    $q = Conn::table(Table::IMAGES)
+      ::update(['title' => "'$title'"])
+      ::where('id', $id)
+      ::send();
+
+    return (bool) $q;
+  }
+
+  /**
    * Remover imagem por id.
    *
    * @param integer $id
@@ -143,13 +176,54 @@ class Model
     return $q;
   }
 
-  public static function beforeSetOption(int $id, string $option, string $value): bool
+  public static function beforeAdd(string $moduleKey, string $key, string $sqlType, int $unique): bool
   {
-    return true;
+
+    $sql = "ALTER TABLE `mod_$moduleKey` ADD `$key` $sqlType DEFAULT NULL";
+
+    if ($unique) $sql .= " UNIQUE";
+
+    $sql .= ", ADD CONSTRAINT `mod_{$moduleKey}_$key`
+    FOREIGN KEY (`$key`)
+    REFERENCES `images`(`id`)
+    ON DELETE SET NULL
+    ON UPDATE SET NULL";
+
+    return (bool) Conn::query($sql);
   }
 
-  public static function afterSetOption(int $id, string $option, string $value): bool
+  public static function beforeSetTypeTo(string $moduleKey, string $key, string $sqlType): bool
   {
-    return true;
+    return (bool) Conn::query(
+      "ALTER TABLE `mod_$moduleKey`
+      MODIFY `$key` $sqlType,
+      ADD CONSTRAINT `mod_{$moduleKey}_$key`
+      FOREIGN KEY (`$key`)
+      REFERENCES `images`(`id`)
+      ON DELETE SET NULL
+      ON UPDATE SET NULL"
+    );
+  }
+
+  public static function beforeSetTypeFrom(string $moduleKey, int $id, string $key): bool
+  {
+    $q1 = Conn::query(
+      "ALTER TABLE `mod_$moduleKey`
+      DROP FOREIGN KEY `mod_{$moduleKey}_$key`;"
+    );
+
+    $q2 = Conn::table(Table::IMAGES)
+      ::deleteWhere('modules_fields_id', $id)
+      ::send();
+
+    return $q1 && $q2;
+  }
+
+  public static function beforeRemove(string $moduleKey, string $key): bool
+  {
+    return (bool) Conn::query(
+      "ALTER TABLE `mod_$moduleKey`
+      DROP FOREIGN KEY `mod_{$moduleKey}_$key`;"
+    );
   }
 }

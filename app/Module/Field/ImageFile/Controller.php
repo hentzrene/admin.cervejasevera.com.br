@@ -31,6 +31,17 @@ class Controller
     Response::send();
   }
 
+  public function getItem($d)
+  {
+    Response::rawBody(
+      Model::getItem(
+        (int) $d['imageId']
+      )
+    );
+
+    Response::send();
+  }
+
   public function addItem()
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
@@ -57,6 +68,19 @@ class Controller
       Response::status(401);
     } else {
       Model::updateOrder(Req::get('images'));
+      Response::set('status', 'success');
+    }
+
+    Response::send();
+  }
+
+  public function updateTitle($d)
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      Model::updateTitle((int) $d['imageId'], Req::get('value'));
       Response::set('status', 'success');
     }
 
