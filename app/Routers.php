@@ -13,8 +13,6 @@ foreach ($fields as $f) {
   }
 }
 
-require __DIR__ . '/Custom/Routers.php';
-
 $router->dispatch();
 
 if ($router->error()) {
