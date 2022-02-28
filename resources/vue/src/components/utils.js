@@ -85,6 +85,12 @@ const formatToURL = (str) =>
     .replace(/([\u0300-\u036f]|[^0-9a-zA-Z-])/g, "")
     .toLocaleLowerCase();
 
+const groupBy = (arr, key) =>
+  arr.reduce((rv, x) => {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+
 export {
   getTelLinkFromPhone,
   getWhatsappLinkFromPhone,
@@ -92,4 +98,5 @@ export {
   toFriendlyURL,
   dateDiff,
   formatToURL,
+  groupBy,
 };
