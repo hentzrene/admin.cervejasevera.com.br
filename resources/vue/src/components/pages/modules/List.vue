@@ -37,7 +37,9 @@ module-template(title="Módulos")
     dark
   )
     template(#item.action="{ item }")
-      v-btn(
+      v-btn(@click.stop="editMenuTitle(item)", color="blue", icon, small)
+        v-icon(small) fas fa-exchange-alt
+      v-btn.ml-2(
         @click.stop="remove(item.id)",
         :disabled="item.removable == 0",
         color="red",
@@ -45,11 +47,6 @@ module-template(title="Módulos")
         small
       )
         v-icon(small) fas fa-trash
-    template(#item.menuTitle="{ item }")
-      div
-        span {{ item.menuTitle }}
-        v-btn(@click.stop="editMenuTitle(item)", color="blue", icon, small)
-          v-icon(small) fas fa-exchange-alt
   v-dialog(v-model="dialogConfirm", max-width="400", persistent)
     v-card(dark)
       v-card-title.d-flex.justify-center Confirmar remoção
@@ -63,8 +60,8 @@ module-template(title="Módulos")
           color="secondary",
           depressed
         ) Confirmar
-  menu-config-list(v-model="dialogMenu", :menus="menus")
-  menu-edit(
+  menu-config-dialog(v-model="dialogMenu", :menus="menus")
+  menu-edit-dialog(
     v-model="dialogEditMenu",
     :menus="menus",
     :module-item="moduleItem"
@@ -74,8 +71,8 @@ module-template(title="Módulos")
 <script>
 import ToolbarButton from "@/components/buttons/Toolbar";
 import ModuleTemplate from "@/components/templates/Module";
-import MenuConfigList from "./menu-config/List";
-import MenuEdit from "./MenuEdit";
+import MenuConfigDialog from "./menu-config-dialog/Index";
+import MenuEditDialog from "./MenuEditDialog";
 
 export default {
   data: () => ({
@@ -85,6 +82,7 @@ export default {
       { text: "Nome", value: "name" },
       { text: "View", value: "viewName" },
       { text: "Menu", value: "menuTitle" },
+      { text: "Submenu", value: "submenuTitle" },
       { text: "", value: "action", align: "right" },
     ],
     dialogConfirm: false,
@@ -160,8 +158,8 @@ export default {
   components: {
     ToolbarButton,
     ModuleTemplate,
-    MenuConfigList,
-    MenuEdit,
+    MenuConfigDialog,
+    MenuEditDialog,
   },
 };
 </script>

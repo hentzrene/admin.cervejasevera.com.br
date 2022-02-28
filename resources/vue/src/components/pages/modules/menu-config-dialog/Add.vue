@@ -47,7 +47,6 @@ export default {
         .then((data) => this.$emit("add", data))
         .finally(() => {
           this.addMenuTitle = null;
-          this.addDialog = false;
           this.loading = false;
         });
     },

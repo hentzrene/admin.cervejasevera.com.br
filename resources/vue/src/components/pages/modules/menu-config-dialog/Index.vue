@@ -26,6 +26,7 @@ v-dialog(
           v-icon(left, small) fas fa-plus
           span Adicionar
     v-data-table(
+      @click:row="(menu) => openEditDialog(menu)",
       :headers="headers",
       :items="menus",
       :mobile-breakpoint="0",
@@ -38,29 +39,20 @@ v-dialog(
       disable-pagination,
       hide-default-footer
     )
-      template(#item.title="{ item }")
-        v-edit-dialog.primary.lighten-4(
-          @save="editTitle(item.id)",
-          :return-value.sync="editMenuTitle",
-          dark
-        ) {{ item.title }}
-          template(#input)
-            v-text-field(
-              :value="item.title",
-              @input="(data) => (editMenuTitle = data)",
-              :rules="[rules.required]",
-              label="Renomear",
-              single-line,
-              counter
-            )
     .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum menu foi adicionada.
   v-overlay(v-if="value", v-model="loading")
     loading
   add(v-model="addDialog")
+  edit(
+    v-if="menuSelectedToEdit",
+    v-model="editDialog",
+    :menu="menuSelectedToEdit"
+  )
 </template>
 
 <script>
 import Add from "./Add";
+import Edit from "./Edit";
 import Loading from "@/components/tools/Loading";
 import { required } from "@/components/forms/rules.js";
 
@@ -71,6 +63,7 @@ export default {
   },
   data: () => ({
     addDialog: false,
+    editDialog: false,
     loading: false,
     headers: [
       {
@@ -84,6 +77,7 @@ export default {
       required,
     },
     selecteds: [],
+    menuSelectedToEdit: null,
   }),
   methods: {
     remove() {
@@ -116,10 +110,15 @@ export default {
         })
         .then(() => (this.loading = false));
     },
+    openEditDialog(menu) {
+      this.menuSelectedToEdit = menu;
+      this.editDialog = true;
+    },
   },
   components: {
     Loading,
     Add,
+    Edit,
   },
 };
 </script>

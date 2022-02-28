@@ -122,6 +122,8 @@ class Module
           'view_name' => 'viewName',
           'menu_id' => 'menuId',
           'menu_title' => 'menuTitle',
+          'submenu_id' => 'submenuId',
+          'submenu_title' => 'submenuTitle',
           'removable'
         ])
         ::where("JSON_CONTAINS('$permissions', CONCAT('\"', id, '\"'), '$')", 1)
@@ -138,6 +140,8 @@ class Module
           'view_name' => 'viewName',
           'menu_id' => 'menuId',
           'menu_title' => 'menuTitle',
+          'submenu_id' => 'submenuId',
+          'submenu_title' => 'submenuTitle',
           'removable'
         ])
         ::send();

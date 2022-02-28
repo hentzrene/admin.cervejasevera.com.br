@@ -40,5 +40,9 @@ $router->delete('/rest/modules-fields/{fieldId}', 'Field:remove');
 
 $router->get('/rest/modules-menu', 'Menu:getAllItems');
 $router->post('/rest/modules-menu', 'Menu:addItem');
-$router->put('/rest/modules-menu/{menuId}/title', 'Menu:setItemTitle');
+$router->put('/rest/modules-menu/{menuId}', 'Menu:updateItem');
 $router->delete('/rest/modules-menu/{menuId}', 'Menu:removeItem');
+
+$router->post('/rest/modules-submenu', 'Submenu:add');
+$router->put('/rest/modules-submenu/{submenuId}', 'Submenu:update');
+$router->delete('/rest/modules-submenu/{submenuId}', 'Submenu:remove');

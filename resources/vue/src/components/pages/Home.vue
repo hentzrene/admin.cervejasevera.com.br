@@ -10,39 +10,52 @@ v-sheet.mx-auto.pa-4.d-flex.align-center(
   ) Nenhum módulo adicionado.
   .mx-auto(v-else)
     grid-container.py-4(
-      cols="150px 150px",
-      cols-sm="repeat(4, 150px)",
-      cols-lg="repeat(5, 150px)",
+      cols="125px 125px",
+      cols-sm="repeat(4, 125px)",
+      cols-lg="repeat(5, 125px)",
       gap="16px"
     )
-      template(v-for="({ text, to, icon, items }, i) in nav")
-        v-responsive(v-if="!items", :aspect-ratio="1", :key="i", width="150px")
-          module-card(:to="to", :title="text", :icon="icon")
+      template(v-for="(submenus, menuTitle) in nav")
+        template(v-if="menuTitle === '$'")
+          v-responsive(
+            v-for="({ to, icon, text }, i) in nav.$.$",
+            :aspect-ratio="1",
+            :key="i",
+            width="125px"
+          )
+            module-card(:to="to", :title="text", :icon="icon")
         grid-item(
           v-else,
           col-end="span 2",
           col-end-sm="span 4",
-          col-end-lg="span 5"
+          col-end-lg="span 5",
+          :key="menuTitle"
         )
-          .white--text.text-body-1.text-uppercase.font-weight-bold {{ text }}
+          .white--text.text-body-1.text-uppercase.font-weight-bold {{ menuTitle }}
           grid-container(
             cols="100px 100px 100px",
             cols-sm="repeat(5, 120px)",
             cols-lg="repeat(6, 125px)",
             gap="16px"
           )
-            v-responsive(
-              v-for="({ text, to, icon }, i) in items",
-              :aspect-ratio="1",
-              :key="i",
-              width="125"
-            )
-              module-card(:to="to", :title="text", :icon="icon")
+            template(v-for="(items, submenuTitle) in submenus")
+              v-responsive(
+                v-for="({ to, icon, text }, i) in items",
+                :aspect-ratio="1",
+                :key="submenuTitle + i",
+                width="125"
+              )
+                module-card(
+                  :to="to",
+                  :title="submenuTitle !== '$' ? `${submenuTitle}\n${text}` : text",
+                  :icon="icon"
+                )
 </template>
 
 <script>
 import Loading from "@/components/tools/Loading";
 import ModuleCard from "@/components/cards/Module";
+import { groupBy } from "../utils";
 
 export default {
   data: () => ({ loading: true }),
@@ -51,43 +64,33 @@ export default {
       return this.$rest("modules").list;
     },
     nav() {
-      let withMenu = [];
-      let withoutMenu = [];
+      let menu = this.modules.map((mod) => {
+        let cloneMod = { ...mod };
+        if (!cloneMod.menuId) cloneMod.menuTitle = "$";
+        if (!cloneMod.submenuId) cloneMod.submenuTitle = "$";
 
-      for (let m of this.modules)
-        if (m.menuId) withMenu.push(m);
-        else withoutMenu.push(m);
+        return cloneMod;
+      });
 
-      withMenu = withMenu.reduce((r, v) => {
-        const menu = r.find(({ text }) => text === v.menuTitle);
+      menu = groupBy(menu, "menuTitle");
 
-        if (!menu) {
-          r.push({
-            text: v.menuTitle,
-            items: [{ text: v.name, to: "/" + v.key, icon: v.icon }],
-          });
-        } else {
-          menu.items.push({ text: v.name, to: "/" + v.key, icon: v.icon });
+      for (let id in menu) {
+        menu[id] = groupBy(menu[id], "submenuTitle");
+      }
+
+      for (let menuKey in menu) {
+        for (let submenuKey in menu[menuKey]) {
+          menu[menuKey][submenuKey] = menu[menuKey][submenuKey].map(
+            ({ name, key, icon }) => ({
+              text: name,
+              to: "/" + key,
+              icon,
+            })
+          );
         }
+      }
 
-        return r;
-      }, []);
-
-      withoutMenu = withoutMenu.map(({ name, key, icon }) => ({
-        text: name,
-        to: "/" + key,
-        icon,
-      }));
-
-      withoutMenu = withoutMenu.sort((a, b) => a.text.localeCompare(b.text));
-      withMenu = withMenu
-        .map((menu) => {
-          menu.items = menu.items.sort((a, b) => a.text.localeCompare(b.text));
-          return menu;
-        })
-        .sort((a, b) => a.text.localeCompare(b.text));
-
-      return [...withoutMenu, ...withMenu];
+      return menu;
     },
   },
   beforeCreate() {

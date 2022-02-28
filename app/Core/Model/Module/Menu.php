@@ -18,7 +18,23 @@ class Menu
       ::select(['id', 'title'])
       ::send();
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    $menus = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+
+    if (!count($menus)) return [];
+
+    $submenus = Submenu::getAllItems();
+
+    foreach ($menus as $key => $menu) {
+      $menus[$key]['submenus'] = [];
+
+      foreach ($submenus as $submenu) {
+        if ($menu['id'] === $submenu['modules_menu_id']) {
+          $menus[$key]['submenus'][] = $submenu;
+        }
+      }
+    }
+
+    return $menus;
   }
 
   /**
@@ -40,15 +56,15 @@ class Menu
    * Definir título do menu.
    *
    * @param integer $menuId
-   * @param string $value
+   * @param string $title
    * @return array
    */
-  public static function setItemTitle(int $menuId, string $value): bool
+  public static function updateItem(int $menuId, string $title): bool
   {
-    $value = addslashes($value);
+    $title = addslashes($title);
 
     return (bool) Conn::table(Table::MODULES_MENU)
-      ::update(['title' => "'$value'"])
+      ::update(['title' => "'$title'"])
       ::where('id', $menuId)
       ::send();
   }

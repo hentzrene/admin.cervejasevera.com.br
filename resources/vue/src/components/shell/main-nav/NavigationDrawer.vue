@@ -20,17 +20,10 @@ v-navigation-drawer(
   template(v-else)
     v-list-item-group.mt-2(v-model="current")
       v-list(dense, nav)
-        template(v-for="({ text, to, icon, items }, i) in nav")
-          v-list-item(v-if="!items", :key="i", :to="to", link)
-            v-list-item-icon.mr-3
-              v-icon(size="20") {{ icon }}
-            v-list-item-content
-              v-list-item-title.body-2 {{ text }}
-          v-list-group(v-else, :key="i", no-action, color="white")
-            template(#activator)
-              v-list-item-title.body-2.text-uppercase.font-weight-bold {{ text }}
-            v-list-item.pl-4(
-              v-for="({ text, to, icon }, i) in items",
+        template(v-for="(submenus, menuTitle) in nav")
+          template(v-if="menuTitle === '$'")
+            v-list-item(
+              v-for="({ to, icon, text }, i) in nav.$.$",
               :key="i",
               :to="to",
               link
@@ -39,9 +32,45 @@ v-navigation-drawer(
                 v-icon(size="20") {{ icon }}
               v-list-item-content
                 v-list-item-title.body-2 {{ text }}
+          v-list-group(v-else, :key="menuTitle", no-action, color="white")
+            template(#activator)
+              v-list-item-title.body-2.text-uppercase.font-weight-bold {{ menuTitle }}
+            template(v-for="(items, submenuTitle) in submenus")
+              template(v-if="submenuTitle === '$'")
+                v-list-item.pl-4(
+                  v-for="({ to, icon, text }, i) in submenus.$",
+                  :key="i",
+                  :to="to",
+                  link
+                )
+                  v-list-item-icon.mr-3
+                    v-icon(size="20") {{ icon }}
+                  v-list-item-content
+                    v-list-item-title.body-2 {{ text }}
+              v-list-group(
+                v-else,
+                :key="submenuTitle",
+                no-action,
+                sub-group,
+                color="white"
+              )
+                template(#activator)
+                  v-list-item-title.body-2.text-uppercase.font-weight-bold.pl-0 {{ submenuTitle }}
+                v-list-item.pl-14(
+                  v-for="({ to, icon, text }, i) in submenus[submenuTitle]",
+                  :key="i",
+                  :to="to",
+                  link
+                )
+                  v-list-item-icon.mr-3
+                    v-icon(size="20") {{ icon }}
+                  v-list-item-content
+                    v-list-item-title.body-2 {{ text }}
 </template>
 
 <script>
+import { groupBy } from "../../utils";
+
 export default {
   props: {
     value: Boolean,
@@ -53,43 +82,33 @@ export default {
   },
   computed: {
     nav() {
-      let withMenu = [];
-      let withoutMenu = [];
+      let menu = this.modules.map((mod) => {
+        let cloneMod = { ...mod };
+        if (!cloneMod.menuId) cloneMod.menuTitle = "$";
+        if (!cloneMod.submenuId) cloneMod.submenuTitle = "$";
 
-      for (let m of this.modules)
-        if (m.menuId) withMenu.push(m);
-        else withoutMenu.push(m);
+        return cloneMod;
+      });
 
-      withMenu = withMenu.reduce((r, v) => {
-        const menu = r.find(({ text }) => text === v.menuTitle);
+      menu = groupBy(menu, "menuTitle");
 
-        if (!menu) {
-          r.push({
-            text: v.menuTitle,
-            items: [{ text: v.name, to: "/" + v.key, icon: v.icon }],
-          });
-        } else {
-          menu.items.push({ text: v.name, to: "/" + v.key, icon: v.icon });
+      for (let id in menu) {
+        menu[id] = groupBy(menu[id], "submenuTitle");
+      }
+
+      for (let menuKey in menu) {
+        for (let submenuKey in menu[menuKey]) {
+          menu[menuKey][submenuKey] = menu[menuKey][submenuKey].map(
+            ({ name, key, icon }) => ({
+              text: name,
+              to: "/" + key,
+              icon,
+            })
+          );
         }
+      }
 
-        return r;
-      }, []);
-
-      withoutMenu = withoutMenu.map(({ name, key, icon }) => ({
-        text: name,
-        to: "/" + key,
-        icon,
-      }));
-
-      withoutMenu = withoutMenu.sort((a, b) => a.text.localeCompare(b.text));
-      withMenu = withMenu
-        .map((menu) => {
-          menu.items = menu.items.sort((a, b) => a.text.localeCompare(b.text));
-          return menu;
-        })
-        .sort((a, b) => a.text.localeCompare(b.text));
-
-      return [...withoutMenu, ...withMenu];
+      return menu;
     },
     modules() {
       return this.$rest("modules").list;
@@ -122,5 +141,9 @@ export default {
   .v-list-group__header__append-icon
   .fa-chevron-down {
   font-size: 14px !important;
+}
+
+.v-navigation-drawer__content .v-list-group--sub-group .v-list-group__header {
+  padding-left: 19px !important;
 }
 </style>

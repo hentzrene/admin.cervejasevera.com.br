@@ -2,77 +2,56 @@
 
 namespace Core\Controller\Module;
 
-use Core\Model\Module\Menu as ModuleMenu;
+use Core\Model\Module\Submenu as ModuleSubmenu;
 use Core\Model\Utility\Request as Req;
 use Core\Model\Utility\Response;
 
-class Menu
+class Submenu
 {
-  public function getAllItems()
-  {
-    if (!ON) {
-      Response::set('status', 'error');
-      Response::status(401);
-      Response::send();
-    }
-
-    Response::rawBody(
-      ModuleMenu::getAllItems()
-    );
-
-    Response::send();
-  }
-
-  public function addItem()
+  public function add()
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       try {
-        ModuleMenu::addItem(Req::get('title'));
-
         Response::rawBody(
-          ModuleMenu::getAllItems()
+          ModuleSubmenu::add(Req::get('menuId'), Req::get('title'))
         );
       } catch (\Exception $e) {
         Response::set('status', 'error');
-        Response::set('error', 'Não foi possível adicionar o menu.');
+        Response::set('error', 'Não foi possível adicionar o submenu.');
       }
     }
 
     Response::send();
   }
 
-  public function updateItem($d)
+  public function update($d)
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
     } else {
       try {
-        ModuleMenu::updateItem((int) $d['menuId'], Req::get('title'));
-
-        Response::rawBody(
-          ModuleMenu::getAllItems()
-        );
+        ModuleSubmenu::update((int) $d['submenuId'], Req::get('title'));
       } catch (\Exception $e) {
         Response::set('status', 'error');
-        Response::set('error', 'Não foi possível alterar o menu.');
+        Response::set('error', 'Não foi possível alterar o submenu.');
       }
     }
 
     Response::send();
   }
 
-  public function removeItem($d)
+  public function remove($d)
   {
     if (!ON) {
       Response::set('status', 'error');
       Response::status(401);
       Response::send();
     } else {
-      ModuleMenu::removeItem((int) $d['menuId']);
+      ModuleSubmenu::remove((int) $d['submenuId']);
       Response::set('status', 'success');
     }
     Response::send();
