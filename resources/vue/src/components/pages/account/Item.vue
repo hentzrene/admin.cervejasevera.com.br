@@ -22,14 +22,38 @@ module-template(title="Contas / Alterar", width="800px")
             dense
           )
       v-text-field(label="Senha", name="password", outlined, dense)
-      .d-flex.flex-wrap(v-if="account.type != 1")
-        v-checkbox.mx-2(
-          v-for="({ id, name }, i) in modules",
-          v-model="permissions",
-          :key="i",
-          :label="name",
-          :value="id"
-        )
+      div(v-if="account.type != 1")
+        template(v-for="(submenus, menuTitle) in groupedModules")
+          .d-flex.flex-wrap(v-if="menuTitle === '$'")
+            v-checkbox.mx-2(
+              v-for="({ id, name }, i) in groupedModules.$.$",
+              v-model="permissions",
+              :key="i",
+              :label="name",
+              :value="id"
+            )
+          v-card.mb-3.pa-3.pb-0.primary.lighten-2(v-else, outlined)
+            .font-weight-bold {{ menuTitle }}
+            div
+              template(v-for="(items, submenuTitle) in submenus")
+                .d-flex.flex-wrap(v-if="submenuTitle === '$'")
+                  v-checkbox.mx-2(
+                    v-for="({ id, name }, i) in submenus[submenuTitle]",
+                    v-model="permissions",
+                    :key="i",
+                    :label="name",
+                    :value="id"
+                  )
+                v-card.pa-3.mb-3(v-else)
+                  .font-weight-bold {{ submenuTitle }}
+                  .d-flex.flex-wrap.ml-2
+                    v-checkbox.mx-2(
+                      v-for="({ id, name }, i) in items",
+                      v-model="permissions",
+                      :key="id",
+                      :label="name",
+                      :value="id"
+                    )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) Salvar
 </template>
@@ -37,6 +61,7 @@ module-template(title="Contas / Alterar", width="800px")
 <script>
 import ModuleTemplate from "@/components/templates/Module";
 import { required, email } from "@/components/forms/rules.js";
+import { groupBy } from "../../utils";
 
 export default {
   name: "AccountItem",
@@ -55,7 +80,35 @@ export default {
       return this.$rest("accounts").item;
     },
     modules() {
-      return this.$rest("modulesBasic").list;
+      return this.$rest("modules").list;
+    },
+    groupedModules() {
+      let menu = this.modules.map((mod) => {
+        let cloneMod = { ...mod };
+        if (!cloneMod.menuId) cloneMod.menuTitle = "$";
+        if (!cloneMod.submenuId) cloneMod.submenuTitle = "$";
+
+        return cloneMod;
+      });
+
+      menu = groupBy(menu, "menuTitle");
+
+      for (let id in menu) {
+        menu[id] = groupBy(menu[id], "submenuTitle");
+      }
+
+      for (let menuKey in menu) {
+        for (let submenuKey in menu[menuKey]) {
+          menu[menuKey][submenuKey] = menu[menuKey][submenuKey].map(
+            ({ id, name }) => ({
+              id,
+              name,
+            })
+          );
+        }
+      }
+
+      return menu;
     },
   },
   methods: {
@@ -77,9 +130,6 @@ export default {
           });
       }
     },
-  },
-  beforeCreate() {
-    this.$rest("modulesBasic").get();
   },
   created() {
     if (this.$store.state.user.type != 1) {
