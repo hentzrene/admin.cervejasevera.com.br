@@ -64,9 +64,10 @@ export default {
         })
         .then((imgs) => {
           this.imgs = imgs
-            .map(({ id, path, order }) => ({
+            .map(({ id, path, title, order }) => ({
               id,
               path,
+              title,
               order: parseInt(order),
             }))
             .sort((a, b) => a.order - b.order);

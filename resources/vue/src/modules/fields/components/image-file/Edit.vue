@@ -56,7 +56,10 @@ export default {
             value: this.title,
           },
         })
-        .then(() => this.$emit("input", false))
+        .then(() => {
+          this.img.title = this.title;
+          this.$emit("input", false);
+        })
         .finally(() => (this.loading = false));
     },
   },
