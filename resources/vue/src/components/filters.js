@@ -84,7 +84,7 @@ const toDateHTML = (d) =>
 const toDateTimeHTML = (d) =>
   verifyDate(d)
     .toLocaleString()
-    .replace(/(\d{2})\/(\d{2})\/(\d{4}) (.+)/, "$3-$2-$1T$4")
+    .replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, "$3-$2-$1T$4")
     .slice(0, -3);
 
 /**
@@ -94,7 +94,7 @@ const toDateTimeHTML = (d) =>
 const toDateMysql = (d) =>
   verifyDate(d)
     .toLocaleString()
-    .replace(/(\d{2})\/(\d{2})\/(\d{4}) (.+)/, "$3-$2-$1 $4")
+    .replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, "$3-$2-$1 $4")
     .slice(0, -3);
 
 /**
