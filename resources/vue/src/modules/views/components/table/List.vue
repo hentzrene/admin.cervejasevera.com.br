@@ -44,6 +44,19 @@ module-template(:title="data.name")
       fixed-header,
       dark
     )
+      template(
+        v-for="(h, i) in listHeaders",
+        v-slot:[`header.${h}`]="{ header }"
+      )
+        component(
+          v-if="header.enabledTableFilter",
+          :is="header.field.typeKey + 'TableFilter'",
+          :text="header.text",
+          :field="header.field",
+          :options="filtersOptions[header.value]",
+          @filter="filter"
+        )
+        template(v-else) {{ header.text }}
       template(v-for="(h, i) in listHeaders", v-slot:[`item.${h}`]="{ item }")
         template(v-if="typeof item[h] === 'string'")
           span {{ item[h] }}
@@ -82,6 +95,7 @@ import PrintButton from "@/components/buttons/Print";
 import ExportButton from "@/components/buttons/Export";
 import ModuleTemplate from "@/components/templates/Module";
 import formatForDisplay from "@/modules/fields/formatForDisplay.js";
+import tableFilter from "@/modules/fields/tableFilter.js";
 import Loading from "@/components/tools/Loading";
 
 export default {
@@ -97,6 +111,8 @@ export default {
     items: [],
     action: "item.action",
     itemsPerPage: 30,
+    filtersOptions: {},
+    filtersQuery: {},
   }),
   computed: {
     fields() {
@@ -108,26 +124,38 @@ export default {
     headers() {
       if (!this.listHeaders || !this.fields) return [];
 
-      const headers = this.listHeaders.map((h) => {
-        const r = {
-          value: h,
+      const headers = this.listHeaders.map((fieldKey) => {
+        const header = {
+          value: fieldKey,
           align: "left",
           sortable: false,
         };
 
-        switch (h) {
+        const field = this.fields.find(({ key }) => key == fieldKey);
+
+        switch (fieldKey) {
           case "showFrom":
-            r.text = "Começo";
+            header.text = "Começo";
             break;
           case "showUp":
-            r.text = "Fim";
+            header.text = "Fim";
             break;
           default:
-            r.text = this.fields.find(({ key }) => key == h).name;
+            header.text = field.name;
+            header.field = field;
+            header.enabledTableFilter =
+              !!tableFilter[field.typeKey + "TableFilter"];
+
+            if (header.enabledTableFilter) {
+              this.filtersOptions[fieldKey] = {
+                active: false,
+              };
+            }
+
             break;
         }
 
-        return r;
+        return header;
       });
 
       headers.unshift({
@@ -153,15 +181,18 @@ export default {
   },
   methods: {
     get(page = 1, itemsPerPage = null) {
+      const params = {
+        fields: "id,active," + this.listHeaders.join(","),
+        itemsPerPage: itemsPerPage ? itemsPerPage : this.itemsPerPage,
+        page,
+        search: this.search,
+        returnTotalItems: 1,
+        ...this.filtersQuery,
+      };
+
       return this.$rest(this.data.key)
         .get({
-          params: {
-            fields: "id,active," + this.listHeaders.join(","),
-            itemsPerPage: itemsPerPage ? itemsPerPage : this.itemsPerPage,
-            page,
-            search: this.search,
-            returnTotalItems: 1,
-          },
+          params,
           save: async (state, { list, totalItems }) => {
             this.totalItems = parseInt(totalItems);
             state.list = list;
@@ -252,9 +283,37 @@ export default {
     changePage(page) {
       this.loading = true;
 
-      this.get(page).finally(() => {
-        this.loading = false;
-      });
+      this.get(page);
+    },
+    filter() {
+      const query = new URLSearchParams();
+
+      function filtersAppendField(query, fieldKey) {
+        const filters = query.get("filters")
+          ? query.get("filters").split(",")
+          : [];
+
+        if (!filters.includes(fieldKey)) filters.push(fieldKey);
+
+        query.set("filters", filters.join(","));
+      }
+
+      for (let fieldKey in this.filtersOptions) {
+        const filterOptions = this.filtersOptions[fieldKey];
+
+        if (!filterOptions.active) continue;
+
+        filtersAppendField(query, fieldKey);
+
+        for (let [key, value] of filterOptions.query) {
+          query.set(key, value);
+        }
+      }
+
+      this.filtersQuery = Object.fromEntries(query.entries());
+
+      this.loading = true;
+      this.get();
     },
   },
   created() {
@@ -267,6 +326,7 @@ export default {
     ExportButton,
     ModuleTemplate,
     Loading,
+    ...tableFilter,
   },
 };
 </script>

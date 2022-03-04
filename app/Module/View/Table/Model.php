@@ -25,8 +25,6 @@ class Model
   {
     $module = addslashes($module);
 
-    $fields = [];
-
     $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
 
     $q = Conn::table("mod_$module")
@@ -46,52 +44,70 @@ class Model
   public static function getAll(string $module)
   {
     $module = addslashes($module);
-    $fields = [];
-    $page = Req::get('page') ? (int) Req::get('page') : 1;
+    $params = Req::getAll();
+    $fieldsKeys = $params->fields ? explode(',', addslashes($params->fields)) : "*";
 
-    $itemsPerPage = Req::get('itemsPerPage') ? (int) Req::get('itemsPerPage') : self::MAX_ITEMS_PER_PAGE;
+    $page = $params->page ? (int) $params->page : 1;
+    $filters = $params->filters ? explode(',', $params->filters) : [];
+
+    $itemsPerPage = $params->itemsPerPage ? (int) $params->itemsPerPage : self::MAX_ITEMS_PER_PAGE;
     if ($itemsPerPage > self::MAX_ITEMS_PER_PAGE) $itemsPerPage = self::MAX_ITEMS_PER_PAGE;
 
     $offset = ($page - 1) * $itemsPerPage;
-    $search = Req::get('search') ? addslashes(Req::get('search')) : null;
-    $returnTotalItems = (int) Req::get('returnTotalItems');
+    $search = $params->search ? addslashes($params->search) : null;
+    $returnTotalItems = (int) $params->returnTotalItems;
     $list = null;
     $totalItems = null;
 
-    $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
+
+    if ($search) $tableHeaders = Module::getViewOptionsByKey($module)->listHeaders;
+    if (count($filters)) $fields = Field::getAll($module);
+
+    $list = Conn::table("mod_$module")
+      ::select($fieldsKeys)
+      ::where('id', 0, '>');
 
     if ($search) {
-      $tableHeaders = Module::getViewOptionsByKey($module)->listHeaders;
-
       $inStr =  'INSTR(LOWER(CONCAT_WS(\'|\', ' . implode(',', $tableHeaders) . ")), LOWER('$search'))";
 
-      $list = Conn::table("mod_$module")
-        ::select($fields)
-        ::where($inStr, 0, '>');
+      $list = $list::and($inStr, 0, '>');
+    }
 
-      $list = $list::orderBy('id', 'DESC')
-        ::limit($itemsPerPage, $offset)
-        ::send();
+    if (count($filters)) {
+      foreach ($filters as $filter) {
+        $filterField = null;
 
-      if ($returnTotalItems) {
-        $totalItems = Conn::query(
-          "SELECT COUNT(*)
-          FROM mod_$module
-          WHERE $inStr > 0
-          ORDER BY id DESC"
-        )->fetch_row()[0];
+        foreach ($fields as $field) {
+          if ($field['key'] === $filter) {
+            $filterField = $field;
+            break;
+          }
+        }
+
+        if (!$filterField) continue;
+
+        $fieldClass = Field::getFieldClassOfTypeKey($filterField['typeKey']);
+        $options = (object) [];
+
+        foreach ($params as $key => $value) {
+          if (strpos($key, "filter_{$filter}_") === 0) {
+            $optionKey = str_replace("filter_{$filter}_", "", $key);
+            $options->{$optionKey} = $value;
+          }
+        }
+
+        if (method_exists($fieldClass, 'beforeTableFilter')) {
+          $list = call_user_func([$fieldClass, 'beforeTableFilter'], $list, $field, $options);
+        }
       }
-    } else {
-      $list = Conn::table("mod_$module")
-        ::select($fields);
+    }
 
-      $list = $list::orderBy('id', 'DESC')
-        ::limit($itemsPerPage, $offset)
-        ::send();
+    $list = $list::orderBy('id', 'DESC')
+      ::limit($itemsPerPage, $offset)
+      ::send();
 
-      if ($returnTotalItems) {
-        $totalItems = self::getTotalItems($module);
-      }
+    if ($returnTotalItems) {
+      $totalItems = self::getTotalItems($module, $search ? "$inStr > 0" : null);
     }
 
     $list = !$list ? [] : $list->fetch_all(MYSQLI_ASSOC);
@@ -177,12 +193,17 @@ class Model
    * Obter a quantidade de itens.
    *
    * @param string $module
+   * @param ?string $where
    * @return integer
    */
-  public static function getTotalItems(string $module): int
+  public static function getTotalItems(string $module, ?string $where = null): int
   {
     $module = addslashes($module);
     $sql = "SELECT COUNT(id) FROM mod_$module";
+
+    if ($where) {
+      $sql .= " WHERE $where";
+    }
 
     return (int) Conn::query($sql)->fetch_row()[0];
   }
