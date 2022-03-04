@@ -197,4 +197,14 @@ class Model
 
     return $list;
   }
+
+  public static function beforeTableFilter(object $query, array $field, object $options): object
+  {
+    $categories = addslashes($options->categories);
+    if ($categories) {
+      $query = $query::and($field['key'], "($categories)", 'IN');
+    }
+
+    return $query;
+  }
 }
