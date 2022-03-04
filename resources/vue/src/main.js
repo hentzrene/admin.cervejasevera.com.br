@@ -23,8 +23,6 @@ Vue.use(VuexRest, {
   base: server + "/rest",
 });
 
-console.log(server);
-
 Vue.mixin({
   data: () => ({
     server,
