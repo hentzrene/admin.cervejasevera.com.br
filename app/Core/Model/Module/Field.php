@@ -265,16 +265,26 @@ class Field
   public static function getFieldClassOfTypeId(int $typeId): string
   {
     $field = FieldType::get($typeId, ['`key`']);
-    $fieldDir = null;
 
     if (!$field) {
       throw new \Exception("Não existe um tipo de campo com esse id.");
-    } else {
-      $fieldDir = ucfirst($field[0]);
     }
 
+    return self::getFieldClassOfTypeKey($field[0]);
+  }
+
+  /**
+   * Obter classe do tipo com sua chave.
+   *
+   * @param string $typeKey
+   * @return string
+   */
+  public static function getFieldClassOfTypeKey(string $typeKey): string
+  {
+    $fieldDir = ucfirst($typeKey);
+
     if (!file_exists(SYSTEM_ROOT . "/app/Module/Field/$fieldDir/Model.php")) {
-      throw new \Exception("Model do field \"{$field[0]}\" não configurado corretamente no código fonte.");
+      throw new \Exception("Model do field \"{$typeKey}\" não configurado corretamente no código fonte.");
     }
 
     return "Module\Field\\$fieldDir\Model";
