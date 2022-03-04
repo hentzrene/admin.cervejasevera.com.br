@@ -12,7 +12,6 @@ export default {
           key: "email",
           type: "1",
           unique: false,
-          private: false,
         },
       ],
       viewOptions: { listHeaders: ["email"] },

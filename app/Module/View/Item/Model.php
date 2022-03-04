@@ -12,29 +12,13 @@ class Model
    * Obter item;
    *
    * @param string $module
-   * @param bool $onlyPublic
    * @return object
    */
-  public static function get(string $module, bool $onlyPublic = false): object
+  public static function get(string $module): object
   {
     $fields = [];
 
-    if (!$onlyPublic) {
-      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
-    } else {
-      $publicFields = Field::getAllPublics($module);
-      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
-
-      if ($requestedFields) {
-        foreach ($requestedFields as $field) {
-          if (in_array($field, $publicFields)) {
-            $fields[] = $field;
-          }
-        }
-      } else {
-        $fields = $publicFields;
-      }
-    }
+    $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
 
     $module = addslashes($module);
     $q = Conn::table("mod_$module")

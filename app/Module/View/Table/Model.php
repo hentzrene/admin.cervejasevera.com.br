@@ -21,29 +21,13 @@ class Model
    * @param integer $id
    * @return object
    */
-  public static function get(string $module, int $id, bool $onlyPublic = false): object
+  public static function get(string $module, int $id): object
   {
     $module = addslashes($module);
 
     $fields = [];
 
-    if (!$onlyPublic) {
-      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
-    } else {
-      $publicFields = Field::getAllPublics($module);
-      array_unshift($publicFields, 'id');
-      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
-
-      if ($requestedFields) {
-        foreach ($requestedFields as $field) {
-          if (in_array($field, $publicFields)) {
-            $fields[] = $field;
-          }
-        }
-      } else {
-        $fields = $publicFields;
-      }
-    }
+    $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
 
     $q = Conn::table("mod_$module")
       ::select($fields)
@@ -59,7 +43,7 @@ class Model
    * @param string $module
    * @return array
    */
-  public static function getAll(string $module, bool $onlyPublic = false)
+  public static function getAll(string $module)
   {
     $module = addslashes($module);
     $fields = [];
@@ -74,23 +58,7 @@ class Model
     $list = null;
     $totalItems = null;
 
-    if (!$onlyPublic) {
-      $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
-    } else {
-      $publicFields = Field::getAllPublics($module);
-      array_unshift($publicFields, 'id');
-      $requestedFields = Req::get('fields') ? explode(',', Req::get('fields')) : null;
-
-      if ($requestedFields) {
-        foreach ($requestedFields as $field) {
-          if (in_array($field, $publicFields)) {
-            $fields[] = $field;
-          }
-        }
-      } else {
-        $fields = $publicFields;
-      }
-    }
+    $fields = Req::get('fields') ? explode(',', addslashes(Req::get('fields'))) : "*";
 
     if ($search) {
       $tableHeaders = Module::getViewOptionsByKey($module)->listHeaders;
@@ -101,8 +69,6 @@ class Model
         ::select($fields)
         ::where($inStr, 0, '>');
 
-      if ($onlyPublic) $list = $list::and('active', 1);
-
       $list = $list::orderBy('id', 'DESC')
         ::limit($itemsPerPage, $offset)
         ::send();
@@ -111,27 +77,20 @@ class Model
         $totalItems = Conn::query(
           "SELECT COUNT(*)
           FROM mod_$module
-          WHERE $inStr > 0 " .
-            ($onlyPublic ? "AND active = 1 " : "") .
-            "ORDER BY id DESC"
+          WHERE $inStr > 0
+          ORDER BY id DESC"
         )->fetch_row()[0];
       }
     } else {
       $list = Conn::table("mod_$module")
         ::select($fields);
 
-      if ($onlyPublic) {
-        $list = $list::where('active', 1)
-          ::and('IF(showFrom, CURRENT_TIMESTAMP > showFrom, TRUE)', 1)
-          ::and('IF(showUp, CURRENT_TIMESTAMP < showUp, TRUE)', 1);
-      }
-
       $list = $list::orderBy('id', 'DESC')
         ::limit($itemsPerPage, $offset)
         ::send();
 
       if ($returnTotalItems) {
-        $totalItems = self::getTotalItems($module, $onlyPublic);
+        $totalItems = self::getTotalItems($module);
       }
     }
 
@@ -220,12 +179,10 @@ class Model
    * @param string $module
    * @return integer
    */
-  public static function getTotalItems(string $module, bool $onlyPublic = false): int
+  public static function getTotalItems(string $module): int
   {
     $module = addslashes($module);
     $sql = "SELECT COUNT(id) FROM mod_$module";
-
-    if ($onlyPublic) $sql .= " WHERE active = 1";
 
     return (int) Conn::query($sql)->fetch_row()[0];
   }

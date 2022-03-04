@@ -29,9 +29,6 @@ v-card.pa-3(color="primary", max-width="400")
       tooltip(v-if="uniqueOption", tip="Único", top)
         v-btn(@click="data.unique = !data.unique", icon)
           v-icon(color="cyan", :disabled="!data.unique") fas fa-fingerprint
-      tooltip(tip="Privado", top)
-        v-btn(@click="data.private = !data.private", icon)
-          v-icon(color="green", :disabled="!data.private") fas fa-shield-alt
     .field-item-btns.d-flex.align-center.justify-end
       v-btn(@click="$emit('remove')", color="secondary darken-2", small)
         v-icon(left) fas fa-trash
@@ -51,7 +48,6 @@ export default {
         key: null,
         type: null,
         unique: false,
-        private: false,
       }),
     },
     types: {

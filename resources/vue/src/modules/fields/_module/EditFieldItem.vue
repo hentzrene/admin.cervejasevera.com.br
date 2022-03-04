@@ -49,7 +49,6 @@ export default {
         type: null,
         required: false,
         unique: false,
-        private: false,
       }),
     },
     types: {

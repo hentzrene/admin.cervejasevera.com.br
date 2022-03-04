@@ -25,27 +25,6 @@ class Field
   }
 
   /**
-   * Obter campos públicos.
-   *
-   * @param string $key
-   * @return array
-   */
-  public static function getAllPublics(string $key): array
-  {
-    $q = Conn::table(Table::VW_MODULES_FIELDS)
-      ::select(['`key`'])
-      ::where('modules_key', "'$key'")
-      ::and('private', 0)
-      ::send();
-
-    if (!$q) {
-      return [];
-    }
-
-    return array_merge(...$q->fetch_all(MYSQLI_NUM));
-  }
-
-  /**
    * Obter todos os campos.
    *
    * @param string $key
@@ -90,7 +69,6 @@ class Field
     $name = addslashes($data->name);
     $key = addslashes($data->key);
     $unique = (int) $data->unique;
-    $private = (int) $data->private;
     $type = (int) $data->type;
     $fieldClass = self::getFieldClassOfTypeId($type);
 
@@ -111,8 +89,8 @@ class Field
 
     $q2 = Conn::table(Table::MODULES_FIELDS)
       ::insert(
-        ['modules_id', 'name', '`key`', '`unique`', 'private', 'modules_fields_types_id', 'options'],
-        [$moduleId, "'$name'", "'$key'", $unique, $private, $type, $defaultOptions ? "'$defaultOptions'" : "'{}'"]
+        ['modules_id', 'name', '`key`', '`unique`', 'modules_fields_types_id', 'options'],
+        [$moduleId, "'$name'", "'$key'", $unique, $type, $defaultOptions ? "'$defaultOptions'" : "'{}'"]
       )
       ::send();
 

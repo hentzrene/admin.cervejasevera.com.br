@@ -39,9 +39,6 @@ v-dialog(
             tooltip(tip="Único", top)
               v-btn(@click="unique = !unique", icon)
                 v-icon(color="cyan", :disabled="!unique") fas fa-fingerprint
-            tooltip(tip="Privado", top)
-              v-btn(@click="private = !private", icon)
-                v-icon(color="green", :disabled="!private") fas fa-shield-alt
         v-col.py-0.mt-2.mt-sm-0(cols=12)
           v-btn(
             @click="send",
@@ -77,7 +74,6 @@ export default {
     key: null,
     type: null,
     unique: false,
-    private: false,
     sending: false,
   }),
   computed: {
@@ -97,7 +93,6 @@ export default {
               key: this.key,
               type: this.type,
               unique: this.unique,
-              private: this.private,
             },
             params: { moduleId: this.moduleId },
           })

@@ -63,7 +63,6 @@ export default {
         key: null,
         type: null,
         unique: false,
-        private: false,
       });
     },
     validate() {

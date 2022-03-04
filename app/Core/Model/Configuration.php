@@ -13,15 +13,13 @@ class Configuration
    * @param string $key
    * @return object
    */
-  public static function getConfig(string $key, bool $onlyPublic = false): object
+  public static function getConfig(string $key): object
   {
     $key = addslashes($key);
 
     $q = Conn::table(Table::CONFIGURATIONS)
       ::select('`data`')
       ::where('`key`', "'$key' ");
-
-    if ($onlyPublic) $q = $q::and('public', 1);
 
     $q = $q::send();
 
