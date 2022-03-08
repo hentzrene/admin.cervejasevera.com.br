@@ -62,6 +62,7 @@ module-template(title="Módulos")
         ) Confirmar
   menu-config-dialog(v-model="dialogMenu", :menus="menus")
   menu-edit-dialog(
+    v-if="moduleItem",
     v-model="dialogEditMenu",
     :menus="menus",
     :module-item="moduleItem"
@@ -120,8 +121,8 @@ export default {
       });
     },
     editMenuTitle(item) {
-      this.dialogEditMenu = true;
       this.moduleItem = item;
+      this.dialogEditMenu = true;
     },
     importFile({ target }) {
       if (!target.files.length) return;

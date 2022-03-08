@@ -101,7 +101,8 @@ class Module
     } else {
       ModelModule::setMenu(
         (int) $d['moduleId'],
-        Req::get('value') ? (int) Req::get('value') : null
+        Req::get('menuId') ? (int) Req::get('menuId') : null,
+        Req::get('submenuId') ? (int) Req::get('submenuId') : null
       );
       Response::set('status', 'success');
       Response::set('success', 'Menu alterado com sucesso.');

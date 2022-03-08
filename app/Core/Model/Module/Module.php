@@ -228,14 +228,18 @@ class Module
   /**
    * Definir menu.
    *
-   * @param integer $id
-   * @param string $value
+   * @param int $id
+   * @param int $menuId
+   * @param int $submenuId
    * @return boolean
    */
-  public static function setMenu(int $id, ?int $value): bool
+  public static function setMenu(int $id, ?int $menuId, ?int $submenuId): bool
   {
     return (bool) Conn::table(Table::MODULES)
-      ::update(["modules_menu_id" => $value ? $value : 'NULL'])
+      ::update([
+        "modules_menu_id" => $menuId ? $menuId : 'NULL',
+        "modules_submenus_id" => $submenuId ? $submenuId : 'NULL'
+      ])
       ::where('id', $id)
       ::send();
   }

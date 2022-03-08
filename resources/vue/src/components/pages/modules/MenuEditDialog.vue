@@ -6,17 +6,28 @@ v-dialog(
 )
   v-card.pa-4(dark)
     .title.mb-4.text-center Definir menu
-    v-select.mb-3(
-      v-model="menuSelected",
-      :items="menusSelect",
-      label="Título",
-      outlined,
-      dense,
-      hide-details
-    )
+    v-form(ref="form")
+      v-select.mb-3(
+        v-model="menuSelected",
+        :items="menuItems",
+        label="Menu",
+        name="menuId",
+        outlined,
+        dense,
+        hide-details
+      )
+      v-select.mb-3(
+        :value="submenuId",
+        :items="submenusItems",
+        label="Submenu",
+        name="submenuId",
+        outlined,
+        dense,
+        hide-details
+      )
     v-btn.text-none(
       @click="save",
-      :disabled="loading || sameValue",
+      :disabled="loading",
       color="secondary",
       block,
       depressed
@@ -39,7 +50,13 @@ export default {
     menuSelected: null,
   }),
   computed: {
-    menusSelect() {
+    menuId() {
+      return this.moduleItem.menuId;
+    },
+    submenuId() {
+      return this.moduleItem.submenuId;
+    },
+    menuItems() {
       const r = this.$rest("modulesMenu").list.map(({ id, title }) => ({
         text: title,
         value: id,
@@ -49,40 +66,79 @@ export default {
 
       return r;
     },
-    sameValue() {
-      return this.moduleItem
-        ? this.moduleItem.menuId === this.menuSelected
-        : false;
+    submenusItems() {
+      let submenusItems = [{ text: "(Nenhum)", value: null }];
+
+      if (!this.menuSelected) {
+        return submenusItems;
+      }
+
+      const menu = this.$rest("modulesMenu").list.find(
+        (menu) => menu.id === this.menuSelected
+      );
+
+      if (menu) {
+        menu.submenus.forEach(({ id, title }) => {
+          submenusItems.push({ text: title, value: id });
+        });
+      }
+
+      return submenusItems;
     },
   },
   methods: {
     save() {
       this.loading = true;
 
+      const form = this.$refs.form;
+
+      const data = new FormData(form.$el);
+
       this.$rest("modules")
         .put({
           id: this.moduleItem.id,
           prop: "menu",
-          data: {
-            value: this.menuSelected,
-          },
+          data,
         })
         .then(() => {
           this.loading = false;
 
-          if (this.menuSelected) {
-            this.moduleItem.menuTitle = this.menus.find(
-              ({ id }) => this.menuSelected == id
-            ).title;
-            this.moduleItem.menuId = this.menuSelected;
+          const menuId = data.get("menuId");
+          const submenuId = data.get("submenuId");
+
+          if (menuId) {
+            const menu = this.menus.find(({ id }) => menuId == id);
+
+            this.moduleItem.menuId = menuId;
+            this.moduleItem.menuTitle = menu.title;
+
+            if (submenuId) {
+              const submenu = menu.submenus.find(({ id }) => submenuId == id);
+
+              this.moduleItem.submenuId = submenuId;
+              this.moduleItem.submenuTitle = submenu.title;
+            } else {
+              this.moduleItem.submenuId = null;
+              this.moduleItem.submenuTitle = null;
+            }
           } else {
-            this.moduleItem.menuTitle = null;
             this.moduleItem.menuId = null;
+            this.moduleItem.menuTitle = null;
+            this.moduleItem.submenuId = null;
+            this.moduleItem.submenuTitle = null;
           }
 
           this.$emit("input", false);
         });
     },
+  },
+  watch: {
+    moduleItem() {
+      this.menuSelected = this.menuId;
+    },
+  },
+  created() {
+    this.menuSelected = this.menuId;
   },
   components: {
     Loading,
