@@ -186,9 +186,9 @@ export default {
         config.image = {
           toolbar: [
             "imageTextAlternative",
-            "imageStyle:inline",
+            "imageStyle:alignLeft",
             "imageStyle:block",
-            "imageStyle:side",
+            "imageStyle:alignRight",
             "linkImage",
           ],
         };
