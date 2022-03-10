@@ -74,8 +74,8 @@ const toLocaleDate = (d) => {
  */
 const toDateHTML = (d) =>
   verifyDate(d)
-    .toLocaleDateString()
-    .replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1");
+    .toISOString()
+    .replace(/(\d{4}-\d{2}-\d{2}).+/, "$1");
 
 /**
  * Transformar a data d no formato de datetime para HTML.
@@ -83,9 +83,8 @@ const toDateHTML = (d) =>
  */
 const toDateTimeHTML = (d) =>
   verifyDate(d)
-    .toLocaleString()
-    .replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, "$3-$2-$1T$4")
-    .slice(0, -3);
+    .toISOString()
+    .replace(/(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}).+/, "$1");
 
 /**
  * Transformar a data d no formato de datetime para MySQL.
@@ -93,9 +92,8 @@ const toDateTimeHTML = (d) =>
  */
 const toDateMysql = (d) =>
   verifyDate(d)
-    .toLocaleString()
-    .replace(/(\d{2})\/(\d{2})\/(\d{4}), (.+)/, "$3-$2-$1 $4")
-    .slice(0, -3);
+    .toISOString()
+    .replace(/(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}).+/, "$1 $2");
 
 /**
  * Transformar a data d no formato de datetime para MySQL.
