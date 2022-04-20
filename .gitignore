@@ -1,8 +1,8 @@
-vendor
-node_modules
-dist
+**/vendor
+**/node_modules
+**/dist
 .env
-./app/Core/DB.php
+app/Core/DB.php
 
 # Log files
 npm-debug.log*
