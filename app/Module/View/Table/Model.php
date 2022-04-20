@@ -301,6 +301,12 @@ class Model
 
     $q1 = Conn::table(EnumTable::IMAGES)
       ::deleteWhere('item_id', $id)
+      ::and('modules_id', $moduleId)
+      ::send();
+
+    $q1 = Conn::table(EnumTable::FILES)
+      ::deleteWhere('item_id', $id)
+      ::and('modules_id', $moduleId)
       ::send();
 
     $q2 = Conn::table("mod_$module")
