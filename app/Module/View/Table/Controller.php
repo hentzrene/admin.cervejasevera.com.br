@@ -37,7 +37,11 @@ class Controller
       Response::set('status', 'error');
       Response::status(401);
     } else {
-      if (!Model::export($module, $data)) {
+      $export = Model::export($module, $data);
+
+      if ($export) {
+        die();
+      } else {
         Response::status(400);
         Response::set('status', 'error');
         Response::set('error', 'Não foi possível realizar a exportação.');
