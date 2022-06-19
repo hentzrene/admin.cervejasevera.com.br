@@ -30,6 +30,8 @@ class Table
 
   const MODULES_VIEWS = "modules_views";
 
+  const MODULES_VIEWS_PERMISSIONS = "modules_views_permissions";
+
   const SESSIONS = "sessions";
 
   const SUBCATEGORIES = "subcategories";

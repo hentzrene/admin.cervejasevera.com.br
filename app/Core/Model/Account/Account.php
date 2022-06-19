@@ -11,7 +11,7 @@ class Account
 {
   /**
    * Obter conta.
-   * 
+   *
    * @param integer $id
    */
   public static function get(int $id): object
@@ -245,17 +245,11 @@ class Account
   public static function getPermissions(int $id): array
   {
     $q = Conn::table(Table::ACCOUNTS_PERMISSIONS)
-      ::select(['modules_id'])
+      ::select(['modules_id', 'modules_views_permissions_id'])
       ::where('accounts_id', $id)
       ::send();
 
-    $permissions = [];
-
-    if ($q) {
-      $permissions = array_merge(...$q->fetch_all(MYSQLI_NUM));
-    }
-
-    return $permissions;
+    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
   }
 
   /**
@@ -272,13 +266,13 @@ class Account
       ::send();
 
     if (count($permissions)) {
-      $permissions = array_map(function ($p) use ($id) {
-        return [$id, $p];
+      $permissions = array_map(function ($permission) use ($id) {
+        return [$id, $permission->modules_id, $permission->modules_views_permissions_id];
       }, $permissions);
 
       Conn::table(Table::ACCOUNTS_PERMISSIONS)
         ::insert(
-          ['accounts_id', 'modules_id'],
+          ['accounts_id', 'modules_id', 'modules_views_permissions_id'],
           $permissions,
           true
         )

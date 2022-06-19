@@ -19,6 +19,32 @@ class View
       ::orderBy('name', 'ASC')
       ::send();
 
+    $views = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+
+    $permissions = self::getAllPermissions();
+
+
+    $views = array_map(function ($view) use ($permissions) {
+      $view['permissions'] = [];
+
+      foreach ($permissions as $permission) {
+        if ($permission['modules_views_id'] === $view['id']) {
+          $view['permissions'][] = $permission;
+        }
+      }
+
+      return $view;
+    }, $views);
+
+    return $views;
+  }
+
+  public static function getAllPermissions()
+  {
+    $q = Conn::table(Table::MODULES_VIEWS_PERMISSIONS)
+      ::select(['id', 'modules_views_id', 'title'])
+      ::send();
+
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
   }
 

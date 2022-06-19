@@ -22,38 +22,14 @@ module-template(title="Contas / Alterar", width="800px")
             dense
           )
       v-text-field(label="Senha", name="password", outlined, dense)
-      div(v-if="account.type != 1")
-        template(v-for="(submenus, menuTitle) in groupedModules")
-          .d-flex.flex-wrap(v-if="menuTitle === '$'")
-            v-checkbox.mx-2(
-              v-for="({ id, name }, i) in groupedModules.$.$",
-              v-model="permissions",
-              :key="i",
-              :label="name",
-              :value="id"
-            )
-          v-card.mb-3.pa-3.pb-0.primary.lighten-2(v-else, outlined)
-            .font-weight-bold {{ menuTitle }}
-            div
-              template(v-for="(items, submenuTitle) in submenus")
-                .d-flex.flex-wrap(v-if="submenuTitle === '$'")
-                  v-checkbox.mx-2(
-                    v-for="({ id, name }, i) in submenus[submenuTitle]",
-                    v-model="permissions",
-                    :key="i",
-                    :label="name",
-                    :value="id"
-                  )
-                v-card.pa-3.mb-3(v-else)
-                  .font-weight-bold {{ submenuTitle }}
-                  .d-flex.flex-wrap.ml-2
-                    v-checkbox.mx-2(
-                      v-for="({ id, name }, i) in items",
-                      v-model="permissions",
-                      :key="id",
-                      :label="name",
-                      :value="id"
-                    )
+      div(v-if="account.type != 1 && userPermissions")
+        div.grey--text.text--lighten-1.font-weight-bold Permissões
+        v-treeview(
+          v-model="userPermissions"
+          :items="modulesPermissions"
+          selectable
+          open-all
+        )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) Salvar
 </template>
@@ -70,7 +46,7 @@ export default {
       required,
       email,
     },
-    permissions: [],
+    userPermissions: null,
   }),
   computed: {
     accountId() {
@@ -80,9 +56,20 @@ export default {
       return this.$rest("accounts").item;
     },
     modules() {
-      return this.$rest("modules").list;
+      return this.$rest("modules").list.map((mod) => {
+        const moduleView = this.modulesViews.find(
+          (moduleView) => moduleView.key === mod.viewKey
+        );
+
+        mod.permissions = moduleView && moduleView.permissions;
+
+        return mod;
+      });
     },
-    groupedModules() {
+    modulesViews() {
+      return this.$rest("modulesViews").list;
+    },
+    modulesPermissions() {
       let menu = this.modules.map((mod) => {
         let cloneMod = { ...mod };
         if (!cloneMod.menuId) cloneMod.menuTitle = "$";
@@ -91,24 +78,59 @@ export default {
         return cloneMod;
       });
 
-      menu = groupBy(menu, "menuTitle");
+      const groupedMenu = groupBy(menu, "menuTitle");
 
-      for (let id in menu) {
-        menu[id] = groupBy(menu[id], "submenuTitle");
+      let groupedSubmenu = {};
+      for (let id in groupedMenu) {
+        groupedSubmenu[id] = groupBy(groupedMenu[id], "submenuTitle");
       }
 
-      for (let menuKey in menu) {
-        for (let submenuKey in menu[menuKey]) {
-          menu[menuKey][submenuKey] = menu[menuKey][submenuKey].map(
-            ({ id, name }) => ({
-              id,
-              name,
+      const tree = Object.entries(groupedSubmenu)
+        .map(([menuKey, menuChildren]) => {
+          const children = Object.entries(menuChildren)
+            .map(([submenuKey, submenuChildren]) => {
+              const children = submenuChildren.map((mod) => {
+                const children = mod.permissions.map(({ id, title }) => ({
+                  id: `${mod.id}:${id}`,
+                  name: title,
+                }));
+
+                return {
+                  id: mod.id,
+                  name: mod.name,
+                  children,
+                };
+              });
+
+              if (submenuKey === "$") {
+                return children;
+              }
+
+              return [
+                {
+                  id: Symbol(),
+                  name: submenuKey,
+                  children,
+                },
+              ];
             })
-          );
-        }
-      }
+            .flat();
 
-      return menu;
+          if (menuKey === "$") {
+            return children;
+          }
+
+          return [
+            {
+              id: Symbol(),
+              name: menuKey,
+              children,
+            },
+          ];
+        })
+        .flat();
+
+      return tree;
     },
   },
   methods: {
@@ -117,7 +139,15 @@ export default {
       if (form.validate()) {
         const data = Object.fromEntries(new FormData(form.$el).entries());
 
-        data.permissions = this.permissions;
+        data.permissions = this.userPermissions.map((permission) => {
+          const [modules_id, modules_views_permissions_id] =
+            permission.split(":");
+
+          return {
+            modules_id,
+            modules_views_permissions_id,
+          };
+        });
 
         this.$rest("accounts")
           .put({ id: this.accountId, data })
@@ -131,23 +161,31 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     if (this.$store.state.user.type != 1) {
       this.$router.replace("/error404");
       return;
     }
 
-    this.$rest("accounts")
-      .get({ id: this.accountId })
-      .then(({ permissions }) => {
-        this.permissions = permissions || [];
-      })
-      .catch(() => this.$router.replace("/accounts"));
+    await this.$rest("modulesViews").get();
+
+    try {
+      const { permissions } = await this.$rest("accounts").get({
+        id: this.accountId,
+      });
+
+      if (permissions) {
+        this.userPermissions = permissions.map(
+          ({ modules_id, modules_views_permissions_id }) =>
+            `${modules_id}:${modules_views_permissions_id}`
+        );
+      }
+    } catch {
+      this.$router.replace("/accounts");
+    }
   },
   components: {
     ModuleTemplate,
   },
 };
 </script>
-
-<style></style>
