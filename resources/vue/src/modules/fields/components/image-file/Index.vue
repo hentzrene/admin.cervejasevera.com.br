@@ -93,7 +93,7 @@ export default {
             }))
             .sort((a, b) => a.order - b.order);
         })
-        .finally(() => this.loading = false);
+        .finally(() => (this.loading = false));
     },
   },
   mounted() {
