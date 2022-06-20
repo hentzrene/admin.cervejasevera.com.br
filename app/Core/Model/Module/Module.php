@@ -16,9 +16,9 @@ class Module
    */
   public static function get(int $id): ?object
   {
-    $permissions = array_unique(array_map(function ($permission) {
+    $permissions = array_values(array_unique(array_map(function ($permission) {
       return $permission['modules_id'];
-    }, Account::getPermissions(ACCOUNT_ID)));
+    }, Account::getPermissions(ACCOUNT_ID))));
 
     if (ACCOUNT_TYPE !== 1 && !in_array($id, $permissions)) {
       return null;
@@ -113,9 +113,9 @@ class Module
     $q = null;
 
     if (ACCOUNT_TYPE !== 1) {
-      $permissions = json_encode(array_unique(array_map(function ($permission) {
+      $permissions = json_encode(array_values(array_unique(array_map(function ($permission) {
         return $permission['modules_id'];
-      }, Account::getPermissions(ACCOUNT_ID))));
+      }, Account::getPermissions(ACCOUNT_ID)))));
 
       $q = Conn::table(Table::VW_MODULES)
         ::select([
@@ -209,9 +209,9 @@ class Module
   {
     if (ACCOUNT_TYPE === 1) return true;
 
-    $permissions = array_unique(array_map(function ($permission) {
+    $permissions = array_values(array_unique(array_map(function ($permission) {
       return $permission['modules_id'];
-    }, Account::getPermissions($accountId)));
+    }, Account::getPermissions($accountId))));
 
     return in_array((string) $id, $permissions);
   }
