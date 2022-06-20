@@ -62,9 +62,9 @@ class Field
    *
    * @param object $data
    * @param int $moduleId
-   * @return boolean
+   * @return int Id do campo adicionado.
    */
-  public static function add(object $data, int $moduleId): bool
+  public static function add(object $data, int $moduleId): int
   {
     $name = addslashes($data->name);
     $key = addslashes($data->key);
@@ -75,26 +75,35 @@ class Field
     [$sqlType, $defaultOptions] = FieldType::get($type, ['sql_type', 'default_options']);
     $moduleKey = Module::getKeyById($moduleId);
 
-    $q1 = null;
+    $defaultOptions = $defaultOptions ? $defaultOptions : '{}';
 
     if (method_exists($fieldClass, 'beforeAdd')) {
-      $q1 = call_user_func([$fieldClass, 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
+      call_user_func([$fieldClass, 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
     } else {
       $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
 
       if ($unique) $sql .= " UNIQUE";
 
-      $q1 = Conn::query($sql);
+      Conn::query($sql);
     }
 
-    $q2 = Conn::table(Table::MODULES_FIELDS)
+    Conn::table(Table::MODULES_FIELDS)
       ::insert(
         ['modules_id', 'name', '`key`', '`unique`', 'modules_fields_types_id', 'options'],
-        [$moduleId, "'$name'", "'$key'", $unique, $type, $defaultOptions ? "'$defaultOptions'" : "'{}'"]
+        [$moduleId, "'$name'", "'$key'", $unique, $type, "'$defaultOptions'"]
       )
       ::send();
 
-    return $q1 && $q2;
+    $fieldId = Conn::$conn->insert_id;
+
+    if ($data->options) {
+
+      foreach ($data->options as $option => $value) {
+        self::setOption($fieldId, $option, $value);
+      }
+    }
+
+    return $fieldId;
   }
 
   /**
