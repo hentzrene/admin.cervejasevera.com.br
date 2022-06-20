@@ -1,21 +1,41 @@
 <template lang="pug">
 grid-item.mb-2(row-end="span 4", col-end="span 2", col-end-sm="span 1")
   .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
-  tooltip(:tip="label", top)
-    v-img.cursor-pointer.grey.d-flex.align-center.rounded-lg(
-      @click="dialog = true",
-      :src="files.replace(prefixPath, '') + (featuredImage && featuredImage.path)",
-      :aspect-ratio="19 / 9",
-      v-ripple,
-      contain
-    )
-      .d-flex.justify-center.align-center
-        v-sheet.d-flex.flex-column.justify-center.align-center.primary.rounded-circle(
+  v-img.grey.rounded-lg(
+    :src="files.replace(prefixPath, '') + (featuredImage && featuredImage.path)",
+    :aspect-ratio="19 / 9",
+    :class="(!featuredImage || !featuredImage.path) && 'd-flex align-center'"
+    contain
+  )
+    template(v-if="!loading")
+      .d-flex.justify-center.align-center(v-if="!featuredImage || !featuredImage.path")
+        v-sheet.d-flex.flex-column.justify-center.align-center.primary.rounded-circle.cursor-pointer(
+          @click="dialog = true",
+          v-ripple
           height="80",
           width="80"
         )
           v-icon.d-block.mx-auto(:size="30") fas fa-file-image
           .text-caption.font-weight-bold.mt-1 Enviar
+      div.d-flex.justify-end.ma-3(v-else)
+        v-btn.text-none(
+          :href="files.replace(prefixPath, '') + featuredImage.path"
+          target="_blank"
+          download="image"
+          depressed
+          small
+        )
+          v-icon(x-small left) fas fa-download
+          | Download
+        v-btn.ml-2.text-none(
+          @click="dialog = true",
+          target="_blank"
+          download="image"
+          depressed
+          small
+        )
+          v-icon(x-small left) fas fa-file-image
+          | Alterar
   list(
     v-model="dialog",
     :input-name="name",
@@ -40,6 +60,7 @@ export default {
   data: () => ({
     dialog: false,
     imgs: [],
+    loading: true,
   }),
   computed: {
     moduleId() {
@@ -71,7 +92,8 @@ export default {
               order: parseInt(order),
             }))
             .sort((a, b) => a.order - b.order);
-        });
+        })
+        .finally(() => this.loading = false);
     },
   },
   mounted() {
