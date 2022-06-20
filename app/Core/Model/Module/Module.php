@@ -460,12 +460,23 @@ class Module
    */
   private static function getViewClassOfKey(string $viewKey): string
   {
-    $viewDir = ucfirst($viewKey);
+    $viewDir = self::snakeToPascalCase($viewKey);
 
     if (!file_exists(SYSTEM_ROOT . "/app/Module/View/$viewDir/Model.php")) {
       throw new \Exception("Model da view não configurado corretamente no código fonte.");
     }
 
     return "Module\View\\$viewDir\Model";
+  }
+
+  /**
+   * Transformar string snake_case para PascalCase.
+   *
+   * @param string $str
+   * @return string
+   */
+  public static function snakeToPascalCase(string $str): string
+  {
+    return str_replace('_', '', ucwords($str, '_'));
   }
 }
