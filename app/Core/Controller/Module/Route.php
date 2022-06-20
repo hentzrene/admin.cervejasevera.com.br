@@ -70,7 +70,7 @@ class Route
       throw new \Exception("Não existe um módulo com essa chave.");
     }
 
-    $viewDir = ucfirst($viewKey);
+    $viewDir = Module::snakeToPascalCase($viewKey);
 
     if (!file_exists(SYSTEM_ROOT . "/app/Module/View/$viewDir/Controller.php")) {
       throw new \Exception("Controller da view não configurado corretamente no código fonte.");
