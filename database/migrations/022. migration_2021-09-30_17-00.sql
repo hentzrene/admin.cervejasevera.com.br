@@ -4,9 +4,9 @@ SET
   `data` = JSON_OBJECT(
     'head_after_begin',
     CONCAT(
-      JSON_UNQUOTE(data -> "$.ads"),
-      JSON_UNQUOTE(data -> "$.analytics"),
-      JSON_UNQUOTE(data -> "$.facebookPixel")
+      JSON_UNQUOTE(JSON_EXTRACT(data, "$.ads")),
+      JSON_UNQUOTE(JSON_EXTRACT(data, "$.analytics")),
+      JSON_UNQUOTE(JSON_EXTRACT(data, "$.facebookPixel"))
     ),
     'head_before_end',
     '',
