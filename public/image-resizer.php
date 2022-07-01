@@ -22,7 +22,7 @@ function setHeaderContentType(string $filePath): void
   header("Content-type: $contentType");
 }
 
-$systemRoot = __DIR__ . '/../';
+$systemRoot = __DIR__ . '/..';
 $file = $_SERVER['REDIRECT_URL'];
 $dir = dirname($file);
 $basename = basename($file);
@@ -40,7 +40,6 @@ if (!$height && !$width) {
   die();
 }
 
-
 $newDir = "{$systemRoot}{$dir}/{$width}x{$height}";
 
 if (!is_dir($newDir)) {
@@ -56,10 +55,33 @@ if (file_exists("$newDir/$basename")) {
 $manager = new Img(array('driver' => 'gd'));
 $make = $manager->make($systemRoot . $file);
 
-$newWidth = $width ? $width : (int) (($make->width() * $height) / $make->height());
-$newHeight = $height ? $height : (int) (($make->height() * $width) / $make->width());
+$makeWidth = $make->width();
+$makeHeight = $make->height();
+
+$newWidth = $width ? $width : (int) (($makeWidth * $height) / $makeHeight);
+$newHeight = $height ? $height : (int) (($makeHeight * $width) / $makeWidth);
 
 $make->resize($newWidth, $newHeight);
+
+if ($_SERVER['REMOTE_ADDR'] === '177.155.216.230') {
+
+  $exif = exif_read_data($systemRoot . $file);
+  if (!empty($exif['Orientation'])) {
+    switch ($exif['Orientation']) {
+      case 8:
+        $make->rotate(90);
+        break;
+      case 3:
+        $make->rotate(180);
+        break;
+      case 6:
+        $make->rotate(-90);
+        break;
+    }
+  }
+}
+
+
 $make->save("$newDir/$basename");
 
 setHeaderContentType("$newDir/$basename");
