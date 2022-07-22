@@ -62,10 +62,12 @@ export default {
       if (!pattern) return;
 
       const r = pattern.replace(/({([^}]+)})/g, (match, p1, p2) => {
-        return this.itemProp(p2) || "";
+        const value = this.itemProp(p2);
+
+        return value ? formatToURL(value) : "";
       });
 
-      return location.origin + "/" + formatToURL(r);
+      return r;
     },
   },
   mixins: [mixin],

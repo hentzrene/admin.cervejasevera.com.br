@@ -12,7 +12,6 @@ template-dialog-any(
       @keyup.enter="save('pattern')",
       :disabled="loading.pattern",
       :loading="loading.pattern",
-      :prefix="patternPrefix",
       ref="pattern",
       label="Padrão",
       outlined,
@@ -54,7 +53,6 @@ export default {
     options: {
       pattern: null,
     },
-    patternPrefix: location.origin + "/",
   }),
   computed: {
     moduleId() {
