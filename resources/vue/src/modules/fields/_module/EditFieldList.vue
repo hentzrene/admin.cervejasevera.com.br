@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  .field-list.d-flex.flex-wrap(ref="fieldList")
+  .field-list(ref="fieldList")
     field-item(
       v-for="(field, i) in items",
       @remove="removeField(i)",
@@ -73,6 +73,26 @@ export default {
 
 <style>
 .field-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+}
+
+@media screen and (min-width: 1904px) {
+  .field-list {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 1264px) {
+  .field-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .field-list {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
