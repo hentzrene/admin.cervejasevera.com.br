@@ -36,7 +36,7 @@ $router->post('/rest/modules-fields', 'Field:add');
 $router->put('/rest/modules-fields/{fieldId}/name', 'Field:setName');
 $router->put('/rest/modules-fields/{fieldId}/type-id', 'Field:setTypeId');
 $router->put('/rest/modules-fields/{fieldId}/options', 'Field:setOption');
-$router->put('/rest/modules-fields/{fieldId}/modules-sections-fields-id', 'Field:setSection');
+$router->put('/rest/modules-fields/{fieldId}/modules_sections_fields_id', 'Field:setSection');
 $router->delete('/rest/modules-fields/{fieldId}', 'Field:remove');
 
 $router->get('/rest/modules-menu', 'Menu:getAllItems');
