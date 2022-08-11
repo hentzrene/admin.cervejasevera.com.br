@@ -1,5 +1,5 @@
 <template lang="pug">
-v-card.pa-3(color="primary", max-width="400")
+v-card.pa-3(color="primary")
   v-form.field-item(ref="form")
     .field-item-inputs
       v-text-field(

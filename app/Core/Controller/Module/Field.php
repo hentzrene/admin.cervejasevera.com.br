@@ -65,6 +65,22 @@ class Field
     Response::send();
   }
 
+  public function setSection($d)
+  {
+    if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {
+      Response::set('status', 'error');
+      Response::status(401);
+    } else {
+      $sectionId = Req::get('value') ? (int) Req::get('value') : null;
+
+      ModelField::setSection((int) $d['fieldId'], $sectionId);
+      Response::set('status', 'success');
+      Response::set('success', 'Seção alterada com sucesso.');
+    }
+
+    Response::send();
+  }
+
   public function remove($d)
   {
     if (!ON || !Module::isAllowed((int) Req::get('moduleId'), ACCOUNT_ID)) {

@@ -6,17 +6,31 @@ module-template(
 )
   v-card.pa-4.rounded-t-0(outlined, dark)
     v-form(ref="form")
-      .item-module-add-form
-        component(
-          v-for="({ id, name, key, typeKey, options }, i) in data.fields",
-          :value="item[key] || ''",
-          :is="typeKey.toLowerCase() + 'field'",
-          :label="name",
-          :name="key",
-          :key="i",
-          :field-id="parseInt(id)",
-          :field-options="options"
-        )
+      div(v-for="fields, section in sectionedFields" :key="section").mb-6
+        template(v-if="section !== 'null'")
+          div.text-body-1.text-uppercase.font-weight-bold {{ section }}
+          .item-module-add-form.mt-2.primary.lighten-2.pa-2.rounded
+            component(
+              v-for="({ id, name, key, typeKey, options }, i) in fields",
+              :value="item[key] || ''",
+              :is="typeKey.toLowerCase() + 'field'",
+              :label="name",
+              :name="key",
+              :key="i",
+              :field-id="parseInt(id)",
+              :field-options="options"
+            )
+        .item-module-add-form.mt-2.rounded(v-else)
+          component(
+            v-for="({ id, name, key, typeKey, options }, i) in fields",
+            :value="item[key] || ''",
+            :is="typeKey.toLowerCase() + 'field'",
+            :label="name",
+            :name="key",
+            :key="i",
+            :field-id="parseInt(id)",
+            :field-options="options"
+          )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) Alterar
 </template>
@@ -24,6 +38,7 @@ module-template(
 <script>
 import ModuleTemplate from "@/components/templates/Module";
 import fieldsElements from "../../../fields";
+import { groupBy } from "../../../../components/utils";
 
 export default {
   name: "ItemIndex",
@@ -36,6 +51,9 @@ export default {
   computed: {
     item() {
       return this.$rest(this.data.key).item;
+    },
+    sectionedFields() {
+      return groupBy(this.data.fields, "modules_sections_fields_title");
     },
   },
   methods: {

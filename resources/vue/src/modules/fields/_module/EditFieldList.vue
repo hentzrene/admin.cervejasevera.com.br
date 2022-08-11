@@ -33,6 +33,9 @@ export default {
         value: id,
       }));
     },
+    moduleId() {
+      return this.$route.params.module;
+    },
   },
   methods: {
     removeField(i) {
@@ -56,8 +59,11 @@ export default {
       return true;
     },
   },
-  beforeCreate() {
+  created() {
     this.$rest("modulesFieldsTypes").get();
+    this.$rest("modulesSectionsFields").get({
+      params: { moduleId: this.moduleId },
+    });
   },
   components: {
     FieldItem,

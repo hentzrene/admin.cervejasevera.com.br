@@ -26,6 +26,8 @@ class Table
 
   const MODULES_MENU = "modules_menu";
 
+  const MODULES_SECTIONS_FIELDS = "modules_sections_fields";
+
   const MODULES_SUBMENUS = "modules_submenus";
 
   const MODULES_VIEWS = "modules_views";

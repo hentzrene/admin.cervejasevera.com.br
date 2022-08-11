@@ -1,3 +1,5 @@
+import { groupBy } from "../../../../components/utils"; import { groupBy } from
+"../../../../components/utils";
 <template lang="pug">
 module-template(
   :title="`${data.name} / Alterar`",
@@ -44,19 +46,33 @@ module-template(
           block,
           depressed
         ) Alterar
-  v-card.pa-4.rounded-t-0(outlined, dark)
+  v-card.pa-2.rounded-t-0(outlined, dark)
     v-form(ref="form")
-      .table-module-edit-form
-        component(
-          v-for="({ id, name, key, typeKey, options }, i) in data.fields",
-          :value="item[key] || ''",
-          :is="typeKey.toLowerCase() + 'field'",
-          :label="name",
-          :name="key",
-          :key="i",
-          :field-id="parseInt(id)",
-          :field-options="options"
-        )
+      div(v-for="fields, section in sectionedFields" :key="section").mb-6
+        template(v-if="section !== 'null'")
+          div.text-body-1.text-uppercase.font-weight-bold {{ section }}
+          .table-module-edit-form.mt-2.primary.lighten-2.pa-2.rounded
+            component(
+              v-for="({ id, name, key, typeKey, options }, i) in fields",
+              :value="item[key] || ''",
+              :is="typeKey.toLowerCase() + 'field'",
+              :label="name",
+              :name="key",
+              :key="i",
+              :field-id="parseInt(id)",
+              :field-options="options"
+            )
+        .table-module-edit-form.mt-2.rounded(v-else)
+          component(
+            v-for="({ id, name, key, typeKey, options }, i) in fields",
+            :value="item[key] || ''",
+            :is="typeKey.toLowerCase() + 'field'",
+            :label="name",
+            :name="key",
+            :key="i",
+            :field-id="parseInt(id)",
+            :field-options="options"
+          )
       .d-flex.justify-end
         v-btn.text-none(@click="send", color="secondary", depressed) {{ isPublished ? 'Alterar' : 'Publicar' }}
 </template>
@@ -65,6 +81,7 @@ module-template(
 import ModuleTemplate from "@/components/templates/Module";
 import ToolbarButton from "@/components/buttons/Toolbar";
 import fieldsElements from "../../../fields";
+import { groupBy } from "../../../../components/utils";
 
 export default {
   name: "TableAdd",
@@ -84,6 +101,9 @@ export default {
     },
     isPublished() {
       return this.item.alteredAt && parseInt(this.item.active);
+    },
+    sectionedFields() {
+      return groupBy(this.data.fields, "modules_sections_fields_title");
     },
   },
   methods: {

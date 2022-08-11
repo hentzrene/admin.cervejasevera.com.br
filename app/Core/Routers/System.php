@@ -36,6 +36,7 @@ $router->post('/rest/modules-fields', 'Field:add');
 $router->put('/rest/modules-fields/{fieldId}/name', 'Field:setName');
 $router->put('/rest/modules-fields/{fieldId}/type-id', 'Field:setTypeId');
 $router->put('/rest/modules-fields/{fieldId}/options', 'Field:setOption');
+$router->put('/rest/modules-fields/{fieldId}/modules-sections-fields-id', 'Field:setSection');
 $router->delete('/rest/modules-fields/{fieldId}', 'Field:remove');
 
 $router->get('/rest/modules-menu', 'Menu:getAllItems');
@@ -46,3 +47,8 @@ $router->delete('/rest/modules-menu/{menuId}', 'Menu:removeItem');
 $router->post('/rest/modules-submenu', 'Submenu:add');
 $router->put('/rest/modules-submenu/{submenuId}', 'Submenu:update');
 $router->delete('/rest/modules-submenu/{submenuId}', 'Submenu:remove');
+
+$router->get('/rest/modules-sections-fields', 'SectionField:getAllItems');
+$router->post('/rest/modules-sections-fields', 'SectionField:addItem');
+$router->put('/rest/modules-sections-fields/{sectionId}', 'SectionField:updateItem');
+$router->delete('/rest/modules-sections-fields/{sectionId}', 'SectionField:removeItem');

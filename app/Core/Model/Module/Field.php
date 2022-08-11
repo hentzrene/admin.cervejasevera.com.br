@@ -39,7 +39,9 @@ class Field
         '`key`',
         'type_id' => 'typeId',
         'type_key' => 'typeKey',
-        'options'
+        'options',
+        'modules_sections_fields_title',
+        'modules_sections_fields_id'
       ])
       ::where('modules_key', "'$key'")
       ::send();
@@ -232,6 +234,23 @@ class Field
     }
 
     return $q1 && $q2 && $q3;
+  }
+
+  /**
+   * Definir seção.
+   *
+   * @param integer $id
+   * @param string|null $value
+   * @return boolean
+   */
+  public static function setSection(int $id, ?string $value = null): bool
+  {
+    $value = $value ? "'" . addslashes($value) . "'" : 'NULL';
+
+    return (bool) Conn::table(Table::MODULES_FIELDS)
+      ::update(["modules_sections_fields_id" => $value])
+      ::where('id', $id)
+      ::send();
   }
 
   /**
