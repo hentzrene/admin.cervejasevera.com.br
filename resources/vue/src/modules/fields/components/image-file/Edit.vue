@@ -1,28 +1,34 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="330px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.text-center Alterar Título
-    v-text-field.mb-3(
-      :value="img.title",
-      @input="(v) => (title = v)",
-      label="Título",
-      outlined,
-      dense,
-      hide-details
-    )
-    v-btn.text-none(
-      @click="submit",
-      :disabled="!title",
-      color="secondary",
-      block,
-      depressed
-    ) Alterar
-  v-overlay(v-if="value", v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="330px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div class="title mb-4 text-center">Alterar Título</div>
+      <v-text-field
+        class="mb-3"
+        :value="img.title"
+        @input="(v) => (title = v)"
+        label="Título"
+        outlined="outlined"
+        dense="dense"
+        hide-details="hide-details"
+      ></v-text-field>
+      <v-btn
+        class="text-none"
+        @click="submit"
+        :disabled="!title"
+        color="secondary"
+        block="block"
+        depressed="depressed"
+        >Alterar</v-btn
+      >
+    </v-card>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

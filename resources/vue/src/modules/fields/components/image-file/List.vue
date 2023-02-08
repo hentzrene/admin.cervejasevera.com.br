@@ -1,97 +1,113 @@
-<template lang="pug">
-template-dialog-any(
-  @input="(data) => $emit('input', data)",
-  :value="value",
-  title="Galeria",
-  max-width="880px"
-)
-  template(#actions)
-    template-dialog-header-button(
-      @click="order",
-      icon="fas fa-save",
-      text="Salvar Ordem"
-    )
-    template-dialog-header-button(
-      @click="editDialog = true",
-      :disabled="selecteds.length !== 1",
-      icon="fas fa-pencil-alt",
-      text="Editar Título"
-    )
-    template-dialog-header-button(
-      @click="featured",
-      :disabled="selecteds.length !== 1",
-      icon="fas fa-star",
-      text="Destacar"
-    )
-    template-dialog-header-button(
-      @click="remove",
-      :disabled="!selecteds.length",
-      icon="fas fa-trash",
-      text="Remover"
-    )
-    template-dialog-header-button(
-      @click="$refs.imageFileLabel.click()",
-      icon="fas fa-upload",
-      text="Enviar"
-    )
-  v-progress-linear.mb-1(
-    :indeterminate="loadingOrder",
-    :class="!loadingOrder && 'opacity-0'",
-    color="secondary"
-  )
-  v-item-group.view-field-list-wrap.d-flex.flex-wrap(
-    v-model="selecteds",
-    v-if="images.length",
-    multiple
-  )
-    draggable.view-field-list.d-flex.flex-wrap(v-model="images")
-      v-item(
-        v-slot="{ active, toggle }",
-        v-for="({ path, id }, i) in images",
-        :key="i",
-        :value="id"
-      )
-        v-img.view-field-item.rounded-sm(
-          v-ripple,
-          @click="toggle",
-          :class="active ? 'active cyan' : 'grey'",
-          :src="files.replace(prefixPath, '') + path + '?resize=1&h=80'",
-          contain
-        )
-          v-overlay(
-            v-if="featuredImage && id === featuredImage.id",
-            absolute,
-            opacity="0.2"
-          )
-            v-icon(color="yellow", size="40") fas fa-star
-  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma imagem foi enviada.
-  v-overlay(v-model="uploading")
-    v-progress-circular.font-weight-bold.accent--text(
-      :value="progress",
-      :size="120",
-      :rotate="-90",
-      :width="12",
+<template>
+  <template-dialog-any
+    @input="(data) => $emit('input', data)"
+    :value="value"
+    title="Galeria"
+    max-width="880px"
+    ><template #actions>
+      <template-dialog-header-button
+        @click="order"
+        icon="fas fa-save"
+        text="Salvar Ordem"
+      />
+      <template-dialog-header-button
+        @click="editDialog = true"
+        :disabled="selecteds.length !== 1"
+        icon="fas fa-pencil-alt"
+        text="Editar Título"
+      />
+      <template-dialog-header-button
+        @click="featured"
+        :disabled="selecteds.length !== 1"
+        icon="fas fa-star"
+        text="Destacar"
+      />
+      <template-dialog-header-button
+        @click="remove"
+        :disabled="!selecteds.length"
+        icon="fas fa-trash"
+        text="Remover"
+      />
+      <template-dialog-header-button
+        @click="$refs.imageFileLabel.click()"
+        icon="fas fa-upload"
+        text="Enviar"
+      />
+    </template>
+    <v-progress-linear
+      class="mb-1"
+      :indeterminate="loadingOrder"
+      :class="!loadingOrder && 'opacity-0'"
       color="secondary"
-    ) {{ progress }}%
-  v-overlay(v-model="loading")
-    loading
-  label(:for="'imageFileInput_' + fieldId", ref="imageFileLabel")
-  input.ma-0.pa-0(
-    @input="upload",
-    :id="'imageFileInput_' + fieldId",
-    :value="file",
-    ref="imageFileInput",
-    type="file",
-    accept="image/*",
-    multiple,
-    hide-details,
-    hidden
-  )
-  edit(
-    v-if="selecteds[0]",
-    v-model="editDialog",
-    :img="findImgById(selecteds[0])"
-  )
+    ></v-progress-linear>
+    <v-item-group
+      class="view-field-list-wrap d-flex flex-wrap"
+      v-model="selecteds"
+      v-if="images.length"
+      multiple
+    >
+      <draggable class="view-field-list d-flex flex-wrap" v-model="images">
+        <v-item
+          v-slot="{ active, toggle }"
+          v-for="({ path, id }, i) in images"
+          :key="i"
+          :value="id"
+        >
+          <v-img
+            class="view-field-item rounded-sm"
+            v-ripple
+            @click="toggle"
+            :class="active ? 'active cyan' : 'grey'"
+            :src="files.replace(prefixPath, '') + path + '?resize=1&h=80'"
+            contain
+          >
+            <v-overlay
+              v-if="featuredImage && id === featuredImage.id"
+              absolute
+              opacity="0.2"
+            >
+              <v-icon color="yellow" size="40">fas fa-star</v-icon>
+            </v-overlay>
+          </v-img>
+        </v-item>
+      </draggable>
+    </v-item-group>
+    <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
+      Nenhuma imagem foi enviada.
+    </div>
+    <v-overlay v-model="uploading">
+      <v-progress-circular
+        class="font-weight-bold accent--text"
+        :value="progress"
+        :size="120"
+        :rotate="-90"
+        :width="12"
+        color="secondary"
+        >{{ progress }}%</v-progress-circular
+      >
+    </v-overlay>
+    <v-overlay v-model="loading">
+      <loading></loading>
+    </v-overlay>
+    <label :for="'imageFileInput_' + fieldId" ref="imageFileLabel"></label>
+    <input
+      class="ma-0 pa-0"
+      @input="upload"
+      :id="'imageFileInput_' + fieldId"
+      :value="file"
+      ref="imageFileInput"
+      type="file"
+      accept="image/*"
+      multiple
+      hide-details
+      hidden
+    />
+    <edit
+      v-if="selecteds[0]"
+      v-model="editDialog"
+      :img="findImgById(selecteds[0])"
+    ></edit>
+  </template-dialog-any>
 </template>
 
 <script>
