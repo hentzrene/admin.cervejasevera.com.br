@@ -43,7 +43,7 @@ export default {
     },
   },
   components: {
-    TemplateDialogHeaderButton
-  }
+    TemplateDialogHeaderButton,
+  },
 };
 </script>
