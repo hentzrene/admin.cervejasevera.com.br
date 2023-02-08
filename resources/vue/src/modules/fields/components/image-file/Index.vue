@@ -53,13 +53,13 @@
         </div>
       </template></v-img
     >
-    <list
+    <List
       v-model="dialog"
       :input-name="name"
       :images="imgs"
       :featured-image="featuredImage"
       :field-id="fieldId"
-    ></list>
+    ></List>
   </grid-item>
 </template>
 

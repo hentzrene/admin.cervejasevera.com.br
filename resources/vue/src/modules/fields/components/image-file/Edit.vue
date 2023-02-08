@@ -26,7 +26,7 @@
       >
     </v-card>
     <v-overlay v-if="value" v-model="loading">
-      <loading></loading>
+      <Loading></Loading>
     </v-overlay>
   </v-dialog>
 </template>

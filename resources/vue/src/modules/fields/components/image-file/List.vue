@@ -1,34 +1,34 @@
 <template>
-  <template-dialog-any
+  <TemplateDialogAny
     @input="(data) => $emit('input', data)"
     :value="value"
     title="Galeria"
     max-width="880px"
     ><template #actions>
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="order"
         icon="fas fa-save"
         text="Salvar Ordem"
       />
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="editDialog = true"
         :disabled="selecteds.length !== 1"
         icon="fas fa-pencil-alt"
         text="Editar Título"
       />
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="featured"
         :disabled="selecteds.length !== 1"
         icon="fas fa-star"
         text="Destacar"
       />
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="remove"
         :disabled="!selecteds.length"
         icon="fas fa-trash"
         text="Remover"
       />
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="$refs.imageFileLabel.click()"
         icon="fas fa-upload"
         text="Enviar"
@@ -87,7 +87,7 @@
       >
     </v-overlay>
     <v-overlay v-model="loading">
-      <loading></loading>
+      <Loading></Loading>
     </v-overlay>
     <label :for="'imageFileInput_' + fieldId" ref="imageFileLabel"></label>
     <input
@@ -102,12 +102,12 @@
       hide-details
       hidden
     />
-    <edit
+    <Edit
       v-if="selecteds[0]"
       v-model="editDialog"
       :img="findImgById(selecteds[0])"
-    ></edit>
-  </template-dialog-any>
+    ></Edit>
+  </TemplateDialogAny>
 </template>
 
 <script>
