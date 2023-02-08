@@ -5,11 +5,7 @@
     title="Galeria"
     max-width="880px"
     ><template #actions>
-      <TemplateDialogHeaderButton
-        @click="order"
-        icon="fas fa-save"
-        text="Salvar Ordem"
-      />
+      <OrderButton @loading="(val) => (loadingOrder = val)" :items="images" />
       <TemplateDialogHeaderButton
         @click="editDialog = true"
         :disabled="selecteds.length !== 1"
@@ -116,6 +112,7 @@ import TemplateDialogAny from "../../templates/DialogAny";
 import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Loading from "@/components/tools/Loading";
 import draggable from "vuedraggable";
+import OrderButton from "./buttons/OrderButton.vue";
 
 export default {
   props: {
@@ -140,7 +137,6 @@ export default {
     progress: 0,
     loading: false,
     loadingOrder: false,
-
     selecteds: [],
     editDialog: false,
   }),
@@ -224,25 +220,6 @@ export default {
         this.uploading = false;
       });
     },
-    order() {
-      this.loadingOrder = true;
-
-      const ordered = this.images.map(({ id, path }, i) => ({
-        id,
-        path,
-        order: i,
-      }));
-
-      this.$rest("modulesImages")
-        .put({
-          id: "order",
-          data: { images: ordered },
-          params: {
-            moduleId: this.moduleId,
-          },
-        })
-        .then(() => (this.loadingOrder = false));
-    },
     findImgById(id) {
       return this.images.find((img) => img.id === id);
     },
@@ -258,6 +235,7 @@ export default {
     draggable,
     TemplateDialogAny,
     TemplateDialogHeaderButton,
+    OrderButton,
   },
 };
 </script>
