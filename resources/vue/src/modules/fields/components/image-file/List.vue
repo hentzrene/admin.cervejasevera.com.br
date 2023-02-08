@@ -24,11 +24,7 @@
         icon="fas fa-trash"
         text="Remover"
       />
-      <TemplateDialogHeaderButton
-        @click="$refs.imageFileLabel.click()"
-        icon="fas fa-upload"
-        text="Enviar"
-      />
+      <UploadButton :field-id="fieldId" :items="images" />
     </template>
     <v-progress-linear
       class="mb-1"
@@ -71,33 +67,9 @@
     <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
       Nenhuma imagem foi enviada.
     </div>
-    <v-overlay v-model="uploading">
-      <v-progress-circular
-        class="font-weight-bold accent--text"
-        :value="progress"
-        :size="120"
-        :rotate="-90"
-        :width="12"
-        color="secondary"
-        >{{ progress }}%</v-progress-circular
-      >
-    </v-overlay>
     <v-overlay v-model="loading">
       <Loading></Loading>
     </v-overlay>
-    <label :for="'imageFileInput_' + fieldId" ref="imageFileLabel"></label>
-    <input
-      class="ma-0 pa-0"
-      @input="upload"
-      :id="'imageFileInput_' + fieldId"
-      :value="file"
-      ref="imageFileInput"
-      type="file"
-      accept="image/*"
-      multiple
-      hide-details
-      hidden
-    />
     <Edit
       v-if="selecteds[0]"
       v-model="editDialog"
@@ -113,6 +85,7 @@ import TemplateDialogHeaderButton from "../../templates/DialogHeaderButton";
 import Loading from "@/components/tools/Loading";
 import draggable from "vuedraggable";
 import OrderButton from "./buttons/OrderButton.vue";
+import UploadButton from "./buttons/UploadButton.vue";
 
 export default {
   props: {
@@ -132,9 +105,6 @@ export default {
     },
   },
   data: () => ({
-    file: null,
-    uploading: false,
-    progress: 0,
     loading: false,
     loadingOrder: false,
     selecteds: [],
@@ -188,38 +158,6 @@ export default {
             })
         );
     },
-    async upload({ target }) {
-      const files = target.files,
-        onUploadProgress = ({ loaded, total }) =>
-          (this.progress = new Intl.NumberFormat("pt-BR", {
-            maximumFractionDigits: 0,
-          }).format((loaded / total) * 100));
-
-      this.uploading = true;
-
-      Promise.all(
-        Array.from(files).map((file) =>
-          this.$rest("modulesImages")
-            .upload({
-              file,
-              prop: "image",
-              params: {
-                itemId: this.itemId,
-                moduleId: this.moduleId,
-                fieldId: this.fieldId,
-              },
-              onUploadProgress,
-            })
-            .then(({ file, id }) => {
-              this.progress = 0;
-              this.images.push({ path: file, id });
-            })
-        )
-      ).then(() => {
-        this.$refs.imageFileInput.value = "";
-        this.uploading = false;
-      });
-    },
     findImgById(id) {
       return this.images.find((img) => img.id === id);
     },
@@ -236,6 +174,7 @@ export default {
     TemplateDialogAny,
     TemplateDialogHeaderButton,
     OrderButton,
+    UploadButton,
   },
 };
 </script>
@@ -265,9 +204,7 @@ export default {
   background: cyan;
   opacity: 0.4;
 }
-.v-progress-circular__overlay {
-  transition: none !important;
-}
+
 .opacity-0 {
   opacity: 0;
 }
