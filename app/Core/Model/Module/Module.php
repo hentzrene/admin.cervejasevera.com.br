@@ -288,7 +288,7 @@ class Module
   }
 
   /**
-   * Remover item da propiedade listHeaders da viewOptions.
+   * Remover item da propriedade listHeaders da viewOptions.
    *
    * @param integer $id
    * @param string $value

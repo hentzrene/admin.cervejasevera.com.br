@@ -12,7 +12,7 @@ use League\Flysystem\Local\LocalFilesystemAdapter;
 
 class Model
 {
-  const MAX_ITEMS_PER_PAGE = 100;
+  const MAX_ITEMS_PER_PAGE = 10000;
 
   /**
    * Obter item;
@@ -252,7 +252,7 @@ class Model
   }
 
   /**
-   * Atualizar propiedade do item.
+   * Atualizar Propriedade do item.
    *
    * @param string $module
    * @param integer $id

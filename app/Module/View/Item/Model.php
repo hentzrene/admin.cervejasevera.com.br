@@ -58,7 +58,7 @@ class Model
   }
 
   /**
-   * Atualizar propiedade do item.
+   * Atualizar propriedade do item.
    *
    * @param string $module
    * @param integer $id

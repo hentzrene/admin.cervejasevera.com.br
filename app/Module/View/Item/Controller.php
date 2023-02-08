@@ -40,7 +40,7 @@ class Controller
     } else {
       Model::setProp($module, $prop, $value);
       Response::set('status', 'success');
-      Response::set('success', 'Propiedade alterada com sucesso.');
+      Response::set('success', 'Propriedade alterada com sucesso.');
     }
 
     Response::send();
