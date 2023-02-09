@@ -3,6 +3,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Intervention\Image\ImageManager as Img;
 
+error_reporting(0);
+
 define('EXIF_IMAGE_TYPES_ALLOWEDS', [
   '1' => 'image/gif',
   '2' => 'image/jpeg',
@@ -64,8 +66,8 @@ $newHeight = $height ? $height : (int) (($makeHeight * $width) / $makeWidth);
 $make->resize($newWidth, $newHeight);
 
 if ($_SERVER['REMOTE_ADDR'] === '177.155.216.230') {
-
   $exif = exif_read_data($systemRoot . $file);
+
   if (!empty($exif['Orientation'])) {
     switch ($exif['Orientation']) {
       case 8:
