@@ -298,34 +298,6 @@ class Module
   {
     $value = addslashes($value);
 
-    var_dump("UPDATE modules
-    SET view_options = IF(
-      JSON_SEARCH(
-        view_options->\"$.listHeaders\",
-        'one',
-        '$value'
-      ) IS NOT NULL,
-      JSON_REMOVE(
-      view_options,
-        CONCAT(
-          '$.listHeaders',
-          REPLACE(
-            JSON_UNQUOTE(
-              JSON_SEARCH(
-                view_options->\"$.listHeaders\",
-                'one',
-                '$value'
-              )
-            ),
-            '$',
-            ''
-          )
-        )
-      ),
-      view_options
-    )
-  WHERE id = $id;");
-
     return (bool) Conn::query(
       "UPDATE modules
         SET view_options = IF(
