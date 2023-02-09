@@ -18,17 +18,6 @@
       hide-details
       hidden
     />
-    <v-overlay v-model="uploading">
-      <v-progress-circular
-        class="font-weight-bold accent--text"
-        :value="progress"
-        :size="120"
-        :rotate="-90"
-        :width="12"
-        color="secondary"
-        >{{ progress }}%</v-progress-circular
-      >
-    </v-overlay>
   </div>
 </template>
 
@@ -47,7 +36,6 @@ export default {
     },
   },
   data: () => ({
-    uploading: false,
     progress: 0,
     file: null,
   }),
@@ -60,36 +48,46 @@ export default {
     },
   },
   methods: {
-    async upload({ target }) {
+    upload({ target }) {
+      this.disabled = true;
+
       const files = target.files;
-      const onUploadProgress = ({ loaded, total }) => {
-        this.progress = parseInt((loaded / total) * 100);
-      };
 
-      this.uploading = true;
+      Array.from(files).map((file) => {
+        const item = {
+          loading: true,
+          progress: 0,
+        };
 
-      Promise.all(
-        Array.from(files).map((file) =>
-          this.$rest("modulesImages")
-            .upload({
-              file,
-              prop: "image",
-              params: {
-                itemId: this.itemId,
-                moduleId: this.moduleId,
-                fieldId: this.fieldId,
-              },
-              onUploadProgress,
-            })
-            .then(({ file, id }) => {
-              this.progress = 0;
-              this.items.push({ path: file, id });
-            })
-        )
-      ).then(() => {
-        this.$refs.imageFileInput.value = "";
-        this.uploading = false;
+        const onUploadProgress = ({ loaded, total }) => {
+          item.progress = parseInt((loaded / total) * 100);
+        };
+
+        this.items.push(item);
+
+        return this.$rest("modulesImages")
+          .upload({
+            file,
+            prop: "image",
+            params: {
+              itemId: this.itemId,
+              moduleId: this.moduleId,
+              fieldId: this.fieldId,
+            },
+            onUploadProgress,
+          })
+          .then(({ file, id }) => {
+            item.loading = false;
+            item.id = id;
+            item.path = file;
+          })
+          .catch(() => {
+            const index = this.items.indexOf(item);
+            this.items.splice(index, 1);
+          });
       });
+
+      this.$refs.imageFileInput.value = "";
     },
   },
   components: {
@@ -100,6 +98,7 @@ export default {
 
 <style scoped>
 .v-progress-circular__overlay {
-  transition: none !important;
+  /* transition: none !important; */
+  transition-duration: 0.5ms !important;
 }
 </style>

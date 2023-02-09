@@ -40,19 +40,23 @@
     >
       <draggable class="view-field-list d-flex flex-wrap" v-model="images">
         <v-item
-          v-slot="{ active, toggle }"
-          v-for="({ path, id }, i) in images"
+          v-slot="{ active }"
+          v-for="({ id, path, loading, progress }, i) in images"
           :key="i"
           :value="id"
         >
-          <v-img
+          <div
             class="view-field-item rounded-sm"
             v-ripple
-            @click="toggle"
+            @click="(event) => selectItem(id, i, event)"
             :class="active ? 'active cyan' : 'grey'"
-            :src="files.replace(prefixPath, '') + path + '?resize=1&h=80'"
-            contain
           >
+            <img
+              class="view-field-item-img"
+              :src="
+                path && files.replace(prefixPath, '') + path + '?resize=1&h=80'
+              "
+            />
             <v-overlay
               v-if="featuredImage && id === featuredImage.id"
               absolute
@@ -60,7 +64,20 @@
             >
               <v-icon color="yellow" size="40">fas fa-star</v-icon>
             </v-overlay>
-          </v-img>
+            <v-overlay v-if="loading" absolute opacity="0.8">
+              <v-progress-circular
+                class="font-weight-bold accent--text"
+                :value="progress < 100 ? progress : undefined"
+                :indeterminate="progress === 100"
+                :size="52"
+                :rotate="-90"
+                :width="4"
+                color="secondary"
+              >
+                {{ progress !== 100 ? `${progress}%` : "" }}
+              </v-progress-circular>
+            </v-overlay>
+          </div>
         </v-item>
       </draggable>
     </v-item-group>
@@ -108,6 +125,7 @@ export default {
     loading: false,
     loadingOrder: false,
     selecteds: [],
+    lastSelectedIndex: 0,
     editDialog: false,
   }),
   computed: {
@@ -161,11 +179,74 @@ export default {
     findImgById(id) {
       return this.images.find((img) => img.id === id);
     },
+    cleanSelecteds() {
+      this.selecteds.splice(0, this.selecteds.length);
+    },
+    isSelectedItem(id) {
+      return this.selecteds.includes(id);
+    },
+    unselectItem(id) {
+      const selectedIndex = this.selecteds.indexOf(id);
+
+      this.selecteds.splice(selectedIndex, 1);
+
+      this.lastSelectedIndex = null;
+
+      return;
+    },
+    selectItem(id, index, event) {
+      if (event.shiftKey) {
+        this.cleanSelecteds();
+
+        const startIndex = this.lastSelectedIndex;
+        const lastIndex = index;
+
+        if (lastIndex >= startIndex) {
+          for (
+            let currentIndex = startIndex;
+            currentIndex <= lastIndex;
+            currentIndex++
+          ) {
+            this.selecteds.push(this.images[currentIndex].id);
+          }
+        } else {
+          for (
+            let currentIndex = startIndex;
+            currentIndex >= lastIndex;
+            currentIndex--
+          ) {
+            this.selecteds.push(this.images[currentIndex].id);
+          }
+        }
+      } else if (event.ctrlKey) {
+        this.selecteds.push(id);
+
+        this.lastSelectedIndex = index;
+      } else {
+        this.cleanSelecteds();
+
+        this.selecteds.push(id);
+
+        this.lastSelectedIndex = index;
+      }
+    },
   },
   watch: {
     editDialog(v) {
       if (!v) this.selecteds = [];
     },
+  },
+  created() {
+    document.addEventListener("click", (event) => {
+      const classList = event.target.classList;
+
+      if (
+        !classList.contains("view-field-item-img") &&
+        !classList.contains("view-field-item")
+      ) {
+        this.cleanSelecteds();
+      }
+    });
   },
   components: {
     Edit,
@@ -191,10 +272,10 @@ export default {
 }
 .view-field-item {
   cursor: pointer;
+  position: relative;
 }
 .view-field-item.active {
   outline: 2px solid cyan;
-  position: relative;
 }
 .view-field-item.active::after {
   content: "";
@@ -203,8 +284,14 @@ export default {
   width: 100%;
   background: cyan;
   opacity: 0.4;
+  position: absolute;
+  top: 0;
 }
-
+.view-field-item img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
 .opacity-0 {
   opacity: 0;
 }

@@ -11,7 +11,8 @@
       :aspect-ratio="19 / 9"
       :class="(!featuredImage || !featuredImage.path) && 'd-flex align-center'"
       contain
-      ><template v-if="!loading">
+    >
+      <template v-if="!loading">
         <div
           class="d-flex justify-center align-center"
           v-if="!featuredImage || !featuredImage.path"
@@ -51,8 +52,8 @@
             <v-icon x-small left>fas fa-file-image</v-icon>Alterar
           </v-btn>
         </div>
-      </template></v-img
-    >
+      </template>
+    </v-img>
     <List
       v-model="dialog"
       :input-name="name"
@@ -107,6 +108,8 @@ export default {
               path,
               title,
               order: parseInt(order),
+              loading: false,
+              progress: 0,
             }))
             .sort((a, b) => a.order - b.order);
         })
