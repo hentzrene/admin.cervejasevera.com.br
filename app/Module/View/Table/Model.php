@@ -102,12 +102,16 @@ class Model
       }
     }
 
+    $sql = Conn::$sql;
+
     $list = $list::orderBy('id', 'DESC')
       ::limit($itemsPerPage, $offset)
       ::send();
 
     if ($returnTotalItems) {
-      $totalItems = self::getTotalItems($module, $search ? "$inStr > 0" : null);
+      $where = preg_replace('/.+WHERE (.+)/', '$1', $sql);
+
+      $totalItems = self::getTotalItems($module, $where);
     }
 
     $list = !$list ? [] : $list->fetch_all(MYSQLI_ASSOC);
