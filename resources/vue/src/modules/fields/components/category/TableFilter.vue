@@ -6,15 +6,19 @@ div
         span {{ text }}
         button.category-table-filter-btn.ml-2(v-bind="attrs", type="button")
           v-icon(size="11") fas fa-chevron-down
-    .category-table-filter-checkboxes-wrap.primary.lighten-2.py-2.px-4
-      v-checkbox.mt-0(
-        v-for="({ text, value }, i) in categories",
+    .category-table-filter-wrap
+      v-autocomplete(
         v-model="selectedsCategories",
+        :items="categories",
         :key="i",
         :label="text",
-        :value="value",
+        background-color="primary"
+        multiple
         hide-details,
+        chips
         dark
+        solo
+        autofocus
       )
 </template>
 
@@ -52,10 +56,12 @@ export default {
             this.field.id
           );
 
-      return categories.map(({ title, id }) => ({
-        text: title,
-        value: id,
-      }));
+      return categories
+        .map(({ title, id }) => ({
+          text: title,
+          value: id,
+        }))
+        .sort((a, b) => a.text.localeCompare(b.text));
     },
   },
   methods: {
@@ -115,18 +121,7 @@ export default {
   opacity: 0.8;
 }
 
-.category-table-filter-checkboxes-wrap {
+.category-table-filter-wrap {
   max-width: 200px;
-  min-width: 160px;
-  display: grid;
-  gap: 16px;
-}
-
-.category-table-filter-checkboxes-wrap label {
-  font-size: 13px;
-  font-weight: 500;
-}
-.category-table-filter-checkboxes-wrap i::before {
-  font-size: 18px !important;
 }
 </style>
