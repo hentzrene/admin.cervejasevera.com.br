@@ -165,8 +165,26 @@ class Model
       ::send()
       ->fetch_row()[0];
 
-    if (is_file(SYSTEM_ROOT . $path)) {
-      unlink(SYSTEM_ROOT . $path);
+    if (is_file(SYSTEM_ROOT . '/public' . $path)) {
+      unlink(SYSTEM_ROOT . '/public' . $path);
+
+      $path_parts = pathinfo(SYSTEM_ROOT . '/public' . $path);
+      $dirname = $path_parts['dirname'];
+      $basename = $path_parts['basename'];
+
+      $dirs = scandir($dirname);
+      array_shift($dirs);
+      array_shift($dirs);
+
+      foreach ($dirs as $dir) {
+        if (is_dir("$dirname/$dir")) {
+          var_dump("$dirname/$dir/$basename");
+
+          if (is_file("$dirname/$dir/$basename")) {
+            unlink("$dirname/$dir/$basename");
+          }
+        }
+      }
     }
 
     $q = Conn::table(Table::IMAGES)
