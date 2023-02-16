@@ -1,38 +1,52 @@
-<template lang="pug">
-v-card.pa-3(color="primary")
-  v-form.field-item(ref="form")
-    .field-item-inputs
-      v-text-field(
-        v-model="data.name",
-        :rules="[rules.required]",
-        label="Nome",
-        dense,
-        solo
-      )
-      v-text-field(
-        v-model="data.key",
-        @input="$emit('changekey')",
-        :rules="[rules.required, rules.alphaNumUnderline]",
-        label="Chave",
-        dense,
-        solo
-      )
-      v-select(
-        v-model="data.type",
-        :items="types",
-        :rules="[rules.required]",
-        label="Tipo",
-        dense,
-        solo
-      )
-    .field-item-switches.d-flex
-      tooltip(v-if="uniqueOption", tip="Único", top)
-        v-btn(@click="data.unique = !data.unique", icon)
-          v-icon(color="cyan", :disabled="!data.unique") fas fa-fingerprint
-    .field-item-btns.d-flex.align-center.justify-end
-      v-btn(@click="$emit('remove')", color="secondary darken-2", small)
-        v-icon(left) fas fa-trash
-        span.text-none Remover
+<template>
+  <v-card class="pa-3" color="primary">
+    <v-form class="field-item" ref="form">
+      <div class="field-item-inputs">
+        <v-text-field
+          v-model="data.name"
+          :rules="[rules.required]"
+          label="Nome"
+          dense="dense"
+          solo="solo"
+        ></v-text-field>
+        <v-text-field
+          v-model="data.key"
+          @input="$emit('changekey')"
+          :rules="[rules.required, rules.alphaNumUnderline]"
+          label="Chave"
+          dense="dense"
+          solo="solo"
+        ></v-text-field>
+        <v-select
+          v-model="data.type"
+          :items="types"
+          :rules="[rules.required]"
+          label="Tipo"
+          dense="dense"
+          solo="solo"
+        ></v-select>
+      </div>
+      <div class="field-item-switches d-flex">
+        <tooltip v-if="uniqueOption" tip="Único" top="top">
+          <v-btn @click="data.unique = !data.unique" icon="icon">
+            <v-icon color="cyan" :disabled="!data.unique"
+              >fas fa-fingerprint</v-icon
+            >
+          </v-btn>
+        </tooltip>
+      </div>
+      <div class="field-item-btns d-flex align-center justify-end">
+        <v-btn
+          @click="$emit('remove')"
+          color="secondary darken-2"
+          small="small"
+        >
+          <v-icon left="left">fas fa-trash</v-icon
+          ><span class="text-none">Remover</span>
+        </v-btn>
+      </div>
+    </v-form>
+  </v-card>
 </template>
 
 <script>

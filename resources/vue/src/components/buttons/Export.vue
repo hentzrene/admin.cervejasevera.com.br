@@ -1,45 +1,54 @@
-<template lang="pug">
-div
-  toolbar-button(
-    @click="dialog = true",
-    tip="Exportar",
-    icon="fas fa-file-export",
-    dark
-  )
-  v-dialog(v-model="dialog", max-width="300px")
-    v-card.pa-4(dark)
-      .title.mb-4.d-flex.flex-column.flex-sm-row.justify-center Exportar Itens Ativos
-      div
-        v-select.mb-3(
-          v-model="typeSelected",
-          :items="types",
-          :rules="[rules.required]",
-          label="Tipo",
-          name="type",
-          outlined,
-          dense,
-          hide-details
-        )
-        v-select.mb-3(
-          v-model="fieldsSelecteds",
-          :items="parsedFields",
-          :rules="[rules.required]",
-          label="Campos",
-          name="fields",
-          multiple,
-          outlined,
-          dense,
-          hide-details
-        )
-        v-btn.text-none(
-          @click="exportation",
-          :disabled="submitDisabled",
-          :loading="loading",
-          color="secondary",
-          block,
-          depressed
-        ) Exportar
-  a(ref="link", download="export")
+<template>
+  <div>
+    <toolbar-button
+      @click="dialog = true"
+      tip="Exportar"
+      icon="fas fa-file-export"
+      dark="dark"
+    ></toolbar-button>
+    <v-dialog v-model="dialog" max-width="300px">
+      <v-card class="pa-4" dark="dark">
+        <div class="title mb-4 d-flex flex-column flex-sm-row justify-center">
+          Exportar Itens Ativos
+        </div>
+        <div>
+          <v-select
+            class="mb-3"
+            v-model="typeSelected"
+            :items="types"
+            :rules="[rules.required]"
+            label="Tipo"
+            name="type"
+            outlined="outlined"
+            dense="dense"
+            hide-details="hide-details"
+          ></v-select>
+          <v-select
+            class="mb-3"
+            v-model="fieldsSelecteds"
+            :items="parsedFields"
+            :rules="[rules.required]"
+            label="Campos"
+            name="fields"
+            multiple="multiple"
+            outlined="outlined"
+            dense="dense"
+            hide-details="hide-details"
+          ></v-select>
+          <v-btn
+            class="text-none"
+            @click="exportation"
+            :disabled="submitDisabled"
+            :loading="loading"
+            color="secondary"
+            block="block"
+            depressed="depressed"
+            >Exportar</v-btn
+          >
+        </div>
+      </v-card> </v-dialog
+    ><a ref="link" download="export"></a>
+  </div>
 </template>
 
 <script>

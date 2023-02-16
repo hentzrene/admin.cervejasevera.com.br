@@ -1,28 +1,34 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="330px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.text-center Vincular módulo
-    v-select.mb-3(
-      v-model="selectedModule",
-      :items="modules",
-      label="Módulo",
-      outlined,
-      dense,
-      hide-details
-    )
-    v-btn.text-none(
-      @click="link",
-      :disabled="!selectedModule",
-      color="secondary",
-      block,
-      depressed
-    ) Vincular
-  v-overlay(v-if="value", v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="330px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div class="title mb-4 text-center">Vincular módulo</div>
+      <v-select
+        class="mb-3"
+        v-model="selectedModule"
+        :items="modules"
+        label="Módulo"
+        outlined="outlined"
+        dense="dense"
+        hide-details="hide-details"
+      ></v-select>
+      <v-btn
+        class="text-none"
+        @click="link"
+        :disabled="!selectedModule"
+        color="secondary"
+        block="block"
+        depressed="depressed"
+        >Vincular</v-btn
+      >
+    </v-card>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

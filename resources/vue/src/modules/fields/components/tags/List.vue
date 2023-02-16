@@ -1,66 +1,76 @@
-<template lang="pug">
-template-dialog-any(
-  @input="(data) => $emit('input', data)",
-  :value="value",
-  title="Tags",
-  max-width="500px"
-)
-  template(#actions)
-    template-dialog-header-button(
-      v-if="isAdminUser",
-      @click="linkModule ? unlink() : (linkModuleDialog = true)",
-      :icon="linkModule ? 'fas fa-unlink' : 'fas fa-link'",
-      :text="(linkModule ? 'Desvincular' : 'Vincular') + ' Módulo'",
-      :disabled="linkModule ? false : Boolean(tags.length)"
-    )
-    template-dialog-header-button(
-      @click="remove",
-      :disabled="!selecteds.length",
-      icon="fas fa-trash",
-      text="Remover"
-    )
-    template-dialog-header-button(
-      @click="addDialog = true",
-      icon="fas fa-plus",
-      text="Adicionar"
-    )
-  v-data-table(
-    :headers="headers",
-    :items="tags",
-    :mobile-breakpoint="0",
-    v-if="tags.length",
-    v-model="selecteds",
-    no-data-text="Não há registros.",
-    sort-by="id",
-    sort-desc,
-    show-select,
-    disable-pagination,
-    hide-default-footer
-  )
-    template(#item.title="{ item }")
-      v-edit-dialog.primary.lighten-4(
-        @save="editTitle(item.id)",
-        :return-value.sync="editTagTitle",
-        dark
-      ) {{ item.title }}
-        template(#input)
-          v-text-field(
-            :value="item.title",
-            @input="(data) => (editTagTitle = data)",
-            :rules="[rules.required]",
-            label="Renomear",
-            single-line,
-            counter
-          )
-  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma tag foi adicionada.
-  v-overlay(v-if="value", v-model="loading")
-    loading
-  add(v-model="addDialog", :field-id="fieldId")
-  link-module(
-    v-model="linkModuleDialog",
-    :field-id="fieldId",
-    :link-module="linkModule"
-  )
+<template>
+  <template-dialog-any
+    @input="(data) => $emit('input', data)"
+    :value="value"
+    title="Tags"
+    max-width="500px"
+  >
+    <template #actions>
+      <template-dialog-header-button
+        v-if="isAdminUser"
+        @click="linkModule ? unlink() : (linkModuleDialog = true)"
+        :icon="linkModule ? 'fas fa-unlink' : 'fas fa-link'"
+        :text="(linkModule ? 'Desvincular' : 'Vincular') + ' Módulo'"
+        :disabled="linkModule ? false : Boolean(tags.length)"
+      ></template-dialog-header-button>
+      <template-dialog-header-button
+        @click="remove"
+        :disabled="!selecteds.length"
+        icon="fas fa-trash"
+        text="Remover"
+      ></template-dialog-header-button>
+      <template-dialog-header-button
+        @click="addDialog = true"
+        icon="fas fa-plus"
+        text="Adicionar"
+      ></template-dialog-header-button>
+    </template>
+    <v-data-table
+      :headers="headers"
+      :items="tags"
+      :mobile-breakpoint="0"
+      v-if="tags.length"
+      v-model="selecteds"
+      no-data-text="Não há registros."
+      sort-by="id"
+      sort-desc="sort-desc"
+      show-select="show-select"
+      disable-pagination="disable-pagination"
+      hide-default-footer="hide-default-footer"
+    >
+      <template #item.title="{ item }">
+        <v-edit-dialog
+          class="primary lighten-4"
+          @save="editTitle(item.id)"
+          :return-value.sync="editTagTitle"
+          dark="dark"
+          >{{ item.title }}
+          <template #input>
+            <v-text-field
+              :value="item.title"
+              @input="(data) => (editTagTitle = data)"
+              :rules="[rules.required]"
+              label="Renomear"
+              single-line="single-line"
+              counter="counter"
+            ></v-text-field>
+          </template>
+        </v-edit-dialog>
+      </template>
+    </v-data-table>
+    <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
+      Nenhuma tag foi adicionada.
+    </div>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+    <add v-model="addDialog" :field-id="fieldId"></add>
+    <link-module
+      v-model="linkModuleDialog"
+      :field-id="fieldId"
+      :link-module="linkModule"
+    ></link-module>
+  </template-dialog-any>
 </template>
 
 <script>

@@ -1,92 +1,111 @@
-<template lang="pug">
-module-template(:title="data.name")
-  template(#toolbar)
-    toolbar-button(
-      @click="remove",
-      :disabled="!selecteds.length",
-      tip="Remover",
-      icon="fas fa-trash",
-      dark
-    )
-    toolbar-button(@click="add", tip="Adicionar", icon="fas fa-plus", dark)
-    print-button
-    export-button(:module-key="data.key", :fields="fields")
-  div
-    .pa-2.primary.lighten-1.module-search
-      v-text-field(
-        v-model="search",
-        @click:append="get(1)",
-        @keydown.enter="get(1)",
-        append-icon="fas fa-search",
-        label="Pesquisar",
-        single-line,
-        hide-details,
-        dense,
-        outlined,
-        dark
-      )
-    v-data-table(
-      @click:row="(item) => $router.push($route.path + '/' + item.id)",
-      @update:page="changePage",
-      v-model="selecteds",
-      :headers="headers",
-      :items="items",
-      :loading="loading",
-      :server-items-length="totalItems",
-      :items-per-page="itemsPerPage",
-      height="calc(100vh - 226px)",
-      sort-by="id",
-      loading-text="Carregado dados.",
-      no-data-text="Não há registros.",
-      no-results-text="Não há registros.",
-      show-select,
-      sort-desc,
-      fixed-header,
-      dark
-    )
-      template(
-        v-for="(h, i) in listHeaders",
-        v-slot:[`header.${h}`]="{ header }"
-      )
-        component(
-          v-if="header.enabledTableFilter",
-          :is="header.field.typeKey + 'TableFilter'",
-          :text="header.text",
-          :field="header.field",
-          :options="filtersOptions[header.value]",
-          @filter="filter"
-        )
-        template(v-else) {{ header.text }}
-      template(v-for="(h, i) in listHeaders", v-slot:[`item.${h}`]="{ item }")
-        template(v-if="typeof item[h] === 'string'")
-          span {{ item[h] }}
-        template(v-else-if="item[h] && typeof item[h] === 'object'")
-          div(v-if="item[h].innerHTML", v-html="item[h].innerHTML")
-          component(
-            v-else-if="item[h].component",
-            :is="item[h].component",
-            :value="item[h].value"
-          )
-      template(#item.action="{ item }")
-        .d-flex.justify-end
-          v-btn(
-            v-if="parseInt(item.active)",
-            @click.stop="toggleActive(item.id, false)",
-            color="green",
-            icon,
-            small
-          )
-            v-icon(small) fas fa-eye
-          v-btn(
-            v-else,
-            @click.stop="toggleActive(item.id, true)",
-            color="blue",
-            icon,
-            small
-          )
-            v-icon(small) fas fa-eye-slash
-  v-overlay(v-model="loading", absolute)
-    loading
+<template>
+  <module-template :title="data.name">
+    <template #toolbar>
+      <toolbar-button
+        @click="remove"
+        :disabled="!selecteds.length"
+        tip="Remover"
+        icon="fas fa-trash"
+        dark="dark"
+      ></toolbar-button>
+      <toolbar-button
+        @click="add"
+        tip="Adicionar"
+        icon="fas fa-plus"
+        dark="dark"
+      ></toolbar-button>
+      <print-button></print-button>
+      <export-button :module-key="data.key" :fields="fields"></export-button>
+    </template>
+    <div>
+      <div class="pa-2 primary lighten-1 module-search">
+        <v-text-field
+          v-model="search"
+          @click:append="get(1)"
+          @keydown.enter="get(1)"
+          append-icon="fas fa-search"
+          label="Pesquisar"
+          single-line="single-line"
+          hide-details="hide-details"
+          dense="dense"
+          outlined="outlined"
+          dark="dark"
+        ></v-text-field>
+      </div>
+      <v-data-table
+        @click:row="(item) => $router.push($route.path + '/' + item.id)"
+        @update:page="changePage"
+        v-model="selecteds"
+        :headers="headers"
+        :items="items"
+        :loading="loading"
+        :server-items-length="totalItems"
+        :items-per-page="itemsPerPage"
+        height="calc(100vh - 226px)"
+        sort-by="id"
+        loading-text="Carregado dados."
+        no-data-text="Não há registros."
+        no-results-text="Não há registros."
+        show-select="show-select"
+        sort-desc="sort-desc"
+        fixed-header="fixed-header"
+        dark="dark"
+      >
+        <template
+          v-for="(h, i) in listHeaders"
+          v-slot:[`header.${h}`]="{ header }"
+        >
+          <component
+            v-if="header.enabledTableFilter"
+            :is="header.field.typeKey + 'TableFilter'"
+            :text="header.text"
+            :field="header.field"
+            :options="filtersOptions[header.value]"
+            @filter="filter"
+          ></component>
+          <template v-else>{{ header.text }}</template>
+        </template>
+        <template v-for="(h, i) in listHeaders" v-slot:[`item.${h}`]="{ item }">
+          <template v-if="typeof item[h] === 'string'"
+            ><span>{{ item[h] }}</span></template
+          >
+          <template v-else-if="item[h] && typeof item[h] === 'object'">
+            <div v-if="item[h].innerHTML" v-html="item[h].innerHTML"></div>
+            <component
+              v-else-if="item[h].component"
+              :is="item[h].component"
+              :value="item[h].value"
+            ></component>
+          </template>
+        </template>
+        <template #item.action="{ item }">
+          <div class="d-flex justify-end">
+            <v-btn
+              v-if="parseInt(item.active)"
+              @click.stop="toggleActive(item.id, false)"
+              color="green"
+              icon="icon"
+              small="small"
+            >
+              <v-icon small="small">fas fa-eye</v-icon>
+            </v-btn>
+            <v-btn
+              v-else
+              @click.stop="toggleActive(item.id, true)"
+              color="blue"
+              icon="icon"
+              small="small"
+            >
+              <v-icon small="small">fas fa-eye-slash</v-icon>
+            </v-btn>
+          </div>
+        </template>
+      </v-data-table>
+    </div>
+    <v-overlay v-model="loading" absolute="absolute">
+      <loading></loading>
+    </v-overlay>
+  </module-template>
 </template>
 
 <script>

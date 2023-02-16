@@ -1,53 +1,67 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="340px"
-)
-  v-card.pa-4(dark)
-    .title.text-center.mb-4 Adicionar campo
-    v-form(ref="form")
-      v-row
-        v-col.py-0(cols=12, sm=6)
-          v-text-field(
-            v-model="name",
-            :rules="[rules.required]",
-            label="Nome",
-            dense,
-            outlined
-          )
-        v-col.py-0(cols=12, sm=6)
-          v-text-field(
-            v-model="key",
-            @input="$emit('changekey')",
-            :rules="[rules.required, rules.alphaNumUnderline]",
-            label="Chave",
-            dense,
-            outlined
-          )
-        v-col.py-0(cols=12, sm=6)
-          v-select(
-            v-model="type",
-            :items="types",
-            :rules="[rules.required]",
-            label="Tipo",
-            dense,
-            outlined
-          )
-        v-col.py-0(cols=12, sm=6)
-          .field-item-switches.d-flex
-            tooltip(tip="Único", top)
-              v-btn(@click="unique = !unique", icon)
-                v-icon(color="cyan", :disabled="!unique") fas fa-fingerprint
-        v-col.py-0.mt-2.mt-sm-0(cols=12)
-          v-btn(
-            @click="send",
-            :loading="sending",
-            color="secondary darken-2",
-            depressed,
-            block
-          )
-            span.text-none Adicionar
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="340px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div class="title text-center mb-4">Adicionar campo</div>
+      <v-form ref="form">
+        <v-row>
+          <v-col class="py-0" cols="12" sm="6">
+            <v-text-field
+              v-model="name"
+              :rules="[rules.required]"
+              label="Nome"
+              dense="dense"
+              outlined="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6">
+            <v-text-field
+              v-model="key"
+              @input="$emit('changekey')"
+              :rules="[rules.required, rules.alphaNumUnderline]"
+              label="Chave"
+              dense="dense"
+              outlined="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6">
+            <v-select
+              v-model="type"
+              :items="types"
+              :rules="[rules.required]"
+              label="Tipo"
+              dense="dense"
+              outlined="outlined"
+            ></v-select>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6">
+            <div class="field-item-switches d-flex">
+              <tooltip tip="Único" top="top">
+                <v-btn @click="unique = !unique" icon="icon">
+                  <v-icon color="cyan" :disabled="!unique"
+                    >fas fa-fingerprint</v-icon
+                  >
+                </v-btn>
+              </tooltip>
+            </div>
+          </v-col>
+          <v-col class="py-0 mt-2 mt-sm-0" cols="12">
+            <v-btn
+              @click="send"
+              :loading="sending"
+              color="secondary darken-2"
+              depressed="depressed"
+              block="block"
+              ><span class="text-none">Adicionar</span></v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script>

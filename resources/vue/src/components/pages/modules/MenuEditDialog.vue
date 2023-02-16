@@ -1,39 +1,47 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="330px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.text-center Definir menu
-    v-form(ref="form")
-      v-select.mb-3(
-        v-model="menuSelected",
-        :items="menuItems",
-        label="Menu",
-        name="menuId",
-        outlined,
-        dense,
-        hide-details
-      )
-      v-select.mb-3(
-        :value="submenuId",
-        :items="submenusItems",
-        label="Submenu",
-        name="submenuId",
-        outlined,
-        dense,
-        hide-details
-      )
-    v-btn.text-none(
-      @click="save",
-      :disabled="loading",
-      color="secondary",
-      block,
-      depressed
-    ) Salvar
-  v-overlay(v-if="value", v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="330px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div class="title mb-4 text-center">Definir menu</div>
+      <v-form ref="form">
+        <v-select
+          class="mb-3"
+          v-model="menuSelected"
+          :items="menuItems"
+          label="Menu"
+          name="menuId"
+          outlined="outlined"
+          dense="dense"
+          hide-details="hide-details"
+        ></v-select>
+        <v-select
+          class="mb-3"
+          :value="submenuId"
+          :items="submenusItems"
+          label="Submenu"
+          name="submenuId"
+          outlined="outlined"
+          dense="dense"
+          hide-details="hide-details"
+        ></v-select>
+      </v-form>
+      <v-btn
+        class="text-none"
+        @click="save"
+        :disabled="loading"
+        color="secondary"
+        block="block"
+        depressed="depressed"
+        >Salvar</v-btn
+      >
+    </v-card>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

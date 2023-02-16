@@ -1,43 +1,43 @@
-<template lang="pug">
-v-form(ref="form")
-  v-text-field(
-    @keydown.enter="send",
-    :rules="[rules.required, rules.email]",
-    :loading="loading",
-    prepend-inner-icon="fas fa-user",
-    type="email",
-    label="E-mail",
-    name="email",
-    autocomplete="email",
-    dense,
-    outlined,
-    dark
-  )
-  v-text-field(
-    @keydown.enter="send",
-    @click:append="show = !show",
-    :rules="[rules.required]",
-    :loading="loading",
-    :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'",
-    :type="show ? 'text' : 'password'",
-    prepend-inner-icon="fas fa-lock",
-    label="Senha",
-    name="password",
-    autocomplete="password",
-    dense,
-    outlined,
-    dark
-  )
-  //- .d-flex.justify-space-between
-    v-btn.text-none(to="/criar-conta", color="secondary", text, small) Criar conta
-    v-btn.text-none(to="/esqueci-a-senha", color="secondary", text, small) Esqueci a senha
-  v-btn.text-none.d-block.ml-auto(
-    @click="send",
-    :loading="loading",
-    color="secondary",
-    depressed,
-    block
-  ) Entrar
+<template>
+  <v-form ref="form">
+    <v-text-field
+      @keydown.enter="send"
+      :rules="[rules.required, rules.email]"
+      :loading="loading"
+      prepend-inner-icon="fas fa-user"
+      type="email"
+      label="E-mail"
+      name="email"
+      autocomplete="email"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-text-field>
+    <v-text-field
+      @keydown.enter="send"
+      @click:append="show = !show"
+      :rules="[rules.required]"
+      :loading="loading"
+      :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+      :type="show ? 'text' : 'password'"
+      prepend-inner-icon="fas fa-lock"
+      label="Senha"
+      name="password"
+      autocomplete="password"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-text-field>
+    <v-btn
+      class="text-none d-block ml-auto"
+      @click="send"
+      :loading="loading"
+      color="secondary"
+      depressed="depressed"
+      block="block"
+      >Entrar</v-btn
+    >
+  </v-form>
 </template>
 
 <script>

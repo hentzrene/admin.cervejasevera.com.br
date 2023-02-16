@@ -1,24 +1,32 @@
-<template lang="pug">
-div
-  div
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Campos
-      tooltip(tip="Adicionar", top)
-        v-btn.ml-2(
-          @click="addField",
-          color="secondary",
-          fab,
-          depressed,
-          x-small
-        )
-          v-icon fas fa-plus
-    field-list(
-      v-if="fields.length",
-      :items="fields",
-      ref="fieldList",
-      :unique-option="false"
-    )
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
+<template>
+  <div>
+    <div>
+      <div class="d-flex align-center mb-2">
+        <div class="white--text font-weight-bold text-body-1">Campos</div>
+        <tooltip tip="Adicionar" top="top">
+          <v-btn
+            class="ml-2"
+            @click="addField"
+            color="secondary"
+            fab="fab"
+            depressed="depressed"
+            x-small="x-small"
+          >
+            <v-icon>fas fa-plus</v-icon>
+          </v-btn>
+        </tooltip>
+      </div>
+      <field-list
+        v-if="fields.length"
+        :items="fields"
+        ref="fieldList"
+        :unique-option="false"
+      ></field-list>
+      <div class="pa-4 text-body-2 text-center font-weight-bold" v-else>
+        Nenhum campo foi adicionado!
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

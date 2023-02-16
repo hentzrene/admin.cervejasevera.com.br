@@ -1,19 +1,25 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  :max-width="maxWidth"
-)
-  v-card.pa-4(v-if="!loading", dark)
-    .title.mb-4.d-flex.flex-column.flex-sm-row(
-      :class="simple ? 'justify-center' : 'justify-space-between'"
-    )
-      div {{ title }}
-      .field-dialog-actions.d-flex(v-if="!simple")
-        slot(name="actions")
-    slot
-  v-overlay(v-if="value", v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    :max-width="maxWidth"
+  >
+    <v-card class="pa-4" v-if="!loading" dark="dark">
+      <div
+        class="title mb-4 d-flex flex-column flex-sm-row"
+        :class="simple ? 'justify-center' : 'justify-space-between'"
+      >
+        <div>{{ title }}</div>
+        <div class="field-dialog-actions d-flex" v-if="!simple">
+          <slot name="actions"></slot>
+        </div>
+      </div>
+      <slot></slot>
+    </v-card>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

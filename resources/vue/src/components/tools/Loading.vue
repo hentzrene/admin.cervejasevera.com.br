@@ -1,8 +1,9 @@
-<template lang="pug">
-svg.mrx-loading(viewBox="0 0 105 76")
-  path(
-    d="M104.4,0 L46,35.6 L105,50.6 L62.4,35.6 z M0.6,76 L59,40.3 L0,25.3 L42.6,40.3 z"
-  )
+<template>
+  <svg class="mrx-loading" viewBox="0 0 105 76">
+    <path
+      d="M104.4,0 L46,35.6 L105,50.6 L62.4,35.6 z M0.6,76 L59,40.3 L0,25.3 L42.6,40.3 z"
+    ></path>
+  </svg>
 </template>
 
 <style>

@@ -1,14 +1,16 @@
-<template lang="pug">
-grid-item.field-source-code(col-end="span 2")
-  v-textarea.rounded-0(
-    :label="label",
-    :value="value",
-    :name="name",
-    :rows="10",
-    dense,
-    outlined,
-    dark
-  )
+<template>
+  <grid-item class="field-source-code" col-end="span 2">
+    <v-textarea
+      class="rounded-0"
+      :label="label"
+      :value="value"
+      :name="name"
+      :rows="10"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-textarea>
+  </grid-item>
 </template>
 
 <script>

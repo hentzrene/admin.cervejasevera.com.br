@@ -1,22 +1,30 @@
-<template lang="pug">
-grid-item(col-end="span 2", col-end-sm="span 1")
-  .d-flex
-    v-text-field(
-      :label="label",
-      :value="value_",
-      :name="name",
-      readonly,
-      dense,
-      outlined,
-      dark
-    )
-    v-btn.ml-1(@click="optionsDialog = true", icon, small)
-      v-icon(small) fas fa-cog
-  options(
-    v-model="optionsDialog",
-    :field-id="fieldId",
-    :field-options="fieldOptions"
-  )
+<template>
+  <grid-item col-end="span 2" col-end-sm="span 1">
+    <div class="d-flex">
+      <v-text-field
+        :label="label"
+        :value="value_"
+        :name="name"
+        readonly="readonly"
+        dense="dense"
+        outlined="outlined"
+        dark="dark"
+      ></v-text-field>
+      <v-btn
+        class="ml-1"
+        @click="optionsDialog = true"
+        icon="icon"
+        small="small"
+      >
+        <v-icon small="small">fas fa-cog</v-icon>
+      </v-btn>
+    </div>
+    <options
+      v-model="optionsDialog"
+      :field-id="fieldId"
+      :field-options="fieldOptions"
+    ></options>
+  </grid-item>
 </template>
 
 <script>

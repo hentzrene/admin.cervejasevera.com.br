@@ -1,27 +1,32 @@
-<template lang="pug">
-v-sheet.mx-auto.module-page.pa-2(
-  :width="width",
-  :max-width="maxWidth",
-  color="transparent"
-)
-  v-toolbar.elevation-0.rounded-t(
-    color="accent darken-1",
-    width="100%",
-    dark,
-    dense
-  )
-    h4 {{ title }}
-    v-spacer
-    .module-page-toolbar
-      slot(name="toolbar")
-      toolbar-button(
-        v-if="prev && !sm",
-        :to="prev",
-        tip="Voltar",
-        icon="fas fa-undo-alt",
-        dark
-      )
-  slot
+<template>
+  <v-sheet
+    class="mx-auto module-page pa-2"
+    :width="width"
+    :max-width="maxWidth"
+    color="transparent"
+  >
+    <v-toolbar
+      class="elevation-0 rounded-t"
+      color="accent darken-1"
+      width="100%"
+      dark="dark"
+      dense="dense"
+    >
+      <h4>{{ title }}</h4>
+      <v-spacer></v-spacer>
+      <div class="module-page-toolbar">
+        <slot name="toolbar"></slot>
+        <toolbar-button
+          v-if="prev && !sm"
+          :to="prev"
+          tip="Voltar"
+          icon="fas fa-undo-alt"
+          dark="dark"
+        ></toolbar-button>
+      </div>
+    </v-toolbar>
+    <slot></slot>
+  </v-sheet>
 </template>
 
 <script>

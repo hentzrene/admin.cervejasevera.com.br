@@ -1,18 +1,25 @@
-<template lang="pug">
-v-sheet.d-flex.justify-center.align-center.pa-3(
-  color="transparent",
-  height="100%"
-)
-  v-card.pa-4(
-    height="max-content",
-    width="320px",
-    color="primary lighten-2",
-    outlined
-  )
-    .d-flex.justify-center
-      img.page-login-logo.mb-3(:src="`${prefixPath}/img/logo.svg`")
-    .title.grey--text.text--lighten-3.text-center.mb-4 Configurar Banco de Dados
-    setup-form(@send="send", :loading="loading")
+<template>
+  <v-sheet
+    class="d-flex justify-center align-center pa-3"
+    color="transparent"
+    height="100%"
+  >
+    <v-card
+      class="pa-4"
+      height="max-content"
+      width="320px"
+      color="primary lighten-2"
+      outlined="outlined"
+    >
+      <div class="d-flex justify-center">
+        <img class="page-login-logo mb-3" :src="`${prefixPath}/img/logo.svg`" />
+      </div>
+      <div class="title grey--text text--lighten-3 text-center mb-4">
+        Configurar Banco de Dados
+      </div>
+      <setup-form @send="send" :loading="loading"></setup-form>
+    </v-card>
+  </v-sheet>
 </template>
 
 <script>

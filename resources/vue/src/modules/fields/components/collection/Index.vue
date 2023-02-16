@@ -1,22 +1,34 @@
-<template lang="pug">
-grid-item.mb-2(row-end="span 2", col-end="span 2", col-end-sm="span 1")
-  .grey--text.text--lighten-1.font-weight-bold.text-caption.d-flex.align-center.mb-1 {{ label }}
-  tooltip(:tip="label", top)
-    v-responsive.grey.d-flex.align-center.rounded-lg.primary.cursor-pointer(
-      @click="listDialog = true",
-      :aspect-ratio="38 / 9",
-      v-ripple
-    )
-      .d-flex.justify-center.align-center
-        .d-flex.flex-column
-          v-icon.d-block.mx-auto(:size="30") fas fa-layer-group
-          .text-caption.font-weight-bold.mt-1 Alterar
-  list(
-    v-model="listDialog",
-    @saved="listDialog = false",
-    :items="parsedValue",
-    :input-name="name"
-  )
+<template>
+  <grid-item class="mb-2" row-end="span 2" col-end="span 2" col-end-sm="span 1">
+    <div
+      class="grey--text text--lighten-1 font-weight-bold text-caption d-flex align-center mb-1"
+    >
+      {{ label }}
+    </div>
+    <tooltip :tip="label" top="top">
+      <v-responsive
+        class="grey d-flex align-center rounded-lg primary cursor-pointer"
+        @click="listDialog = true"
+        :aspect-ratio="38 / 9"
+        v-ripple="v - ripple"
+      >
+        <div class="d-flex justify-center align-center">
+          <div class="d-flex flex-column">
+            <v-icon class="d-block mx-auto" :size="30"
+              >fas fa-layer-group</v-icon
+            >
+            <div class="text-caption font-weight-bold mt-1">Alterar</div>
+          </div>
+        </div>
+      </v-responsive>
+    </tooltip>
+    <list
+      v-model="listDialog"
+      @saved="listDialog = false"
+      :items="parsedValue"
+      :input-name="name"
+    ></list>
+  </grid-item>
 </template>
 
 <script>

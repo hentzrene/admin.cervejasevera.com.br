@@ -1,5 +1,10 @@
-<template lang="pug">
-toolbar-button(@click="print", tip="Imprimir", icon="fas fa-print", dark)
+<template>
+  <toolbar-button
+    @click="print"
+    tip="Imprimir"
+    icon="fas fa-print"
+    dark="dark"
+  ></toolbar-button>
 </template>
 
 <script>

@@ -1,20 +1,26 @@
-<template lang="pug">
-v-sheet.d-flex.justify-center.align-center.pa-3(
-  color="transparent",
-  height="100%"
-)
-  v-card.pa-4(
-    height="max-content",
-    width="320px",
-    color="primary lighten-2",
-    outlined
-  )
-    .d-flex.justify-center
-      img.page-login-logo.mb-3(:src="`${prefixPath}/img/logo.svg`")
-    .grey--text.text--lighten-3.text-center.mb-4
-      .title Painel de Administração
-      .text-body-1 v{{ version }}
-    login-form(@send="send", :loading="loading")
+<template>
+  <v-sheet
+    class="d-flex justify-center align-center pa-3"
+    color="transparent"
+    height="100%"
+  >
+    <v-card
+      class="pa-4"
+      height="max-content"
+      width="320px"
+      color="primary lighten-2"
+      outlined="outlined"
+    >
+      <div class="d-flex justify-center">
+        <img class="page-login-logo mb-3" :src="`${prefixPath}/img/logo.svg`" />
+      </div>
+      <div class="grey--text text--lighten-3 text-center mb-4">
+        <div class="title">Painel de Administração</div>
+        <div class="text-body-1">v{{ version }}</div>
+      </div>
+      <login-form @send="send" :loading="loading"></login-form>
+    </v-card>
+  </v-sheet>
 </template>
 
 <script>

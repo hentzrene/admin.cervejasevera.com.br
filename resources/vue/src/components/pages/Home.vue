@@ -1,55 +1,72 @@
-<template lang="pug">
-v-sheet.mx-auto.pa-4.d-flex.align-center(
-  color="transparent",
-  max-width="960px",
-  min-height="100%"
-)
-  loading.mx-auto(v-if="loading")
-  .pa-4.white--text.font-weight-bold.primary.rounded-pill.text-body-1.mx-auto(
-    v-else-if="!modules.length"
-  ) Nenhum módulo adicionado.
-  .mx-auto(v-else)
-    grid-container.py-4(
-      cols="125px 125px",
-      cols-sm="repeat(4, 125px)",
-      cols-lg="repeat(5, 125px)",
-      gap="16px"
-    )
-      template(v-for="(submenus, menuTitle) in nav")
-        template(v-if="menuTitle === '$'")
-          v-responsive(
-            v-for="({ to, icon, text }, i) in nav.$.$",
-            :aspect-ratio="1",
-            :key="i",
-            width="125px"
-          )
-            module-card(:to="to", :title="text", :icon="icon")
-        grid-item(
-          v-else,
-          col-end="span 2",
-          col-end-sm="span 4",
-          col-end-lg="span 5",
-          :key="menuTitle"
-        )
-          .white--text.text-body-1.text-uppercase.font-weight-bold {{ menuTitle }}
-          grid-container(
-            cols="100px 100px 100px",
-            cols-sm="repeat(5, 120px)",
-            cols-lg="repeat(6, 125px)",
-            gap="16px"
-          )
-            template(v-for="(items, submenuTitle) in submenus")
-              v-responsive(
-                v-for="({ to, icon, text }, i) in items",
-                :aspect-ratio="1",
-                :key="submenuTitle + i",
-                width="125"
-              )
-                module-card(
-                  :to="to",
-                  :title="submenuTitle !== '$' ? `${submenuTitle}\n${text}` : text",
-                  :icon="icon"
-                )
+<template>
+  <v-sheet
+    class="mx-auto pa-4 d-flex align-center"
+    color="transparent"
+    max-width="960px"
+    min-height="100%"
+  >
+    <loading class="mx-auto" v-if="loading"></loading>
+    <div
+      class="pa-4 white--text font-weight-bold primary rounded-pill text-body-1 mx-auto"
+      v-else-if="!modules.length"
+    >
+      Nenhum módulo adicionado.
+    </div>
+    <div class="mx-auto" v-else>
+      <grid-container
+        class="py-4"
+        cols="125px 125px"
+        cols-sm="repeat(4, 125px)"
+        cols-lg="repeat(5, 125px)"
+        gap="16px"
+        ><template v-for="(submenus, menuTitle) in nav"
+          ><template v-if="menuTitle === '$'">
+            <v-responsive
+              v-for="({ to, icon, text }, i) in nav.$.$"
+              :aspect-ratio="1"
+              :key="i"
+              width="125px"
+            >
+              <module-card :to="to" :title="text" :icon="icon"></module-card>
+            </v-responsive>
+          </template>
+          <grid-item
+            v-else
+            col-end="span 2"
+            col-end-sm="span 4"
+            col-end-lg="span 5"
+            :key="menuTitle"
+          >
+            <div
+              class="white--text text-body-1 text-uppercase font-weight-bold"
+            >
+              {{ menuTitle }}
+            </div>
+            <grid-container
+              cols="100px 100px 100px"
+              cols-sm="repeat(5, 120px)"
+              cols-lg="repeat(6, 125px)"
+              gap="16px"
+              ><template v-for="(items, submenuTitle) in submenus">
+                <v-responsive
+                  v-for="({ to, icon, text }, i) in items"
+                  :aspect-ratio="1"
+                  :key="submenuTitle + i"
+                  width="125"
+                >
+                  <module-card
+                    :to="to"
+                    :title="
+                      submenuTitle !== '$' ? `${submenuTitle}${text}` : text
+                    "
+                    :icon="icon"
+                  ></module-card>
+                </v-responsive> </template
+            ></grid-container>
+          </grid-item> </template
+      ></grid-container>
+    </div>
+  </v-sheet>
 </template>
 
 <script>

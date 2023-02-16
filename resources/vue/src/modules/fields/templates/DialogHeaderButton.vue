@@ -1,14 +1,17 @@
-<template lang="pug">
-tooltip(:tip="text", top)
-  v-btn.text-none(
-    @click="(e) => $emit('click', e)",
-    :disabled="disabled",
-    color="secondary",
-    depressed,
-    x-small,
-    fab
-  )
-    v-icon(small) {{ icon }}
+<template>
+  <tooltip :tip="text" top="top">
+    <v-btn
+      class="text-none"
+      @click="(e) => $emit('click', e)"
+      :disabled="disabled"
+      color="secondary"
+      depressed="depressed"
+      x-small="x-small"
+      fab="fab"
+    >
+      <v-icon small="small">{{ icon }}</v-icon>
+    </v-btn>
+  </tooltip>
 </template>
 
 <script>

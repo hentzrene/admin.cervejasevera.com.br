@@ -1,3 +1,3 @@
-<template lang="pug">
-.d-none
+<template>
+  <div class="d-none"></div>
 </template>

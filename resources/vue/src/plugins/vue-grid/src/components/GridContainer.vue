@@ -1,13 +1,15 @@
-<template lang="pug">
-.grid-container(:style="style", :class="classes")
-  div(
-    v-for="area in gridAreas",
-    :key="area",
-    :style="{ gridArea: area }",
-    :class="'grid-area-' + area"
-  )
-    slot(:name="area")
-  slot(name="default")
+<template>
+  <div class="grid-container" :style="style" :class="classes">
+    <div
+      v-for="area in gridAreas"
+      :key="area"
+      :style="{ gridArea: area }"
+      :class="'grid-area-' + area"
+    >
+      <slot :name="area"></slot>
+    </div>
+    <slot name="default"></slot>
+  </div>
 </template>
 
 <script>

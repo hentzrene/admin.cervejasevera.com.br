@@ -1,12 +1,13 @@
-<template lang="pug">
-div
-  toolbar-button(
-    @click="exportation",
-    tip="Exportar",
-    icon="fas fa-file-export",
-    dark
-  )
-  a(ref="link", download="export")
+<template>
+  <div>
+    <toolbar-button
+      @click="exportation"
+      tip="Exportar"
+      icon="fas fa-file-export"
+      dark="dark"
+    ></toolbar-button
+    ><a ref="link" download="export"></a>
+  </div>
 </template>
 
 <script>

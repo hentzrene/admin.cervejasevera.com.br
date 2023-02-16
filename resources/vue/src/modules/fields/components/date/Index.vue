@@ -1,14 +1,15 @@
-<template lang="pug">
-grid-item.field-date(col-end="span 2", col-end-sm="span 1")
-  v-text-field(
-    :label="label",
-    :value="_value",
-    :name="name",
-    type="date",
-    dense,
-    outlined,
-    dark
-  )
+<template>
+  <grid-item class="field-date" col-end="span 2" col-end-sm="span 1">
+    <v-text-field
+      :label="label"
+      :value="_value"
+      :name="name"
+      type="date"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-text-field>
+  </grid-item>
 </template>
 
 <script>

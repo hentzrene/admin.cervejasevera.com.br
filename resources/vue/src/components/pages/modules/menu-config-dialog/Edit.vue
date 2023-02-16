@@ -1,43 +1,65 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="330px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.text-center Editar menu
-    v-form(ref="form")
-      v-text-field.mb-3(
-        @keydown.enter="(e) => edit(e.target.value)",
-        :value="menu.title",
-        label="Título",
-        name="title",
-        outlined,
-        dense,
-        hide-details
-      )
-      .grey--text.text--lighten-1.font-weight-bold.text-caption Submenus
-      v-card.mb-4(outlined)
-        v-list.py-0
-          template(v-for="submenu of menu.submenus")
-            v-list-item.submenuitem(:key="submenu.id")
-              v-list-item-title.text-body-2.submenuitem-title(
-                @keydown.enter="(e) => editSubmenu(submenu, e.target.textContent)",
-                contenteditable
-              ) {{ submenu.title }}
-              v-list-item-action
-                v-btn(@click="removeSubmenu(submenu.id)", icon, small)
-                  v-icon(size="14") fas fa-trash
-            v-divider
-        .submenu-add-input.py-1
-          v-icon.pa-3(small) fas fa-plus
-          input(
-            @keydown.enter="addSubmenu",
-            @blur="(e) => (e.target.value = '')",
-            placeholder="Adicionar Submenu"
-          )
-  v-overlay(v-if="value", v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="330px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div class="title mb-4 text-center">Editar menu</div>
+      <v-form ref="form">
+        <v-text-field
+          class="mb-3"
+          @keydown.enter="(e) => edit(e.target.value)"
+          :value="menu.title"
+          label="Título"
+          name="title"
+          outlined="outlined"
+          dense="dense"
+          hide-details="hide-details"
+        ></v-text-field>
+        <div class="grey--text text--lighten-1 font-weight-bold text-caption">
+          Submenus
+        </div>
+        <v-card class="mb-4" outlined="outlined">
+          <v-list class="py-0">
+            <template v-for="submenu of menu.submenus">
+              <v-list-item class="submenuitem" :key="submenu.id">
+                <v-list-item-title
+                  class="text-body-2 submenuitem-title"
+                  @keydown.enter="
+                    (e) => editSubmenu(submenu, e.target.textContent)
+                  "
+                  contenteditable="contenteditable"
+                  >{{ submenu.title }}</v-list-item-title
+                >
+                <v-list-item-action>
+                  <v-btn
+                    @click="removeSubmenu(submenu.id)"
+                    icon="icon"
+                    small="small"
+                  >
+                    <v-icon size="14">fas fa-trash</v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </v-list-item>
+              <v-divider :key="submenu.id"></v-divider>
+            </template>
+          </v-list>
+          <div class="submenu-add-input py-1">
+            <v-icon class="pa-3" small="small">fas fa-plus</v-icon>
+            <input
+              @keydown.enter="addSubmenu"
+              @blur="(e) => (e.target.value = '')"
+              placeholder="Adicionar Submenu"
+            />
+          </div>
+        </v-card>
+      </v-form>
+    </v-card>
+    <v-overlay v-if="value" v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

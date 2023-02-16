@@ -1,14 +1,15 @@
-<template lang="pug">
-grid-item(col-end="span 2", col-end-sm="span 1")
-  v-switch(
-    v-model="value_",
-    :label="label",
-    color="accent",
-    dense,
-    outlined,
-    dark
-  )
-  input(type="hidden", :name="name", :value="parseInt(value_ | 0)")
+<template>
+  <grid-item col-end="span 2" col-end-sm="span 1">
+    <v-switch
+      v-model="value_"
+      :label="label"
+      color="accent"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-switch>
+    <input type="hidden" :name="name" :value="parseInt(value_ | 0)" />
+  </grid-item>
 </template>
 
 <script>

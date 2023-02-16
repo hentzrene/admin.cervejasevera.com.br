@@ -1,20 +1,29 @@
-<template lang="pug">
-v-app
-  template(v-if="!checking")
-    main-nav(v-if="!['/error404', '/entrar', '/setup'].includes($route.path)")
-    v-main
-      router-view
-  v-sheet.d-flex.justify-center.align-center(
-    v-else,
-    color="transparent",
-    height="100%",
-    width="100%"
-  )
-    loading
-  float-alert(:value="lastRequestError", color="red")
-    span {{ lastRequestError }}
-  float-alert(:value="lastRequestSuccess", color="green")
-    span {{ lastRequestSuccess }}
+<template>
+  <v-app>
+    <template v-if="!checking">
+      <main-nav
+        v-if="!['/error404', '/entrar', '/setup'].includes($route.path)"
+      ></main-nav>
+      <v-main>
+        <router-view></router-view>
+      </v-main>
+    </template>
+    <v-sheet
+      class="d-flex justify-center align-center"
+      v-else
+      color="transparent"
+      height="100%"
+      width="100%"
+    >
+      <loading></loading>
+    </v-sheet>
+    <float-alert :value="lastRequestError" color="red"
+      ><span>{{ lastRequestError }}</span></float-alert
+    >
+    <float-alert :value="lastRequestSuccess" color="green"
+      ><span>{{ lastRequestSuccess }}</span></float-alert
+    >
+  </v-app>
 </template>
 
 <script>

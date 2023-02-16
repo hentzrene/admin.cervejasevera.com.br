@@ -1,35 +1,61 @@
-<template lang="pug">
-div
-  div
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Campos
-      tooltip(tip="Adicionar", top)
-        v-btn.ml-2(
-          @click="addField",
-          color="secondary",
-          fab,
-          depressed,
-          x-small
-        )
-          v-icon fas fa-plus
-    field-list(
-      v-if="fields.length",
-      @changefieldkey="updateListHeaders",
-      :items="fields",
-      ref="fieldList"
-    )
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
-  .mt-6
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Cabeçalhos da lista
-    v-chip-group(v-model="listHeaders", column, multiple)
-      template(v-for="({ name, key }, i) in fields")
-        v-chip(v-if="name", :value="key", :key="i", filter, outlined) {{ name }}
-      v-chip(value="showFrom", filter, outlined) Começo
-      v-chip(value="showUp", filter, outlined) Fim
-    .pt-8.text-body-2.text-center.font-weight-bold.red--text(
-      v-if="noListHeaders"
-    ) Deve haver no mínimo um cabeçalho.
+<template>
+  <div>
+    <div>
+      <div class="d-flex align-center mb-2">
+        <div class="white--text font-weight-bold text-body-1">Campos</div>
+        <tooltip tip="Adicionar" top="top">
+          <v-btn
+            class="ml-2"
+            @click="addField"
+            color="secondary"
+            fab="fab"
+            depressed="depressed"
+            x-small="x-small"
+          >
+            <v-icon>fas fa-plus</v-icon>
+          </v-btn>
+        </tooltip>
+      </div>
+      <field-list
+        v-if="fields.length"
+        @changefieldkey="updateListHeaders"
+        :items="fields"
+        ref="fieldList"
+      ></field-list>
+      <div class="pa-4 text-body-2 text-center font-weight-bold" v-else>
+        Nenhum campo foi adicionado!
+      </div>
+    </div>
+    <div class="mt-6">
+      <div class="d-flex align-center mb-2">
+        <div class="white--text font-weight-bold text-body-1">
+          Cabeçalhos da lista
+        </div>
+      </div>
+      <v-chip-group v-model="listHeaders" column="column" multiple="multiple">
+        <template v-for="({ name, key }, i) in fields">
+          <v-chip
+            v-if="name"
+            :value="key"
+            :key="i"
+            filter="filter"
+            outlined="outlined"
+            >{{ name }}</v-chip
+          >
+        </template>
+        <v-chip value="showFrom" filter="filter" outlined="outlined"
+          >Começo</v-chip
+        >
+        <v-chip value="showUp" filter="filter" outlined="outlined">Fim</v-chip>
+      </v-chip-group>
+      <div
+        class="pt-8 text-body-2 text-center font-weight-bold red--text"
+        v-if="noListHeaders"
+      >
+        Deve haver no mínimo um cabeçalho.
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

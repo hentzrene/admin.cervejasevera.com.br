@@ -1,5 +1,7 @@
-<template lang="pug">
-.pa-4.text-body-2.text-center.font-weight-bold O módulo "{{ data.name }}" apenas pode ser alterado no código fonte.
+<template>
+  <div class="pa-4 text-body-2 text-center font-weight-bold">
+    O módulo "{{ data.name }}" apenas pode ser alterado no código fonte.
+  </div>
 </template>
 
 <script>

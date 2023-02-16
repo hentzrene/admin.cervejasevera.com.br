@@ -16,5 +16,7 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "vue/valid-v-for": "off",
+    "vue/require-v-for-key": "off",
   },
 };

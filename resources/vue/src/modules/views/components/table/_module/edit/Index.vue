@@ -1,50 +1,70 @@
-<template lang="pug">
-div
-  div
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Campos
-      tooltip(tip="Adicionar", top)
-        v-btn.ml-2(
-          @click="addDialog = true",
-          color="secondary",
-          fab,
-          depressed,
-          x-small
-        )
-          v-icon fas fa-plus
-    field-list(
-      v-if="data.fields && data.fields.length",
-      @changefieldkey="updateListHeaders",
-      :items="data.fields",
-      ref="fieldList"
-    )
-    .pa-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum campo foi adicionado!
-  .mt-6.mb-4
-    .d-flex.align-center.mb-2
-      .white--text.font-weight-bold.text-body-1 Cabeçalhos da lista
-    v-chip-group(v-model="listHeaders", column, multiple)
-      v-chip(
-        v-for="({ name, key }, i) in data.fields",
-        :value="key",
-        :key="i",
-        filter,
-        outlined
-      ) {{ name }}
-      v-chip(value="showFrom", filter, outlined) Começo
-      v-chip(value="showUp", filter, outlined) Fim
-      v-btn(
-        @click="sendListHeaders",
-        :loading="sendingListHeaders",
-        color="secondary darken-1",
-        fab,
-        small,
-        depressed
-      )
-        v-icon fas fa-save
-    .pt-8.text-body-2.text-center.font-weight-bold.red--text(
-      v-if="noListHeaders"
-    ) Deve haver no mínimo um cabeçalho.
-    add-field(v-model="addDialog", :types="fieldsTypes")
+<template>
+  <div>
+    <div>
+      <div class="d-flex align-center mb-2">
+        <div class="white--text font-weight-bold text-body-1">Campos</div>
+        <tooltip tip="Adicionar" top="top">
+          <v-btn
+            class="ml-2"
+            @click="addDialog = true"
+            color="secondary"
+            fab="fab"
+            depressed="depressed"
+            x-small="x-small"
+          >
+            <v-icon>fas fa-plus</v-icon>
+          </v-btn>
+        </tooltip>
+      </div>
+      <field-list
+        v-if="data.fields && data.fields.length"
+        @changefieldkey="updateListHeaders"
+        :items="data.fields"
+        ref="fieldList"
+      ></field-list>
+      <div class="pa-4 text-body-2 text-center font-weight-bold" v-else>
+        Nenhum campo foi adicionado!
+      </div>
+    </div>
+    <div class="mt-6 mb-4">
+      <div class="d-flex align-center mb-2">
+        <div class="white--text font-weight-bold text-body-1">
+          Cabeçalhos da lista
+        </div>
+      </div>
+      <v-chip-group v-model="listHeaders" column="column" multiple="multiple">
+        <v-chip
+          v-for="({ name, key }, i) in data.fields"
+          :value="key"
+          :key="i"
+          filter="filter"
+          outlined="outlined"
+          >{{ name }}</v-chip
+        >
+        <v-chip value="showFrom" filter="filter" outlined="outlined"
+          >Começo</v-chip
+        >
+        <v-chip value="showUp" filter="filter" outlined="outlined">Fim</v-chip>
+        <v-btn
+          @click="sendListHeaders"
+          :loading="sendingListHeaders"
+          color="secondary darken-1"
+          fab="fab"
+          small="small"
+          depressed="depressed"
+        >
+          <v-icon>fas fa-save</v-icon>
+        </v-btn>
+      </v-chip-group>
+      <div
+        class="pt-8 text-body-2 text-center font-weight-bold red--text"
+        v-if="noListHeaders"
+      >
+        Deve haver no mínimo um cabeçalho.
+      </div>
+      <add-field v-model="addDialog" :types="fieldsTypes"></add-field>
+    </div>
+  </div>
 </template>
 
 <script>

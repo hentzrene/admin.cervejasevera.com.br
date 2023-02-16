@@ -1,7 +1,8 @@
-<template lang="pug">
-div
-  app-bar(@toggledrawer="drawer = !drawer")
-  navigation-drawer(v-model="drawer")
+<template>
+  <div>
+    <app-bar @toggledrawer="drawer = !drawer"></app-bar>
+    <navigation-drawer v-model="drawer"></navigation-drawer>
+  </div>
 </template>
 
 <script>

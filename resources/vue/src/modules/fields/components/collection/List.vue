@@ -1,48 +1,77 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="800px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
-      div Coleção
-      div
-        v-btn.mr-2.text-none(
-          @click="remove",
-          color="secondary",
-          :disabled="!selecteds.length",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-trash
-          span Remover
-        v-btn.text-none(@click="add", color="secondary", depressed, small)
-          v-icon(left, small) fas fa-plus
-          span Adicionar
-    v-form(v-if="mappedItems.length", ref="form")
-      v-data-table(
-        v-model="selecteds",
-        :headers="headers",
-        :items="mappedItems",
-        :mobile-breakpoint="0",
-        no-data-text="Não há registros.",
-        show-select,
-        disable-pagination,
-        hide-default-footer
-      )
-        template(#item.item="{ item }")
-          v-textarea.field-collection-list-item.mt-1.py-2(
-            :value="item.value",
-            :rows="1",
-            dense,
-            auto-grow,
-            @input="(data) => (items_[item.id] = data)"
-          )
-    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum item foi adicionado.
-    v-btn.text-none.mt-2(@click="save", color="secondary", block, depressed) Salvar
-  v-overlay(v-model="loading")
-    loading
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="800px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div
+        class="title mb-4 d-flex flex-column flex-sm-row justify-space-between"
+      >
+        <div>Coleção</div>
+        <div>
+          <v-btn
+            class="mr-2 text-none"
+            @click="remove"
+            color="secondary"
+            :disabled="!selecteds.length"
+            depressed="depressed"
+            small="small"
+          >
+            <v-icon left="left" small="small">fas fa-trash</v-icon
+            ><span>Remover</span>
+          </v-btn>
+          <v-btn
+            class="text-none"
+            @click="add"
+            color="secondary"
+            depressed="depressed"
+            small="small"
+          >
+            <v-icon left="left" small="small">fas fa-plus</v-icon
+            ><span>Adicionar</span>
+          </v-btn>
+        </div>
+      </div>
+      <v-form v-if="mappedItems.length" ref="form">
+        <v-data-table
+          v-model="selecteds"
+          :headers="headers"
+          :items="mappedItems"
+          :mobile-breakpoint="0"
+          no-data-text="Não há registros."
+          show-select="show-select"
+          disable-pagination="disable-pagination"
+          hide-default-footer="hide-default-footer"
+        >
+          <template #item.item="{ item }">
+            <v-textarea
+              class="field-collection-list-item mt-1 py-2"
+              :value="item.value"
+              :rows="1"
+              dense="dense"
+              auto-grow="auto-grow"
+              @input="(data) => (items_[item.id] = data)"
+            ></v-textarea>
+          </template>
+        </v-data-table>
+      </v-form>
+      <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
+        Nenhum item foi adicionado.
+      </div>
+      <v-btn
+        class="text-none mt-2"
+        @click="save"
+        color="secondary"
+        block="block"
+        depressed="depressed"
+        >Salvar</v-btn
+      >
+    </v-card>
+    <v-overlay v-model="loading">
+      <loading></loading>
+    </v-overlay>
+  </v-dialog>
 </template>
 
 <script>

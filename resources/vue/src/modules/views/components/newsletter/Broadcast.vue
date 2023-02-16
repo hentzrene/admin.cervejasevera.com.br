@@ -1,21 +1,28 @@
-<template lang="pug">
-module-template(
-  :title="`${data.name} / Transmissão`",
-  width="800px",
-  max-width="100%"
-)
-  v-card.pa-4.rounded-t-0(outlined, dark)
-    v-form(ref="form")
-      .table-module-edit-form
-        tiny-text(name="subject", label="Assunto")
-        big-text(ref="text", name="text", label="Texto")
-      .d-flex.justify-end
-        v-btn.text-none(
-          @click="send",
-          :loading="loading",
-          color="secondary",
-          depressed
-        ) Transmitir
+<template>
+  <module-template
+    :title="`${data.name} / Transmissão`"
+    width="800px"
+    max-width="100%"
+  >
+    <v-card class="pa-4 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form ref="form">
+        <div class="table-module-edit-form">
+          <tiny-text name="subject" label="Assunto"></tiny-text>
+          <big-text ref="text" name="text" label="Texto"></big-text>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn
+            class="text-none"
+            @click="send"
+            :loading="loading"
+            color="secondary"
+            depressed="depressed"
+            >Transmitir</v-btn
+          >
+        </div>
+      </v-form>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

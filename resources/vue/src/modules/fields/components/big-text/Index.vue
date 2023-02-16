@@ -1,15 +1,24 @@
-<template lang="pug">
-grid-item(col-end="span 2")
-  .grey--text.text--lighten-1.font-weight-bold.text-caption {{ label }}
-  div(:class="[disabled ? 'disabled' : '', 'view-big-text-field']")
-    ckeditor.elevation-1(
-      @input="(data) => (editorData = data)",
-      :value="value",
-      :editor="editor",
-      :config="config",
-      :disabled="disabled"
-    )
-    v-text-field(v-model="editorData", :name="name", type="hidden")
+<template>
+  <grid-item col-end="span 2">
+    <div class="grey--text text--lighten-1 font-weight-bold text-caption">
+      {{ label }}
+    </div>
+    <div :class="[disabled ? 'disabled' : '', 'view-big-text-field']">
+      <ckeditor
+        class="elevation-1"
+        @input="(data) => (editorData = data)"
+        :value="value"
+        :editor="editor"
+        :config="config"
+        :disabled="disabled"
+      ></ckeditor>
+      <v-text-field
+        v-model="editorData"
+        :name="name"
+        type="hidden"
+      ></v-text-field>
+    </div>
+  </grid-item>
 </template>
 
 <script>

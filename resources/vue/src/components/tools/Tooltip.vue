@@ -1,9 +1,11 @@
-<template lang="pug">
-v-tooltip(:top="top", :right="right", :left="left", :bottom="bottom")
-  template(#activator="{ on, attrs }")
-    div(v-bind="attrs", v-on="on")
-      slot
-  span {{ tip }}
+<template>
+  <v-tooltip :top="top" :right="right" :left="left" :bottom="bottom">
+    <template #activator="{ on, attrs }">
+      <div v-bind="attrs" v-on="on">
+        <slot></slot>
+      </div> </template
+    ><span>{{ tip }}</span>
+  </v-tooltip>
 </template>
 
 <script>

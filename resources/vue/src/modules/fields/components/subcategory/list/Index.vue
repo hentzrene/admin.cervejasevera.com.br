@@ -1,78 +1,91 @@
-<template lang="pug">
-template-dialog-any(
-  @input="(data) => $emit('input', data)",
-  :value="value",
-  title="Subcategorias",
-  max-width="500px"
-)
-  template(#actions)
-    template-dialog-header-button(
-      @click="removeItem",
-      :disabled="!tableSelecteds.length",
-      icon="fas fa-trash",
-      text="Remover"
-    ) Remover
-    template-dialog-header-button(
-      @click="addDialog = true",
-      icon="fas fa-plus",
-      text="Adicionar"
-    )
-  v-row
-    v-col(cols=12, sm=6)
-      select-field-category(
-        :value="fieldCategory",
-        :field-id="fieldId",
-        :module-id="moduleId",
-        :items="fieldsCategory"
-      )
-    v-col(cols=12, sm=6)
-      v-select(
-        v-model="selectedCategory",
-        :items="categories",
-        label="Campo",
-        outlined,
-        dense,
-        hide-details
-      )
-  v-data-table(
-    v-if="items.length",
-    v-model="tableSelecteds",
-    :headers="tableHeaders",
-    :items="items",
-    :mobile-breakpoint="0",
-    :loading="loading",
-    :search="selectedCategory",
-    :custom-filter="filterItems",
-    no-data-text="Não há registros.",
-    no-results-text="Não há registros.",
-    sort-by="id",
-    sort-desc,
-    show-select,
-    disable-pagination,
-    hide-default-footer
-  )
-    template(#item.title="{ item }")
-      v-edit-dialog.primary.lighten-4(
-        @save="updateItemTitle(item.id)",
-        :return-value.sync="itemTitle",
-        dark
-      ) {{ item.title }}
-        template(#input)
-          v-text-field(
-            :value="item.title",
-            @input="(data) => (itemTitle = data)",
-            :rules="[rules.required]",
-            label="Renomear",
-            single-line,
-            counter
-          )
-  .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhuma categoria foi adicionada.
-  add(
-    v-model="addDialog",
-    :field-id="fieldId",
-    :module-id="moduleId",
-    :categories="categories"
-  )
+<template>
+  <template-dialog-any
+    @input="(data) => $emit('input', data)"
+    :value="value"
+    title="Subcategorias"
+    max-width="500px"
+  >
+    <template #actions>
+      <template-dialog-header-button
+        @click="removeItem"
+        :disabled="!tableSelecteds.length"
+        icon="fas fa-trash"
+        text="Remover"
+        >Remover</template-dialog-header-button
+      >
+      <template-dialog-header-button
+        @click="addDialog = true"
+        icon="fas fa-plus"
+        text="Adicionar"
+      ></template-dialog-header-button>
+    </template>
+    <v-row>
+      <v-col cols="12" sm="6">
+        <select-field-category
+          :value="fieldCategory"
+          :field-id="fieldId"
+          :module-id="moduleId"
+          :items="fieldsCategory"
+        ></select-field-category>
+      </v-col>
+      <v-col cols="12" sm="6">
+        <v-select
+          v-model="selectedCategory"
+          :items="categories"
+          label="Campo"
+          outlined="outlined"
+          dense="dense"
+          hide-details="hide-details"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-data-table
+      v-if="items.length"
+      v-model="tableSelecteds"
+      :headers="tableHeaders"
+      :items="items"
+      :mobile-breakpoint="0"
+      :loading="loading"
+      :search="selectedCategory"
+      :custom-filter="filterItems"
+      no-data-text="Não há registros."
+      no-results-text="Não há registros."
+      sort-by="id"
+      sort-desc="sort-desc"
+      show-select="show-select"
+      disable-pagination="disable-pagination"
+      hide-default-footer="hide-default-footer"
+    >
+      <template #item.title="{ item }">
+        <v-edit-dialog
+          class="primary lighten-4"
+          @save="updateItemTitle(item.id)"
+          :return-value.sync="itemTitle"
+          dark="dark"
+          >{{ item.title }}
+          <template #input>
+            <v-text-field
+              :value="item.title"
+              @input="(data) => (itemTitle = data)"
+              :rules="[rules.required]"
+              label="Renomear"
+              single-line="single-line"
+              counter="counter"
+            ></v-text-field>
+          </template>
+        </v-edit-dialog>
+      </template>
+    </v-data-table>
+    <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
+      Nenhuma categoria foi adicionada.
+    </div>
+    <add
+      v-model="addDialog"
+      :field-id="fieldId"
+      :module-id="moduleId"
+      :categories="categories"
+    ></add>
+  </template-dialog-any>
 </template>
 
 <script>

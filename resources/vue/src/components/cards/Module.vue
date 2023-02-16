@@ -1,7 +1,17 @@
-<template lang="pug">
-v-card.module-card(:to="to", height="100%", color="primary lighten-1", outlined)
-  v-icon(size="50", color="grey lighten-3") {{ icon }}
-  span.font-weight-medium.mt-2.grey--text.text--lighten-5.text-center.module-card-title {{ title }}
+<template>
+  <v-card
+    class="module-card"
+    :to="to"
+    height="100%"
+    color="primary lighten-1"
+    outlined="outlined"
+  >
+    <v-icon size="50" color="grey lighten-3">{{ icon }}</v-icon
+    ><span
+      class="font-weight-medium mt-2 grey--text text--lighten-5 text-center module-card-title"
+      >{{ title }}</span
+    >
+  </v-card>
 </template>
 
 <script>

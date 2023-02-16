@@ -1,53 +1,69 @@
-<template lang="pug">
-module-template(title="Adicionar módulo")
-  v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
-    v-form.pt-4(ref="form")
-      v-row
-        v-col.py-0(cols=12, sm=6, md=12, lg=3)
-          v-text-field(
-            v-model="name",
-            :rules="[rules.required]",
-            label="Nome",
-            outlined,
-            dense
-          )
-        v-col.py-0(cols=12, sm=6, md=4, lg=3)
-          v-select(
-            v-model="viewSelected",
-            :items="views",
-            :rules="[rules.required]",
-            label="Tipo",
-            outlined,
-            dense
-          )
-        v-col.py-0(cols=12, sm=6, md=4, lg=3)
-          v-text-field(
-            v-model="icon",
-            :rules="[rules.required]",
-            :append-icon="icon",
-            label="Ícone",
-            outlined,
-            dense
-          )
-        v-col.py-0(cols=12, sm=6, md=4, lg=3)
-          v-text-field(
-            v-model="key",
-            :rules="[rules.required, rules.alphaNumUnderline]",
-            label="Chave",
-            outlined,
-            dense
-          )
-      component(v-if="viewSelected", :is="viewSelected + '-add'", ref="view")
-      .d-flex.justify-end.py-4(
-        v-if="viewSelected && viewSelected !== 'custom'"
-      )
-        v-btn.text-none(
-          @click="add",
-          color="secondary",
-          depressed,
-          :loading="loading",
-          :disabled="loading"
-        ) Adicionar
+<template>
+  <module-template title="Adicionar módulo">
+    <v-card class="pa-4 pb-0 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form class="pt-4" ref="form">
+        <v-row>
+          <v-col class="py-0" cols="12" sm="6" md="12" lg="3">
+            <v-text-field
+              v-model="name"
+              :rules="[rules.required]"
+              label="Nome"
+              outlined="outlined"
+              dense="dense"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6" md="4" lg="3">
+            <v-select
+              v-model="viewSelected"
+              :items="views"
+              :rules="[rules.required]"
+              label="Tipo"
+              outlined="outlined"
+              dense="dense"
+            ></v-select>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6" md="4" lg="3">
+            <v-text-field
+              v-model="icon"
+              :rules="[rules.required]"
+              :append-icon="icon"
+              label="Ícone"
+              outlined="outlined"
+              dense="dense"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6" md="4" lg="3">
+            <v-text-field
+              v-model="key"
+              :rules="[rules.required, rules.alphaNumUnderline]"
+              label="Chave"
+              outlined="outlined"
+              dense="dense"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <component
+          v-if="viewSelected"
+          :is="viewSelected + '-add'"
+          ref="view"
+        ></component>
+        <div
+          class="d-flex justify-end py-4"
+          v-if="viewSelected && viewSelected !== 'custom'"
+        >
+          <v-btn
+            class="text-none"
+            @click="add"
+            color="secondary"
+            depressed="depressed"
+            :loading="loading"
+            :disabled="loading"
+            >Adicionar</v-btn
+          >
+        </div>
+      </v-form>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

@@ -1,33 +1,41 @@
-<template lang="pug">
-div
-  grid-container(
-    cols="300px",
-    cols-md="300px 300px 300px",
-    auto-rows="100px",
-    auto-rows-md="200px",
-    justify="center",
-    :layout="layout",
-    :layout-md="layoutMd"
-  )
-    template(#header)
-      .item
-    template(#main)
-      .item
-    template(#side)
-      .item
-    template(#banner)
-      .item
-    template(#side)
-      .item
-    template(#footer)
-      .item
-  br
-  grid-list(col-width="200px", col-width-md="300px", row-height="200px")
-    grid-item.item(col-end-sm="3", col-end-md="auto")
-    .item
-    .item
-    .item
-    .item
+<template>
+  <div>
+    <grid-container
+      cols="300px"
+      cols-md="300px 300px 300px"
+      auto-rows="100px"
+      auto-rows-md="200px"
+      justify="center"
+      :layout="layout"
+      :layout-md="layoutMd"
+    >
+      <template #header>
+        <div class="item"></div>
+      </template>
+      <template #main>
+        <div class="item"></div>
+      </template>
+      <template #side>
+        <div class="item"></div>
+      </template>
+      <template #banner>
+        <div class="item"></div>
+      </template>
+      <template #side>
+        <div class="item"></div>
+      </template>
+      <template #footer>
+        <div class="item"></div>
+      </template> </grid-container
+    ><br />
+    <grid-list col-width="200px" col-width-md="300px" row-height="200px">
+      <grid-item class="item" col-end-sm="3" col-end-md="auto"></grid-item>
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+      <div class="item"></div>
+    </grid-list>
+  </div>
 </template>
 
 <script>

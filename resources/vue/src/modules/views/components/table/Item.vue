@@ -1,80 +1,113 @@
 import { groupBy } from "../../../../components/utils"; import { groupBy } from
 "../../../../components/utils";
-<template lang="pug">
-module-template(
-  :title="`${data.name} / Alterar`",
-  width="800px",
-  max-width="100%"
-)
-  template(#toolbar)
-    toolbar-button(
-      @click="rangeDateActiveDialog = true",
-      tip="Começo/Fim",
-      icon="fas fa-calendar-alt"
-    )
-    v-dialog(v-model="rangeDateActiveDialog", max-width="330px")
-      v-card.pa-4(dark)
-        .title.mb-4.text-center Alterar período ativo
-        v-form.table-module-edit-rangedateactived(ref="rangeDateActiveForm")
-          v-text-field.mb-3(
-            label="Começo",
-            type="datetime-local",
-            name="showFrom",
-            :value="item.showFrom && item.showFrom.replace(' ', 'T')",
-            :clearable="true",
-            clear-icon="fas fa-times",
-            outlined,
-            dense,
-            hide-details
-          )
-          v-text-field.mb-3(
-            label="Fim",
-            type="datetime-local",
-            name="showUp",
-            :value="item.showUp && item.showUp.replace(' ', 'T')",
-            :clearable="true",
-            clear-icon="fas fa-times",
-            outlined,
-            dense,
-            hide-details
-          )
-        v-btn.text-none(
-          @click="setRangeDateActived",
-          color="secondary",
-          :loading="updatingRangeDateActived",
-          :disabled="updatingRangeDateActived",
-          block,
-          depressed
-        ) Alterar
-  v-card.pa-2.rounded-t-0(outlined, dark)
-    v-form(ref="form")
-      div(v-for="fields, section in sectionedFields" :key="section").mb-6
-        template(v-if="section !== 'null'")
-          div.text-body-1.text-uppercase.font-weight-bold {{ section }}
-          .table-module-edit-form.mt-2.primary.lighten-2.pa-2.rounded
-            component(
-              v-for="({ id, name, key, typeKey, options }, i) in fields",
-              :value="item[key] || ''",
-              :is="typeKey.toLowerCase() + 'field'",
-              :label="name",
-              :name="key",
-              :key="i",
-              :field-id="parseInt(id)",
+<template>
+  <module-template
+    :title="`${data.name} / Alterar`"
+    width="800px"
+    max-width="100%"
+  >
+    <template #toolbar>
+      <toolbar-button
+        @click="rangeDateActiveDialog = true"
+        tip="Começo/Fim"
+        icon="fas fa-calendar-alt"
+      ></toolbar-button>
+      <v-dialog v-model="rangeDateActiveDialog" max-width="330px">
+        <v-card class="pa-4" dark="dark">
+          <div class="title mb-4 text-center">Alterar período ativo</div>
+          <v-form
+            class="table-module-edit-rangedateactived"
+            ref="rangeDateActiveForm"
+          >
+            <v-text-field
+              class="mb-3"
+              label="Começo"
+              type="datetime-local"
+              name="showFrom"
+              :value="item.showFrom && item.showFrom.replace(' ', 'T')"
+              :clearable="true"
+              clear-icon="fas fa-times"
+              outlined="outlined"
+              dense="dense"
+              hide-details="hide-details"
+            ></v-text-field>
+            <v-text-field
+              class="mb-3"
+              label="Fim"
+              type="datetime-local"
+              name="showUp"
+              :value="item.showUp && item.showUp.replace(' ', 'T')"
+              :clearable="true"
+              clear-icon="fas fa-times"
+              outlined="outlined"
+              dense="dense"
+              hide-details="hide-details"
+            ></v-text-field>
+          </v-form>
+          <v-btn
+            class="text-none"
+            @click="setRangeDateActived"
+            color="secondary"
+            :loading="updatingRangeDateActived"
+            :disabled="updatingRangeDateActived"
+            block="block"
+            depressed="depressed"
+            >Alterar</v-btn
+          >
+        </v-card>
+      </v-dialog>
+    </template>
+    <v-card class="pa-2 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form ref="form">
+        <div
+          class="mb-6"
+          v-for="(fields, section) in sectionedFields"
+          :key="section"
+        >
+          <template v-if="section !== 'null'">
+            <div class="text-body-1 text-uppercase font-weight-bold">
+              {{ section }}
+            </div>
+            <div
+              class="table-module-edit-form mt-2 primary lighten-2 pa-2 rounded"
+            >
+              <component
+                v-for="({ id, name, key, typeKey, options }, i) in fields"
+                :value="item[key] || ''"
+                :is="typeKey.toLowerCase() + 'field'"
+                :label="name"
+                :name="key"
+                :key="i"
+                :field-id="parseInt(id)"
+                :field-options="options"
+              ></component>
+            </div>
+          </template>
+          <div class="table-module-edit-form mt-2 rounded" v-else>
+            <component
+              v-for="({ id, name, key, typeKey, options }, i) in fields"
+              :value="item[key] || ''"
+              :is="typeKey.toLowerCase() + 'field'"
+              :label="name"
+              :name="key"
+              :key="i"
+              :field-id="parseInt(id)"
               :field-options="options"
-            )
-        .table-module-edit-form.mt-2.rounded(v-else)
-          component(
-            v-for="({ id, name, key, typeKey, options }, i) in fields",
-            :value="item[key] || ''",
-            :is="typeKey.toLowerCase() + 'field'",
-            :label="name",
-            :name="key",
-            :key="i",
-            :field-id="parseInt(id)",
-            :field-options="options"
-          )
-      .d-flex.justify-end
-        v-btn.text-none(@click="send", color="secondary", depressed) {{ isPublished ? 'Alterar' : 'Publicar' }}
+            ></component>
+          </div>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn
+            class="text-none"
+            @click="send"
+            color="secondary"
+            depressed="depressed"
+            >{{ isPublished ? "Alterar" : "Publicar" }}</v-btn
+          >
+        </div>
+      </v-form>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

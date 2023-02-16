@@ -1,55 +1,61 @@
-<template lang="pug">
-module-template.page-tags(title="Tags", max-width="800px")
-  v-card.pa-4.pb-0.rounded-t-0(outlined, dark)
-    v-form.pt-4.d-flex.flex-column(ref="form")
-      v-textarea(
-        :value="configuration.head_after_begin",
-        :disabled="loading",
-        :loading="loading",
-        :rows="10",
-        label="HEAD - Depois de começar",
-        name="head_after_begin",
-        outlined,
-        dense
-      )
-      v-textarea(
-        :value="configuration.head_before_end",
-        :disabled="loading",
-        :loading="loading",
-        :rows="10",
-        label="HEAD - Antes do fim",
-        name="head_before_end",
-        outlined,
-        dense
-      )
-      v-textarea(
-        :value="configuration.body_after_begin",
-        :disabled="loading",
-        :loading="loading",
-        :rows="10",
-        label="BODY - Depois de começar",
-        name="body_after_begin",
-        outlined,
-        dense
-      )
-      v-textarea(
-        :value="configuration.body_before_end",
-        :disabled="loading",
-        :loading="loading",
-        :rows="10",
-        label="BODY - Antes do fim",
-        name="body_before_end",
-        outlined,
-        dense
-      )
-    v-card-actions
-      v-btn.text-none.ml-auto(
-        @click="submit",
-        :disabled="loading",
-        :loading="loading",
-        color="secondary",
-        depressed
-      ) Salvar
+<template>
+  <module-template class="page-tags" title="Tags" max-width="800px">
+    <v-card class="pa-4 pb-0 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form class="pt-4 d-flex flex-column" ref="form">
+        <v-textarea
+          :value="configuration.head_after_begin"
+          :disabled="loading"
+          :loading="loading"
+          :rows="10"
+          label="HEAD - Depois de começar"
+          name="head_after_begin"
+          outlined="outlined"
+          dense="dense"
+        ></v-textarea>
+        <v-textarea
+          :value="configuration.head_before_end"
+          :disabled="loading"
+          :loading="loading"
+          :rows="10"
+          label="HEAD - Antes do fim"
+          name="head_before_end"
+          outlined="outlined"
+          dense="dense"
+        ></v-textarea>
+        <v-textarea
+          :value="configuration.body_after_begin"
+          :disabled="loading"
+          :loading="loading"
+          :rows="10"
+          label="BODY - Depois de começar"
+          name="body_after_begin"
+          outlined="outlined"
+          dense="dense"
+        ></v-textarea>
+        <v-textarea
+          :value="configuration.body_before_end"
+          :disabled="loading"
+          :loading="loading"
+          :rows="10"
+          label="BODY - Antes do fim"
+          name="body_before_end"
+          outlined="outlined"
+          dense="dense"
+        ></v-textarea>
+      </v-form>
+      <v-card-actions>
+        <v-btn
+          class="text-none ml-auto"
+          @click="submit"
+          :disabled="loading"
+          :loading="loading"
+          color="secondary"
+          depressed="depressed"
+          >Salvar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

@@ -1,41 +1,57 @@
-<template lang="pug">
-module-template(title="Contas / Adicionar", width="800px", max-width="100%")
-  v-card.pa-4.rounded-t-0(outlined, dark)
-    v-form.pt-4(ref="form")
-      v-row
-        v-col.py-0(cols=12, sm=6)
-          v-text-field(
-            label="Nome",
-            name="name",
-            :rules="[rules.required]",
-            outlined,
-            dense
-          )
-        v-col.py-0(cols=12, sm=6)
-          v-text-field(
-            label="E-mail",
-            name="email",
-            :rules="[rules.required, rules.email]",
-            outlined,
-            dense
-          )
-      v-text-field(
-        label="Senha",
-        name="password",
-        :rules="[rules.required]",
-        outlined,
-        dense
-      )
-      div
-        div.grey--text.text--lighten-1.font-weight-bold Permissões
-        v-treeview(
-          v-model="userPermissions"
-          :items="modulesPermissions"
-          selectable
-          open-all
-        )
-      .d-flex.justify-end
-        v-btn.text-none(@click="send", color="secondary", depressed) Adicionar
+<template>
+  <module-template title="Contas / Adicionar" width="800px" max-width="100%">
+    <v-card class="pa-4 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form class="pt-4" ref="form">
+        <v-row>
+          <v-col class="py-0" cols="12" sm="6">
+            <v-text-field
+              label="Nome"
+              name="name"
+              :rules="[rules.required]"
+              outlined="outlined"
+              dense="dense"
+            ></v-text-field>
+          </v-col>
+          <v-col class="py-0" cols="12" sm="6">
+            <v-text-field
+              label="E-mail"
+              name="email"
+              :rules="[rules.required, rules.email]"
+              outlined="outlined"
+              dense="dense"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-text-field
+          label="Senha"
+          name="password"
+          :rules="[rules.required]"
+          outlined="outlined"
+          dense="dense"
+        ></v-text-field>
+        <div>
+          <div class="grey--text text--lighten-1 font-weight-bold">
+            Permissões
+          </div>
+          <v-treeview
+            v-model="userPermissions"
+            :items="modulesPermissions"
+            selectable="selectable"
+            open-all="open-all"
+          ></v-treeview>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn
+            class="text-none"
+            @click="send"
+            color="secondary"
+            depressed="depressed"
+            >Adicionar</v-btn
+          >
+        </div>
+      </v-form>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

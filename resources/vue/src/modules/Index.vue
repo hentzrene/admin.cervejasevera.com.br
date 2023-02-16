@@ -1,13 +1,16 @@
-<template lang="pug">
-div
-  component(v-if="!loading", :is="component", :data="module")
-  v-sheet.d-flex.justify-center.align-center(
-    v-else,
-    height="calc(100vh - 48px)",
-    width="100%",
-    color="transparent"
-  )
-    loading
+<template>
+  <div>
+    <component v-if="!loading" :is="component" :data="module"></component>
+    <v-sheet
+      class="d-flex justify-center align-center"
+      v-else
+      height="calc(100vh - 48px)"
+      width="100%"
+      color="transparent"
+    >
+      <loading></loading>
+    </v-sheet>
+  </div>
 </template>
 
 <script>

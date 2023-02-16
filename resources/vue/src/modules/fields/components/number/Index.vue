@@ -1,14 +1,15 @@
-<template lang="pug">
-grid-item(col-end="span 2", col-end-sm="span 1")
-  v-text-field(
-    :label="label",
-    :value="value",
-    :name="name",
-    type="number",
-    dense,
-    outlined,
-    dark
-  )
+<template>
+  <grid-item col-end="span 2" col-end-sm="span 1">
+    <v-text-field
+      :label="label"
+      :value="value"
+      :name="name"
+      type="number"
+      dense="dense"
+      outlined="outlined"
+      dark="dark"
+    ></v-text-field>
+  </grid-item>
 </template>
 
 <script>

@@ -1,31 +1,35 @@
-<template lang="pug">
-template-dialog-any(
-  @input="(data) => $emit('input', data)",
-  :value="value",
-  title="Opções",
-  max-width="500px"
-)
-  template(#actions)
-  .d-flex
-    v-text-field.mr-2(
-      v-model="options.prefix",
-      @keyup.enter="save('prefix')",
-      :rules="[rules.url]",
-      :disabled="loading.prefix",
-      :loading="loading.prefix",
-      ref="prefix",
-      label="Prefixo",
-      type="url",
-      outlined,
-      dense,
-      dark
-    )
-    .pt-1
-      template-dialog-header-button(
-        @click="save('prefix')",
-        icon="fas fa-save",
-        text="Salvar"
-      )
+<template>
+  <template-dialog-any
+    @input="(data) => $emit('input', data)"
+    :value="value"
+    title="Opções"
+    max-width="500px"
+  >
+    <template #actions></template>
+    <div class="d-flex">
+      <v-text-field
+        class="mr-2"
+        v-model="options.prefix"
+        @keyup.enter="save('prefix')"
+        :rules="[rules.url]"
+        :disabled="loading.prefix"
+        :loading="loading.prefix"
+        ref="prefix"
+        label="Prefixo"
+        type="url"
+        outlined="outlined"
+        dense="dense"
+        dark="dark"
+      ></v-text-field>
+      <div class="pt-1">
+        <template-dialog-header-button
+          @click="save('prefix')"
+          icon="fas fa-save"
+          text="Salvar"
+        ></template-dialog-header-button>
+      </div>
+    </div>
+  </template-dialog-any>
 </template>
 
 <script>

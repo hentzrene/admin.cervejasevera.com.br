@@ -1,25 +1,34 @@
-<template lang="pug">
-div
-  v-menu(left, offset-y, :close-on-content-click="false")
-    template(v-slot:activator="{ on, attrs }")
-      .category-table-filter-label(v-on="on")
-        span {{ text }}
-        button.category-table-filter-btn.ml-2(v-bind="attrs", type="button")
-          v-icon(size="11") fas fa-chevron-down
-    .category-table-filter-wrap
-      v-autocomplete(
-        v-model="selectedsCategories",
-        :items="categories",
-        :key="i",
-        :label="text",
-        background-color="primary"
-        multiple
-        hide-details,
-        chips
-        dark
-        solo
-        autofocus
-      )
+<template>
+  <div>
+    <v-menu left="left" offset-y="offset-y" :close-on-content-click="false">
+      <template v-slot:activator="{ on, attrs }">
+        <div class="category-table-filter-label" v-on="on">
+          <span>{{ text }}</span>
+          <button
+            class="category-table-filter-btn ml-2"
+            v-bind="attrs"
+            type="button"
+          >
+            <v-icon size="11">fas fa-chevron-down</v-icon>
+          </button>
+        </div>
+      </template>
+      <div class="category-table-filter-wrap">
+        <v-autocomplete
+          v-model="selectedsCategories"
+          :items="categories"
+          :label="text"
+          background-color="primary"
+          multiple="multiple"
+          hide-details="hide-details"
+          chips="chips"
+          dark="dark"
+          solo="solo"
+          autofocus="autofocus"
+        ></v-autocomplete>
+      </div>
+    </v-menu>
+  </div>
 </template>
 
 <script>

@@ -1,9 +1,14 @@
-<template lang="pug">
-v-snackbar(:value="value && visible", :color="color", top, :timeout="timeout")
-  v-icon(color="white", left, size="16") fas fa-info-circle
-  span
-    slot
-  v-spacer
+<template>
+  <v-snackbar
+    :value="value && visible"
+    :color="color"
+    top="top"
+    :timeout="timeout"
+  >
+    <v-icon color="white" left="left" size="16">fas fa-info-circle</v-icon
+    ><span> <slot></slot></span>
+    <v-spacer></v-spacer>
+  </v-snackbar>
 </template>
 
 <script>

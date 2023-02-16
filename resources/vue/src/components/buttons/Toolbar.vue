@@ -1,10 +1,29 @@
-<template lang="pug">
-div
-  tooltip(:tip="tip", top)
-    v-btn(v-if="sm", v-bind="$attrs", v-on="$listeners", icon, exact, small)
-      v-icon(small) {{ icon }}
-    v-btn.toolbar-button-desktop(v-else, v-bind="$attrs", v-on="$listeners", text, exact, small)
-      v-icon(small) {{ icon }}
+<template>
+  <div>
+    <tooltip :tip="tip" top="top">
+      <v-btn
+        v-if="sm"
+        v-bind="$attrs"
+        v-on="$listeners"
+        icon="icon"
+        exact="exact"
+        small="small"
+      >
+        <v-icon small="small">{{ icon }}</v-icon>
+      </v-btn>
+      <v-btn
+        class="toolbar-button-desktop"
+        v-else
+        v-bind="$attrs"
+        v-on="$listeners"
+        text="text"
+        exact="exact"
+        small="small"
+      >
+        <v-icon small="small">{{ icon }}</v-icon>
+      </v-btn>
+    </tooltip>
+  </div>
 </template>
 
 <script>

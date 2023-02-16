@@ -1,29 +1,31 @@
-<template lang="pug">
-grid-item(col-end="span 2", col-end-sm="span 1")
-  .d-flex
-    v-autocomplete(
-      v-model="value_",
-      :label="label",
-      :name="name",
-      :items="categoriesSelect",
-      no-data-text="Nenhuma categoria adicionada",
-      dense,
-      outlined,
-      dark
-    )
-    v-btn.ml-1(@click="listDialog = true", icon, small)
-      v-icon(small) fas fa-cog
-  list(
-    v-model="listDialog",
-    :field-id="fieldId",
-    :categories="categories",
-    :link-module="linkModule",
-    :is-admin-user="isAdminUser"
-  )
+<template>
+  <grid-item col-end="span 2" col-end-sm="span 1">
+    <div class="d-flex">
+      <v-autocomplete
+        v-model="value_"
+        :label="label"
+        :name="name"
+        :items="categoriesSelect"
+        no-data-text="Nenhuma categoria adicionada"
+        dense="dense"
+        outlined="outlined"
+        dark="dark"
+      ></v-autocomplete>
+      <v-btn class="ml-1" @click="listDialog = true" icon="icon" small="small">
+        <v-icon small="small">fas fa-cog</v-icon>
+      </v-btn>
+    </div>
+    <list
+      v-model="listDialog"
+      :field-id="fieldId"
+      :categories="categories"
+      :link-module="linkModule"
+      :is-admin-user="isAdminUser"
+    ></list>
+  </grid-item>
 </template>
 
 <script>
-import Tooltip from "@/components/tools/Tooltip";
 import List from "./List";
 import mixin from "../../mixin";
 
@@ -96,7 +98,6 @@ export default {
   },
   mixins: [mixin],
   components: {
-    Tooltip,
     List,
   },
 };

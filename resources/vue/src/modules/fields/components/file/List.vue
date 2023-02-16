@@ -1,100 +1,122 @@
-<template lang="pug">
-v-dialog(
-  :value="value",
-  @input="(data) => $emit('input', data)",
-  max-width="880px"
-)
-  v-card.pa-4(dark)
-    .title.mb-4.d-flex.flex-column.flex-sm-row.justify-space-between
-      div Arquivos
-      div
-        v-btn.mr-2.text-none(
-          @click="remove",
-          color="secondary",
-          :disabled="!selecteds.length",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-trash
-          span Remover
-        v-btn.text-none(
-          @click="$refs.fileLabel.click()",
-          color="secondary",
-          depressed,
-          small
-        )
-          v-icon(left, small) fas fa-upload
-          span Enviar
-    v-data-table(
-      :headers="headers",
-      :items="files",
-      :mobile-breakpoint="0",
-      v-if="files.length",
-      v-model="selecteds",
-      no-data-text="Não há registros.",
-      sort-by="id",
-      sort-desc,
-      show-select,
-      disable-pagination,
-      hide-default-footer
-    )
-      template(#item.title="{ item }")
-        v-edit-dialog.primary.lighten-4(
-          @save="editTitle(item.id)",
-          :return-value.sync="editFileTitle",
-          dark
-        ) {{ item.title }}
-          template(#input)
-            v-text-field(
-              :value="item.title",
-              @input="(data) => (editFileTitle = data)",
-              :rules="[rules.required]",
-              label="Renomear",
-              single-line,
-              counter
-            )
-      template(#item.action="{ item }")
-        v-btn(
-          v-if="item.path === highlightedFile",
-          @click="highlight(item.id)",
-          color="yellow",
-          icon,
-          small
-        )
-          v-icon(small) fas fa-star
-        v-btn(v-else, @click="highlight(item.id)", color="yellow", icon, small)
-          v-icon(small) far fa-star
-    .pt-8.pb-4.text-body-2.text-center.font-weight-bold(v-else) Nenhum arquivo foi enviado.
-  v-overlay(v-model="uploading")
-    v-progress-circular.font-weight-bold.accent--text(
-      :value="progress",
-      :size="120",
-      :rotate="-90",
-      :width="12",
-      color="secondary"
-    ) {{ progress }}%
-  v-overlay(v-model="loading")
-    loading
-  label(:for="'fileInput_' + fieldId", ref="fileLabel")
-  input.ma-0.pa-0(
-    @input="upload",
-    :id="'fileInput_' + fieldId",
-    :value="file",
-    ref="fileInput",
-    type="file",
-    multiple,
-    hide-details,
-    hidden
-  )
-  //- v-text-field.ma-0.pa-0(
-  //-   v-model="file",
-  //-   :name="inputName",
-  //-   ref="file",
-  //-   type="file",
-  //-   multiple,
-  //-   hide-details,
-  //-   hidden
-  //- )
+<template>
+  <v-dialog
+    :value="value"
+    @input="(data) => $emit('input', data)"
+    max-width="880px"
+  >
+    <v-card class="pa-4" dark="dark">
+      <div
+        class="title mb-4 d-flex flex-column flex-sm-row justify-space-between"
+      >
+        <div>Arquivos</div>
+        <div>
+          <v-btn
+            class="mr-2 text-none"
+            @click="remove"
+            color="secondary"
+            :disabled="!selecteds.length"
+            depressed="depressed"
+            small="small"
+          >
+            <v-icon left="left" small="small">fas fa-trash</v-icon
+            ><span>Remover</span>
+          </v-btn>
+          <v-btn
+            class="text-none"
+            @click="$refs.fileLabel.click()"
+            color="secondary"
+            depressed="depressed"
+            small="small"
+          >
+            <v-icon left="left" small="small">fas fa-upload</v-icon
+            ><span>Enviar</span>
+          </v-btn>
+        </div>
+      </div>
+      <v-data-table
+        :headers="headers"
+        :items="files"
+        :mobile-breakpoint="0"
+        v-if="files.length"
+        v-model="selecteds"
+        no-data-text="Não há registros."
+        sort-by="id"
+        sort-desc="sort-desc"
+        show-select="show-select"
+        disable-pagination="disable-pagination"
+        hide-default-footer="hide-default-footer"
+      >
+        <template #item.title="{ item }">
+          <v-edit-dialog
+            class="primary lighten-4"
+            @save="editTitle(item.id)"
+            :return-value.sync="editFileTitle"
+            dark="dark"
+            >{{ item.title }}
+            <template #input>
+              <v-text-field
+                :value="item.title"
+                @input="(data) => (editFileTitle = data)"
+                :rules="[rules.required]"
+                label="Renomear"
+                single-line="single-line"
+                counter="counter"
+              ></v-text-field>
+            </template>
+          </v-edit-dialog>
+        </template>
+        <template #item.action="{ item }">
+          <v-btn
+            v-if="item.path === highlightedFile"
+            @click="highlight(item.id)"
+            color="yellow"
+            icon="icon"
+            small="small"
+          >
+            <v-icon small="small">fas fa-star</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            @click="highlight(item.id)"
+            color="yellow"
+            icon="icon"
+            small="small"
+          >
+            <v-icon small="small">far fa-star</v-icon>
+          </v-btn>
+        </template>
+      </v-data-table>
+      <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
+        Nenhum arquivo foi enviado.
+      </div>
+    </v-card>
+    <v-overlay v-model="uploading">
+      <v-progress-circular
+        class="font-weight-bold accent--text"
+        :value="progress"
+        :size="120"
+        :rotate="-90"
+        :width="12"
+        color="secondary"
+        >{{ progress }}%</v-progress-circular
+      >
+    </v-overlay>
+    <v-overlay v-model="loading">
+      <loading></loading>
+    </v-overlay>
+    <label :for="'fileInput_' + fieldId" ref="fileLabel"></label>
+    <input
+      class="ma-0 pa-0"
+      @input="upload"
+      :id="'fileInput_' + fieldId"
+      :value="file"
+      ref="fileInput"
+      type="file"
+      multiple="multiple"
+      hide-details="hide-details"
+      hidden="hidden"
+    />
+  </v-dialog>
 </template>
 
 <script>

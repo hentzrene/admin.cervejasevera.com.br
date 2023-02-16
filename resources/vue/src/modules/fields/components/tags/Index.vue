@@ -1,31 +1,33 @@
-<template lang="pug">
-grid-item(col-end="span 2", col-end-sm="span 1")
-  .d-flex
-    v-select(
-      v-model="value_",
-      :label="label",
-      :items="tagsSelect",
-      no-data-text="Nenhuma tag adicionada",
-      dense,
-      outlined,
-      dark,
-      multiple,
-      chips
-    )
-    v-btn.ml-1(@click="listDialog = true", icon, small)
-      v-icon(small) fas fa-cog
-  input(:name="name", :value="valueParsed", type="hidden")
-  list(
-    v-model="listDialog",
-    :field-id="fieldId",
-    :tags="tags",
-    :link-module="linkModule",
-    :is-admin-user="isAdminUser"
-  )
+<template>
+  <grid-item col-end="span 2" col-end-sm="span 1">
+    <div class="d-flex">
+      <v-select
+        v-model="value_"
+        :label="label"
+        :items="tagsSelect"
+        no-data-text="Nenhuma tag adicionada"
+        dense="dense"
+        outlined="outlined"
+        dark="dark"
+        multiple="multiple"
+        chips="chips"
+      ></v-select>
+      <v-btn class="ml-1" @click="listDialog = true" icon="icon" small="small">
+        <v-icon small="small">fas fa-cog</v-icon>
+      </v-btn>
+    </div>
+    <input :name="name" :value="valueParsed" type="hidden" />
+    <list
+      v-model="listDialog"
+      :field-id="fieldId"
+      :tags="tags"
+      :link-module="linkModule"
+      :is-admin-user="isAdminUser"
+    ></list>
+  </grid-item>
 </template>
 
 <script>
-import Tooltip from "@/components/tools/Tooltip";
 import List from "./List";
 import mixin from "../../mixin";
 
@@ -98,7 +100,6 @@ export default {
   },
   mixins: [mixin],
   components: {
-    Tooltip,
     List,
   },
 };

@@ -1,38 +1,60 @@
-<template lang="pug">
-module-template(
-  :title="`${data.name} / Alterar`",
-  width="800px",
-  max-width="100%"
-)
-  v-card.pa-4.rounded-t-0(outlined, dark)
-    v-form(ref="form")
-      div(v-for="fields, section in sectionedFields" :key="section").mb-6
-        template(v-if="section !== 'null'")
-          div.text-body-1.text-uppercase.font-weight-bold {{ section }}
-          .item-module-add-form.mt-2.primary.lighten-2.pa-2.rounded
-            component(
-              v-for="({ id, name, key, typeKey, options }, i) in fields",
-              :value="item[key] || ''",
-              :is="typeKey.toLowerCase() + 'field'",
-              :label="name",
-              :name="key",
-              :key="i",
-              :field-id="parseInt(id)",
+<template>
+  <module-template
+    :title="`${data.name} / Alterar`"
+    width="800px"
+    max-width="100%"
+  >
+    <v-card class="pa-4 rounded-t-0" outlined="outlined" dark="dark">
+      <v-form ref="form">
+        <div
+          class="mb-6"
+          v-for="(fields, section) in sectionedFields"
+          :key="section"
+        >
+          <template v-if="section !== 'null'">
+            <div class="text-body-1 text-uppercase font-weight-bold">
+              {{ section }}
+            </div>
+            <div
+              class="item-module-add-form mt-2 primary lighten-2 pa-2 rounded"
+            >
+              <component
+                v-for="({ id, name, key, typeKey, options }, i) in fields"
+                :value="item[key] || ''"
+                :is="typeKey.toLowerCase() + 'field'"
+                :label="name"
+                :name="key"
+                :key="i"
+                :field-id="parseInt(id)"
+                :field-options="options"
+              ></component>
+            </div>
+          </template>
+          <div class="item-module-add-form mt-2 rounded" v-else>
+            <component
+              v-for="({ id, name, key, typeKey, options }, i) in fields"
+              :value="item[key] || ''"
+              :is="typeKey.toLowerCase() + 'field'"
+              :label="name"
+              :name="key"
+              :key="i"
+              :field-id="parseInt(id)"
               :field-options="options"
-            )
-        .item-module-add-form.mt-2.rounded(v-else)
-          component(
-            v-for="({ id, name, key, typeKey, options }, i) in fields",
-            :value="item[key] || ''",
-            :is="typeKey.toLowerCase() + 'field'",
-            :label="name",
-            :name="key",
-            :key="i",
-            :field-id="parseInt(id)",
-            :field-options="options"
-          )
-      .d-flex.justify-end
-        v-btn.text-none(@click="send", color="secondary", depressed) Alterar
+            ></component>
+          </div>
+        </div>
+        <div class="d-flex justify-end">
+          <v-btn
+            class="text-none"
+            @click="send"
+            color="secondary"
+            depressed="depressed"
+            >Alterar</v-btn
+          >
+        </div>
+      </v-form>
+    </v-card>
+  </module-template>
 </template>
 
 <script>

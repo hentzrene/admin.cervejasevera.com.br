@@ -1,6 +1,7 @@
-<template lang="pug">
-.grid-item(:style="style", :class="classes")
-  slot
+<template>
+  <div class="grid-item" :style="style" :class="classes">
+    <slot></slot>
+  </div>
 </template>
 
 <script>

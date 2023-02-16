@@ -1,14 +1,14 @@
-<template lang="pug">
-v-select(
-  v-model="value_",
-  @change="(v) => update(v)",
-  :items="items",
-  :loading="loading",
-  label="Campo",
-  outlined,
-  dense,
-  hide-details
-)
+<template>
+  <v-select
+    v-model="value_"
+    @change="(v) => update(v)"
+    :items="items"
+    :loading="loading"
+    label="Campo"
+    outlined="outlined"
+    dense="dense"
+    hide-details="hide-details"
+  ></v-select>
 </template>
 
 <script>
