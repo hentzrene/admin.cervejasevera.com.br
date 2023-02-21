@@ -46,6 +46,7 @@ class Model
     $module = addslashes($module);
     $params = Req::getAll();
     $fieldsKeys = $params->fields ? explode(',', addslashes($params->fields)) : "*";
+    $fieldsKeys = array_map(fn ($key) => "`$key`", $fieldsKeys);
 
     $page = $params->page ? (int) $params->page : 1;
     $filters = $params->filters ? explode(',', $params->filters) : [];

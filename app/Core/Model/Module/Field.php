@@ -82,7 +82,7 @@ class Field
     if (method_exists($fieldClass, 'beforeAdd')) {
       call_user_func([$fieldClass, 'beforeAdd'], $moduleKey, $key, $sqlType, $unique);
     } else {
-      $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
+      $sql = "ALTER TABLE mod_$moduleKey ADD `$key` $sqlType DEFAULT NULL";
 
       if ($unique) $sql .= " UNIQUE";
 
