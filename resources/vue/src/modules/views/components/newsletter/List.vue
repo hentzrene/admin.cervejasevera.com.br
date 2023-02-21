@@ -98,7 +98,7 @@ import ToolbarButton from "@/components/buttons/ToolbarButton";
 import PrintButton from "@/components/buttons/PrintButton";
 import ExportButton from "@/components/buttons/ExportButton";
 import ModuleTemplate from "@/components/templates/Module";
-import formatForDisplay from "@/modules/fields/formatForDisplay.js";
+import { fieldsFormatForDisplay } from "@/modules/fields";
 import Loading from "@/components/tools/Loading";
 
 export default {
@@ -205,10 +205,10 @@ export default {
                     item_[key] = item[key];
                   }
                 } else {
-                  if (!formatForDisplay[fieldTypeKey]) {
+                  if (!fieldsFormatForDisplay[fieldTypeKey]) {
                     item_[key] = item[key];
                   } else {
-                    const v = formatForDisplay[fieldTypeKey]({
+                    const v = fieldsFormatForDisplay[fieldTypeKey]({
                       component: this,
                       value: item[key],
                       fieldData: this.fields.find((field) => field.key === key),

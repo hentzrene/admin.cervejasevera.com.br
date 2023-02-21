@@ -113,8 +113,8 @@ import ToolbarButton from "../../../../components/buttons/ToolbarButton.vue";
 import PrintButton from "../../../../components/buttons/PrintButton.vue";
 import ExportButton from "../../../../components/buttons/ExportButton.vue";
 import ModuleTemplate from "../../../../components/templates/Module.vue";
-import formatForDisplay from "../../../../modules/fields/formatForDisplay.js";
-import tableFilter from "../../../../modules/fields/tableFilter.js";
+import { fieldsFormatForDisplay } from "../../../../modules/fields";
+import { fieldsHeaderFilterComponents } from "../../../../modules/fields";
 import Loading from "../../../../components/tools/Loading.vue";
 
 export default {
@@ -163,7 +163,7 @@ export default {
             header.text = field.name;
             header.field = field;
             header.enabledTableFilter =
-              !!tableFilter[field.typeKey + "TableFilter"];
+              !!fieldsHeaderFilterComponents[field.typeKey + "TableFilter"];
 
             if (header.enabledTableFilter) {
               this.filtersOptions[fieldKey] = {
@@ -238,10 +238,10 @@ export default {
                     item_[key] = item[key];
                   }
                 } else {
-                  if (!formatForDisplay[fieldTypeKey]) {
+                  if (!fieldsFormatForDisplay[fieldTypeKey]) {
                     item_[key] = item[key];
                   } else {
-                    const v = formatForDisplay[fieldTypeKey]({
+                    const v = fieldsFormatForDisplay[fieldTypeKey]({
                       id: item.id,
                       item,
                       component: this,
@@ -345,7 +345,7 @@ export default {
     ExportButton,
     ModuleTemplate,
     Loading,
-    ...tableFilter,
+    ...fieldsHeaderFilterComponents,
   },
 };
 </script>

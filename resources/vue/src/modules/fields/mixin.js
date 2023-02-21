@@ -1,14 +1,14 @@
 export default {
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
     label: {
       type: String,
       required: true,
     },
     value: String,
-    name: {
-      type: String,
-      required: true,
-    },
   },
   computed: {
     isAdminUser() {
