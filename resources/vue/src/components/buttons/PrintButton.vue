@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ToolbarButton from "./Toolbar";
+import ToolbarButton from "./ToolbarButton";
 
 export default {
   components: {

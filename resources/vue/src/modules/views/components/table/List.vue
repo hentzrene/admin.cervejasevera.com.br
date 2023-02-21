@@ -109,13 +109,13 @@
 </template>
 
 <script>
-import ToolbarButton from "@/components/buttons/Toolbar";
-import PrintButton from "@/components/buttons/Print";
-import ExportButton from "@/components/buttons/Export";
-import ModuleTemplate from "@/components/templates/Module";
-import formatForDisplay from "@/modules/fields/formatForDisplay.js";
-import tableFilter from "@/modules/fields/tableFilter.js";
-import Loading from "@/components/tools/Loading";
+import ToolbarButton from "../../../../components/buttons/ToolbarButton.vue";
+import PrintButton from "../../../../components/buttons/PrintButton.vue";
+import ExportButton from "../../../../components/buttons/ExportButton.vue";
+import ModuleTemplate from "../../../../components/templates/Module.vue";
+import formatForDisplay from "../../../../modules/fields/formatForDisplay.js";
+import tableFilter from "../../../../modules/fields/tableFilter.js";
+import Loading from "../../../../components/tools/Loading.vue";
 
 export default {
   name: "TableList",

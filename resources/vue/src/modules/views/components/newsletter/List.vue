@@ -94,9 +94,9 @@
 </template>
 
 <script>
-import ToolbarButton from "@/components/buttons/Toolbar";
-import PrintButton from "@/components/buttons/Print";
-import ExportButton from "@/components/buttons/Export";
+import ToolbarButton from "@/components/buttons/ToolbarButton";
+import PrintButton from "@/components/buttons/PrintButton";
+import ExportButton from "@/components/buttons/ExportButton";
 import ModuleTemplate from "@/components/templates/Module";
 import formatForDisplay from "@/modules/fields/formatForDisplay.js";
 import Loading from "@/components/tools/Loading";

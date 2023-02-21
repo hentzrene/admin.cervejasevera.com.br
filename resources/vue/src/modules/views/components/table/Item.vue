@@ -1,5 +1,3 @@
-import { groupBy } from "../../../../components/utils"; import { groupBy } from
-"../../../../components/utils";
 <template>
   <module-template
     :title="`${data.name} / Alterar`"
@@ -112,7 +110,7 @@ import { groupBy } from "../../../../components/utils"; import { groupBy } from
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import ToolbarButton from "@/components/buttons/Toolbar";
+import ToolbarButton from "@/components/buttons/ToolbarButton";
 import fieldsElements from "../../../fields";
 import { groupBy } from "../../../../components/utils";
 

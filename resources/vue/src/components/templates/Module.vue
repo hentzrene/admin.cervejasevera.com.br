@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ToolbarButton from "@/components/buttons/Toolbar";
+import ToolbarButton from "@/components/buttons/ToolbarButton";
 
 export default {
   props: {

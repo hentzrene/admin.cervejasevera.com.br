@@ -55,7 +55,7 @@
 <script>
 import ModuleTemplate from "@/components/templates/Module";
 import Loading from "@/components/tools/Loading";
-import ExportModuleButton from "@/components/buttons/ExportModule";
+import ExportModuleButton from "@/components/buttons/ExportModuleButton";
 import { viewEditModuleComponents as editComponents } from "@/modules/views";
 import { required } from "@/components/forms/rules";
 

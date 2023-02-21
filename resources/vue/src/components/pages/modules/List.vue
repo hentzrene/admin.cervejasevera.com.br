@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import ToolbarButton from "@/components/buttons/Toolbar";
+import ToolbarButton from "@/components/buttons/ToolbarButton";
 import ModuleTemplate from "@/components/templates/Module";
 import MenuConfigDialog from "./menu-config-dialog/Index";
 import MenuEditDialog from "./MenuEditDialog";

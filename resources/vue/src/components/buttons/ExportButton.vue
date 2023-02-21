@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import ToolbarButton from "./Toolbar";
+import ToolbarButton from "./ToolbarButton";
 import { required } from "../forms/rules";
 
 export default {
