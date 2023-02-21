@@ -61,7 +61,7 @@ export const fieldsFormatForDisplay = Object.fromEntries(
 export const fieldsHeaderFilterComponents = Object.fromEntries(
   fieldsEntries
     .filter(([, val]) => !!val.headerFilterComponent)
-    .map(([key, val]) => [key + "TableFilter", val.headerFilterComponent])
+    .map(([key, val]) => [key, val.headerFilterComponent])
 );
 
 export default Object.fromEntries(

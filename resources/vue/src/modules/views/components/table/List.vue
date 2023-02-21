@@ -1,22 +1,21 @@
 <template>
-  <module-template :title="data.name">
+  <ModuleTemplate :title="data.name">
     <template #toolbar>
-      <toolbar-button
-        @click="remove"
+      <RemoveItemButton
+        @loading="(val) => (loading = val)"
+        :module-key="moduleKey"
         :disabled="!selecteds.length"
-        tip="Remover"
-        icon="fas fa-trash"
-        dark="dark"
-      ></toolbar-button>
-      <toolbar-button
-        @click="add"
-        tip="Adicionar"
-        icon="fas fa-plus"
-        dark="dark"
-      ></toolbar-button>
-      <print-button></print-button>
-      <export-button :module-key="data.key" :fields="fields"></export-button>
+        :selecteds="selecteds"
+        :items="items"
+      />
+      <AddItemButton
+        @loading="(val) => (loading = val)"
+        :module-key="moduleKey"
+      />
+      <PrintButton />
+      <ExportButton :module-key="data.key" :fields="fields" />
     </template>
+
     <div>
       <div class="pa-2 primary lighten-1 module-search">
         <v-text-field
@@ -32,8 +31,9 @@
           dark="dark"
         ></v-text-field>
       </div>
+
       <v-data-table
-        @click:row="(item) => $router.push($route.path + '/' + item.id)"
+        @click:row="showItem"
         @update:page="changePage"
         v-model="selecteds"
         :headers="headers"
@@ -43,73 +43,71 @@
         :items-per-page="itemsPerPage"
         height="calc(100vh - 226px)"
         sort-by="id"
-        loading-text="Carregado dados."
+        loading-text="Carregando dados."
         no-data-text="Não há registros."
         no-results-text="Não há registros."
-        show-select="show-select"
-        sort-desc="sort-desc"
-        fixed-header="fixed-header"
-        dark="dark"
+        show-select
+        sort-desc
+        fixed-header
+        dark
       >
         <template
-          v-for="(h, i) in listHeaders"
-          v-slot:[`header.${h}`]="{ header }"
+          v-for="header in headersWithFilter"
+          v-slot:[`header.${header.value}`]
         >
           <component
-            v-if="header.enabledTableFilter"
-            :is="header.field.typeKey + 'TableFilter'"
+            :is="header.fieldFilterComponent"
+            :key="header.value"
             :text="header.text"
             :field="header.field"
-            :options="filtersOptions[header.value]"
+            :options="filtersOptions[header.value],"
             @filter="filter"
-          ></component>
-          <template v-else>{{ header.text }}</template>
+          />
         </template>
-        <template v-for="(h, i) in listHeaders" v-slot:[`item.${h}`]="{ item }">
-          <template v-if="typeof item[h] === 'string'"
-            ><span>{{ item[h] }}</span></template
-          >
-          <template v-else-if="item[h] && typeof item[h] === 'object'">
-            <div v-if="item[h].innerHTML" v-html="item[h].innerHTML"></div>
+
+        <template
+          v-for="{ key } in columnsWithDisplay"
+          v-slot:[`item.${key}`]="{ item }"
+        >
+          <span v-if="typeof item[key] === 'string'" :key="key">{{
+            item[key]
+          }}</span>
+
+          <template v-else-if="item[key] && typeof item[key] === 'object'">
+            <div
+              v-if="item[key].innerHTML"
+              v-html="item[key].innerHTML"
+              :key="key"
+            ></div>
             <component
-              v-else-if="item[h].component"
-              :is="item[h].component"
-              :value="item[h].value"
-            ></component>
+              v-else-if="item[key].component"
+              :is="item[key].component"
+              :value="item[key].value"
+              :key="key"
+            />
           </template>
         </template>
+
         <template #item.action="{ item }">
-          <div class="d-flex justify-end">
-            <v-btn
-              v-if="parseInt(item.active)"
-              @click.stop="toggleActive(item.id, false)"
-              color="green"
-              icon="icon"
-              small="small"
-            >
-              <v-icon small="small">fas fa-eye</v-icon>
-            </v-btn>
-            <v-btn
-              v-else
-              @click.stop="toggleActive(item.id, true)"
-              color="blue"
-              icon="icon"
-              small="small"
-            >
-              <v-icon small="small">fas fa-eye-slash</v-icon>
-            </v-btn>
-          </div>
+          <ToggleActiveButton
+            :module-key="moduleKey"
+            :item="item"
+            :items="items"
+          />
         </template>
       </v-data-table>
     </div>
+
     <v-overlay v-model="loading" absolute="absolute">
-      <loading></loading>
+      <Loading></Loading>
     </v-overlay>
-  </module-template>
+  </ModuleTemplate>
 </template>
 
 <script>
-import ToolbarButton from "../../../../components/buttons/ToolbarButton.vue";
+import AddItemButton from "./AddItemButton.vue";
+import RemoveItemButton from "./RemoveItemButton.vue";
+import ToggleActiveButton from "./ToggleActiveButton.vue";
 import PrintButton from "../../../../components/buttons/PrintButton.vue";
 import ExportButton from "../../../../components/buttons/ExportButton.vue";
 import ModuleTemplate from "../../../../components/templates/Module.vue";
@@ -137,65 +135,43 @@ export default {
     fields() {
       return this.data.fields;
     },
+    fieldsMap() {
+      return Object.fromEntries(this.fields.map((field) => [field.key, field]));
+    },
     listHeaders() {
       return this.data.viewOptions.listHeaders;
     },
     headers() {
-      if (!this.listHeaders || !this.fields) return [];
+      if (!this.fields || !this.listHeaders) return [];
 
-      const headers = this.listHeaders.map((fieldKey) => {
-        const header = {
-          value: fieldKey,
-          align: "left",
-          sortable: false,
-        };
+      const headers = this.listHeaders.map(this.createHeaderFromField);
 
-        const field = this.fields.find(({ key }) => key == fieldKey);
-
-        switch (fieldKey) {
-          case "showFrom":
-            header.text = "Começo";
-            break;
-          case "showUp":
-            header.text = "Fim";
-            break;
-          default:
-            header.text = field.name;
-            header.field = field;
-            header.enabledTableFilter =
-              !!fieldsHeaderFilterComponents[field.typeKey + "TableFilter"];
-
-            if (header.enabledTableFilter) {
-              this.filtersOptions[fieldKey] = {
-                active: false,
-              };
-            }
-
-            break;
-        }
-
-        return header;
-      });
-
-      headers.unshift({
-        text: "Id",
-        value: "id",
-        align: "left",
-        sortable: false,
-        filterable: false,
-      });
-      headers.push({
-        text: "",
-        value: "action",
-        align: "right",
-        sortable: false,
-        filterable: false,
-      });
-
-      return headers;
+      return [
+        this.createHeader({
+          text: "Id",
+          value: "id",
+        }),
+        ...headers,
+        this.createHeader({
+          text: "",
+          value: "action",
+          align: "right",
+        }),
+      ];
+    },
+    headersWithFilter() {
+      return this.headers.filter((header) => !!header.fieldFilterComponent);
+    },
+    columnsWithDisplay() {
+      return this.fields.filter(
+        (filter) => filter.typeKey in fieldsFormatForDisplay
+      );
     },
     sm() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    moduleKey() {
+      return this.data.key;
     },
   },
   methods: {
@@ -209,95 +185,59 @@ export default {
         ...this.filtersQuery,
       };
 
-      return this.$rest(this.data.key)
+      return this.$rest(this.moduleKey)
         .get({
           params,
           save: async (state, { list, totalItems }) => {
             this.totalItems = parseInt(totalItems);
             state.list = list;
 
-            this.items = [];
-
-            const fieldsTypeKeys = Object.fromEntries(
-              this.fields.map(({ key, typeKey }) => [key, typeKey])
-            );
-
-            for (let item of list) {
-              const item_ = {};
-
-              for (let key in item) {
-                const fieldTypeKey = fieldsTypeKeys[key];
-
-                if (!fieldsTypeKeys[key]) {
-                  if ((key === "showFrom" || key === "showUp") && item[key]) {
-                    item_[key] = new Date(item[key]).toLocaleString("pt-BR", {
-                      dateStyle: "short",
-                      timeStyle: "short",
-                    });
-                  } else {
-                    item_[key] = item[key];
-                  }
-                } else {
-                  if (!fieldsFormatForDisplay[fieldTypeKey]) {
-                    item_[key] = item[key];
-                  } else {
-                    const v = fieldsFormatForDisplay[fieldTypeKey]({
-                      id: item.id,
-                      item,
-                      component: this,
-                      value: item[key],
-                      fieldData: this.fields.find((field) => field.key === key),
-                      moduleId: this.data.id,
-                    });
-
-                    if (v instanceof Promise) item_[key] = await v;
-                    else item_[key] = v;
-                  }
-                }
-              }
-
-              this.items.push(item_);
-            }
+            await this.parseItems(list);
 
             this.loading = false;
           },
         })
         .catch(() => this.$router.replace("/"));
     },
-    add() {
-      this.loading = true;
-      this.$rest(this.data.key)
-        .post()
-        .then(({ id }) => this.$router.push(this.$route.path + "/" + id))
-        .finally(() => (this.loading = false));
-    },
-    remove() {
-      this.loading = true;
-      Promise.all(
-        this.selecteds.map(({ id }) =>
-          this.$rest(this.data.key)
-            .delete({ id })
-            .then(() => {
-              this.items.splice(
-                this.items.findIndex((v) => v.id == id),
-                1
-              );
+    async parseItems(list) {
+      this.items = [];
 
-              this.loading = false;
-            })
-        )
-      ).finally(() => (this.loading = false));
+      for (let item of list) {
+        const item_ = await this.parseItem(item);
+
+        this.items.push(item_);
+      }
     },
-    toggleActive(id, active) {
-      this.$rest(this.data.key)
-        .put({
-          id,
-          prop: "active",
-          data: { value: active | 0 },
-        })
-        .then(
-          () => (this.items.find((item) => item.id == id).active = active | 0)
-        );
+    async parseItem(item) {
+      const item_ = {};
+
+      for (let key in item) {
+        const field = this.fieldsMap[key];
+
+        if (!field && ["showFrom", "showUp"].includes(key)) {
+          item_[key] = fieldsFormatForDisplay["datetime"]({
+            value: item[key],
+          });
+        } else if (field && fieldsFormatForDisplay[field.typeKey]) {
+          item_[key] = await fieldsFormatForDisplay[field.typeKey]({
+            id: item.id,
+            item,
+            component: this,
+            value: item[key],
+            fieldData: this.fields.find((field) => field.key === key),
+            moduleId: this.data.id,
+          });
+        } else {
+          item_[key] = item[key];
+        }
+      }
+
+      return item_;
+    },
+    showItem(item) {
+      const route = this.$route.path + "/" + item.id;
+
+      this.$router.push(route);
     },
     changePage(page) {
       this.loading = true;
@@ -334,18 +274,63 @@ export default {
       this.loading = true;
       this.get();
     },
+    findFieldByKey(key) {
+      return this.fields.find((field) => field.key == key);
+    },
+    createHeader(options) {
+      const defaultOptions = {
+        align: "left",
+        sortable: false,
+        filterable: false,
+      };
+
+      const mergedOptions = Object.assign(defaultOptions, options);
+
+      return mergedOptions;
+    },
+    createHeaderFromField(fieldKey) {
+      const systemFields = {
+        showFrom: "Começo",
+        showUp: "Fim",
+      };
+
+      if (fieldKey in systemFields) {
+        return this.createHeader({
+          value: fieldKey,
+          text: systemFields[fieldKey],
+        });
+      }
+
+      const field = this.fieldsMap[fieldKey];
+
+      const fieldFilterComponent = fieldsHeaderFilterComponents[field.typeKey];
+
+      if (fieldFilterComponent) {
+        this.filtersOptions[fieldKey] = {
+          active: false,
+        };
+      }
+
+      return this.createHeader({
+        value: fieldKey,
+        text: field.name,
+        field: field,
+        fieldFilterComponent,
+      });
+    },
   },
   created() {
     this.loading = true;
     this.get();
   },
   components: {
-    ToolbarButton,
+    AddItemButton,
+    RemoveItemButton,
+    ToggleActiveButton,
     PrintButton,
     ExportButton,
     ModuleTemplate,
     Loading,
-    ...fieldsHeaderFilterComponents,
   },
 };
 </script>

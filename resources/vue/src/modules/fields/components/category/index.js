@@ -2,7 +2,7 @@ import Index from "./Index.vue";
 import TableFilter from "./TableFilter.vue";
 
 export default {
-  name: "category",
+  name: "categoryfield",
   component: Index,
   headerFilterComponent: TableFilter,
   formatForDisplay: async ({ component, value, moduleId, fieldData }) => {
