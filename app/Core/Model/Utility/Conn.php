@@ -327,7 +327,6 @@ class Conn
 
     Conn::$sql = "INSERT INTO " . Conn::$table;
 
-    $columns = array_map(fn ($col) => "`$col`", $columns);
     $columns = implode(', ', $columns);
     Conn::$sql .= "($columns) VALUES";
 
@@ -359,7 +358,7 @@ class Conn
     Conn::$sql = "UPDATE " . Conn::$table .  " SET ";
 
     foreach ($columns as $column => $value) {
-      Conn::$sql .= "`$column` = $value,";
+      Conn::$sql .= "$column = $value,";
     }
 
     Conn::$sql = substr(Conn::$sql, 0, -1);
