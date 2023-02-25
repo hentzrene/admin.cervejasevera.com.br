@@ -82,6 +82,8 @@
             <component
               v-else-if="item[key].component"
               :is="item[key].component"
+              :item="item"
+              :name="key"
               :value="item[key].value"
               :key="key"
             />

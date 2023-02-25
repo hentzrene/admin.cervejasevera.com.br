@@ -3,29 +3,26 @@ import table from "./components/table";
 import item from "./components/item";
 import newsletter from "./components/newsletter";
 
-const views = { custom, table, item, newsletter },
-  viewAddModuleComponents = {},
-  viewEditModuleComponents = {};
+const views = {
+  custom,
+  table,
+  item,
+  newsletter,
+};
 
-require
-  .context("./components", true, /^\.\/[^/]+$/)
-  .keys()
-  .map((path) => {
-    const view = path.match(/^\.\/[^/]+$/)[0].slice(2);
+const { viewAddModuleComponents, viewEditModuleComponents } = Object.entries(
+  views
+).reduce(
+  (moduleConfigComponents, [name, view]) => {
+    moduleConfigComponents.viewAddModuleComponents[name] =
+      view.moduleConfig.components.add;
+    moduleConfigComponents.viewEditModuleComponents[name] =
+      view.moduleConfig.components.edit;
 
-    if (
-      !(view in viewAddModuleComponents) &&
-      !(view in viewEditModuleComponents)
-    ) {
-      viewAddModuleComponents[view] = [];
-      viewEditModuleComponents[view] = [];
-    }
-
-    viewAddModuleComponents[view] = () =>
-      import(`./components/${view}/_module/add/Index.vue`);
-    viewEditModuleComponents[view] = () =>
-      import(`./components/${view}/_module/edit/Index.vue`);
-  });
+    return moduleConfigComponents;
+  },
+  { viewAddModuleComponents: {}, viewEditModuleComponents: {} }
+);
 
 let components = [];
 
@@ -33,7 +30,7 @@ for (let view in views) {
   if (view === "custom") {
     components = [
       ...components,
-      ...views[view].flatMap(({ routes }) => routes),
+      ...views[view].modules.flatMap(({ routes }) => routes),
     ];
   } else {
     components = [...components, ...views[view].routes];
