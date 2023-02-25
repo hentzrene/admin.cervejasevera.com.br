@@ -15,7 +15,7 @@
 export default {
   props: {
     moduleId: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
     fieldId: {
@@ -33,7 +33,7 @@ export default {
     loading: false,
   }),
   methods: {
-    update(v) {
+    update(value) {
       this.loading = true;
 
       this.$rest("modules-fields")
@@ -41,13 +41,16 @@ export default {
           id: this.fieldId,
           prop: "options",
           data: {
-            value: v,
+            value,
           },
           params: {
             moduleId: this.moduleId,
             option: "category",
           },
           save: false,
+        })
+        .then(() => {
+          this.$emit("input", value);
         })
         .finally(() => (this.loading = false));
     },

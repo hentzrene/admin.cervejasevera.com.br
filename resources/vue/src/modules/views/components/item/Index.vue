@@ -27,6 +27,10 @@
                 :key="i"
                 :field-id="parseInt(id)"
                 :field-options="options"
+                :item="item"
+                :item-id="itemId"
+                :module-id="moduleId"
+                :module-key="moduleKey"
               ></component>
             </div>
           </template>
@@ -40,6 +44,10 @@
               :key="i"
               :field-id="parseInt(id)"
               :field-options="options"
+              :item="item"
+              :item-id="itemId"
+              :module-id="moduleId"
+              :module-key="moduleKey"
             ></component>
           </div>
         </div>
@@ -76,6 +84,12 @@ export default {
     },
     sectionedFields() {
       return groupBy(this.data.fields, "modules_sections_fields_title");
+    },
+    moduleId() {
+      return this.$rest("modules").item.id;
+    },
+    moduleKey() {
+      return this.$route.params.module;
     },
   },
   methods: {

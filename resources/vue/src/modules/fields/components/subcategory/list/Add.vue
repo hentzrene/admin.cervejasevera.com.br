@@ -45,7 +45,7 @@ export default {
   props: {
     value: Boolean,
     moduleId: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
     fieldId: {

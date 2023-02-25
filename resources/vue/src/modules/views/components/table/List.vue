@@ -178,8 +178,10 @@ export default {
   },
   methods: {
     get(page = 1, itemsPerPage = null) {
+      const strListHeaders = this.listHeaders.join(",");
+
       const params = {
-        fields: "id,active," + this.listHeaders.join(","),
+        fields: "id,active" + (strListHeaders ? `,${strListHeaders}` : ""),
         itemsPerPage: itemsPerPage ? itemsPerPage : this.itemsPerPage,
         page,
         search: this.search,

@@ -7,29 +7,30 @@
         :name="name"
         :items="categoriesSelect"
         no-data-text="Nenhuma categoria adicionada"
-        dense="dense"
-        outlined="outlined"
-        dark="dark"
-      ></v-autocomplete>
+        dense
+        outlined
+        dark
+      />
       <v-btn class="ml-1" @click="listDialog = true" icon="icon" small="small">
         <v-icon small="small">fas fa-cog</v-icon>
       </v-btn>
     </div>
-    <list
+    <ListDialog
       v-model="listDialog"
       :field-id="fieldId"
       :categories="categories"
       :link-module="linkModule"
       :is-admin-user="isAdminUser"
-    ></list>
+    />
   </grid-item>
 </template>
 
 <script>
-import List from "./List";
+import ListDialog from "./ListDialog";
 import mixin from "../../mixin";
 
 export default {
+  mixins: [mixin],
   props: {
     fieldId: {
       type: Number,
@@ -39,18 +40,24 @@ export default {
       type: Object,
       required: true,
     },
+    item: {
+      type: Object,
+      required: true,
+    },
+    itemId: {
+      type: [String, Number],
+      required: true,
+    },
+    moduleId: {
+      type: [String, Number],
+      required: true,
+    },
   },
   data: () => ({
     listDialog: false,
     value_: null,
   }),
   computed: {
-    moduleId() {
-      return this.$rest("modules").item.id;
-    },
-    itemId() {
-      return this.$route.params.sub;
-    },
     linkModule() {
       return this.fieldOptions.linkModule;
     },
@@ -96,9 +103,8 @@ export default {
   mounted() {
     this.value_ = this.value;
   },
-  mixins: [mixin],
   components: {
-    List,
+    ListDialog,
   },
 };
 </script>

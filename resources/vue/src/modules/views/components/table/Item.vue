@@ -5,55 +5,7 @@
     max-width="100%"
   >
     <template #toolbar>
-      <toolbar-button
-        @click="rangeDateActiveDialog = true"
-        tip="Começo/Fim"
-        icon="fas fa-calendar-alt"
-      ></toolbar-button>
-      <v-dialog v-model="rangeDateActiveDialog" max-width="330px">
-        <v-card class="pa-4" dark="dark">
-          <div class="title mb-4 text-center">Alterar período ativo</div>
-          <v-form
-            class="table-module-edit-rangedateactived"
-            ref="rangeDateActiveForm"
-          >
-            <v-text-field
-              class="mb-3"
-              label="Começo"
-              type="datetime-local"
-              name="showFrom"
-              :value="item.showFrom && item.showFrom.replace(' ', 'T')"
-              :clearable="true"
-              clear-icon="fas fa-times"
-              outlined="outlined"
-              dense="dense"
-              hide-details="hide-details"
-            ></v-text-field>
-            <v-text-field
-              class="mb-3"
-              label="Fim"
-              type="datetime-local"
-              name="showUp"
-              :value="item.showUp && item.showUp.replace(' ', 'T')"
-              :clearable="true"
-              clear-icon="fas fa-times"
-              outlined="outlined"
-              dense="dense"
-              hide-details="hide-details"
-            ></v-text-field>
-          </v-form>
-          <v-btn
-            class="text-none"
-            @click="setRangeDateActived"
-            color="secondary"
-            :loading="updatingRangeDateActived"
-            :disabled="updatingRangeDateActived"
-            block="block"
-            depressed="depressed"
-            >Alterar</v-btn
-          >
-        </v-card>
-      </v-dialog>
+      <RangeDateButton :item="item" :item-id="itemId" :data="data" />
     </template>
     <v-card class="pa-2 rounded-t-0" outlined="outlined" dark="dark">
       <v-form ref="form">
@@ -78,6 +30,10 @@
                 :key="i"
                 :field-id="parseInt(id)"
                 :field-options="options"
+                :item="item"
+                :item-id="itemId"
+                :module-id="moduleId"
+                :module-key="moduleKey"
               ></component>
             </div>
           </template>
@@ -91,6 +47,10 @@
               :key="i"
               :field-id="parseInt(id)"
               :field-options="options"
+              :item="item"
+              :item-id="itemId"
+              :module-id="moduleId"
+              :module-key="moduleKey"
             ></component>
           </div>
         </div>
@@ -110,19 +70,15 @@
 
 <script>
 import ModuleTemplate from "@/components/templates/Module";
-import ToolbarButton from "@/components/buttons/ToolbarButton";
 import fieldsElements from "../../../fields";
 import { groupBy } from "../../../../components/utils";
+import RangeDateButton from "./RangeDateButton.vue";
 
 export default {
   name: "TableAdd",
   props: {
     data: Object,
   },
-  data: () => ({
-    rangeDateActiveDialog: false,
-    updatingRangeDateActived: false,
-  }),
   computed: {
     itemId() {
       return this.$route.params.sub;
@@ -135,6 +91,12 @@ export default {
     },
     sectionedFields() {
       return groupBy(this.data.fields, "modules_sections_fields_title");
+    },
+    moduleId() {
+      return this.$rest("modules").item.id;
+    },
+    moduleKey() {
+      return this.$route.params.module;
     },
   },
   methods: {
@@ -155,17 +117,6 @@ export default {
           .then(() => this.$router.push(`/${this.data.key}`));
       }
     },
-    setRangeDateActived() {
-      this.updatingRangeDateActived = true;
-
-      const data = Object.fromEntries(
-        new FormData(this.$refs.rangeDateActiveForm.$el).entries()
-      );
-
-      this.$rest(this.data.key)
-        .put({ id: this.itemId, save: () => false, data })
-        .finally(() => (this.updatingRangeDateActived = false));
-    },
   },
   created() {
     this.$rest(this.data.key)
@@ -174,8 +125,8 @@ export default {
   },
   components: {
     ModuleTemplate,
-    ToolbarButton,
     ...fieldsElements,
+    RangeDateButton,
   },
 };
 </script>
@@ -186,9 +137,5 @@ export default {
   grid-template-columns: repeat(2, calc(50% - 16px / 2));
   column-gap: 16px;
   grid-auto-flow: dense;
-}
-
-.table-module-edit-rangedateactived input::-webkit-calendar-picker-indicator {
-  filter: brightness(1) invert(1);
 }
 </style>

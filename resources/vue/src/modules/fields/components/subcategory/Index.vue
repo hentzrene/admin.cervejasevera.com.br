@@ -5,7 +5,7 @@
         v-model="value_"
         :label="label"
         :name="name"
-        :items="itemsSelect"
+        :items="subcategoriesToSelect"
         dense="dense"
         outlined="outlined"
         dark="dark"
@@ -18,8 +18,8 @@
       v-model="listDialog"
       :module-id="moduleId"
       :field-id="fieldId"
-      :items="items"
-      :field-category="parseInt(fieldOptions.category)"
+      :items="allSubcategoriesField"
+      :field-category="linkedCategoryId"
     ></list>
   </grid-item>
 </template>
@@ -29,6 +29,7 @@ import List from "./list/Index";
 import mixin from "../../mixin";
 
 export default {
+  mixins: [mixin],
   props: {
     fieldId: {
       type: Number,
@@ -38,56 +39,70 @@ export default {
       type: Object,
       required: true,
     },
+    moduleId: {
+      type: [String, Number],
+      required: true,
+    },
+    moduleKey: {
+      type: String,
+      required: true,
+    },
   },
   data: () => ({
     listDialog: false,
     value_: null,
   }),
   computed: {
-    moduleKey() {
-      return this.$route.params.module;
+    allSubcategoriesField() {
+      return this.$rest("modulesSubcategories").getters.filterByProperty(
+        "fieldId",
+        this.fieldId
+      );
     },
-    moduleId() {
-      return parseInt(this.$rest("modules").item.id);
+    linkedCategoryId() {
+      return parseInt(this.fieldOptions.category);
     },
-    savedSelectedCategory() {
-      if (!this.fieldOptions.category) return null;
-
-      const categoryField = this.$rest("modules").item.fields.find(
-        ({ id }) => id == this.fieldOptions.category
+    linkedCategoryFieldComponent() {
+      const linkedCategoryField = this.$rest("modules").item.fields.find(
+        ({ id }) => id == this.linkedCategoryId
       );
 
-      if (!categoryField) return null;
+      if (!linkedCategoryField) {
+        return null;
+      }
 
       return this.$parent.$children.find(
-        ({ name }) => name === categoryField.key
-      ).value;
-    },
-    selectedCategory() {
-      if (!this.fieldOptions.category) return null;
-
-      const categoryField = this.$rest("modules").item.fields.find(
-        ({ id }) => id == this.fieldOptions.category
+        ({ name }) => name === linkedCategoryField.key
       );
-
-      if (!categoryField) return null;
-
-      return this.$parent.$children.find(
-        ({ name }) => name === categoryField.key
-      ).value_;
     },
-    items() {
-      if (!this.selectedCategory) return [];
+    currentLinkedCategoryValue() {
+      if (!this.linkedCategoryFieldComponent) {
+        return null;
+      }
 
-      return this.$rest("modulesSubcategories")
-        .getters.filterByProperty("fieldId", this.fieldId)
-        .filter(({ categoryId }) => categoryId == this.selectedCategory);
+      return this.linkedCategoryFieldComponent.value_;
     },
-    itemsSelect() {
-      const items = this.items.map(({ title, id }) => ({
-        text: title,
-        value: id,
-      }));
+    savedLinkedCategoryValue() {
+      if (!this.linkedCategoryFieldComponent) {
+        return null;
+      }
+
+      return this.linkedCategoryFieldComponent.value;
+    },
+    subcategoriesFromLinkedCategory() {
+      if (!this.currentLinkedCategoryValue) return [];
+
+      return this.allSubcategoriesField.filter(
+        ({ categoryId }) => categoryId == this.currentLinkedCategoryValue
+      );
+    },
+    subcategoriesToSelect() {
+      const items = this.subcategoriesFromLinkedCategory.map(
+        ({ id, title }) => ({
+          text: title,
+          value: id,
+        })
+      );
 
       items.unshift({
         text: "",
@@ -98,12 +113,15 @@ export default {
     },
   },
   watch: {
-    value(v) {
-      this.value_ = v;
+    value(val) {
+      this.value_ = val;
     },
-    selectedCategory(v) {
-      if (v !== this.savedSelectedCategory) this.value_ = null;
-      else this.value_ = this.value;
+    currentLinkedCategoryValue(val) {
+      if (val !== this.savedLinkedCategoryValue) {
+        this.value_ = null;
+      } else {
+        this.value_ = this.value;
+      }
     },
   },
   mounted() {
@@ -118,7 +136,6 @@ export default {
       keepCache: true,
     });
   },
-  mixins: [mixin],
   components: {
     List,
   },

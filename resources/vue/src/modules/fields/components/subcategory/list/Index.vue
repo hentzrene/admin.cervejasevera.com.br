@@ -6,32 +6,32 @@
     max-width="500px"
   >
     <template #actions>
-      <template-dialog-header-button
+      <TemplateDialogHeaderButton
         @click="removeItem"
         :disabled="!tableSelecteds.length"
         icon="fas fa-trash"
         text="Remover"
-        >Remover</template-dialog-header-button
-      >
-      <template-dialog-header-button
+      />
+      <TemplateDialogHeaderButton
         @click="addDialog = true"
         icon="fas fa-plus"
         text="Adicionar"
-      ></template-dialog-header-button>
+      />
     </template>
     <v-row>
       <v-col cols="12" sm="6">
-        <select-field-category
+        <SelectFieldCategory
+          @input="(val) => (fieldCategory_ = val)"
           :value="fieldCategory"
           :field-id="fieldId"
           :module-id="moduleId"
-          :items="fieldsCategory"
-        ></select-field-category>
+          :items="categoryTypeFieldsToSelect"
+        />
       </v-col>
       <v-col cols="12" sm="6">
         <v-select
           v-model="selectedCategory"
-          :items="categories"
+          :items="categoriesFromCurrentCategoryTypeField"
           label="Campo"
           outlined="outlined"
           dense="dense"
@@ -40,7 +40,7 @@
       </v-col>
     </v-row>
     <v-data-table
-      v-if="items.length"
+      v-if="items.length && selectedCategory"
       v-model="tableSelecteds"
       :headers="tableHeaders"
       :items="items"
@@ -77,13 +77,13 @@
       </template>
     </v-data-table>
     <div class="pt-8 pb-4 text-body-2 text-center font-weight-bold" v-else>
-      Nenhuma categoria foi adicionada.
+      Nenhuma categoria disponível .
     </div>
     <add
       v-model="addDialog"
       :field-id="fieldId"
       :module-id="moduleId"
-      :categories="categories"
+      :categories="categoriesFromCurrentCategoryTypeField"
     ></add>
   </template-dialog-any>
 </template>
@@ -99,7 +99,7 @@ export default {
   props: {
     value: Boolean,
     moduleId: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
     fieldId: {
@@ -130,22 +130,37 @@ export default {
     rules: {
       required,
     },
+    fieldCategory_: null,
     selectedCategory: null,
   }),
   computed: {
-    fieldsCategory() {
-      const fieldsCategory = this.$rest("modules")
-        .item.fields.filter(({ typeKey }) => typeKey === "category")
-        .map(({ id, name }) => ({ text: name, value: parseInt(id) }));
-
-      fieldsCategory.unshift({ text: "", value: "" });
-
-      return fieldsCategory;
+    categoryTypeFields() {
+      return this.$rest("modules").item.fields.filter(
+        ({ typeKey }) => typeKey === "category"
+      );
     },
-    categories() {
-      return this.$rest("modulesCategories")
-        .getters.filterByProperty("fieldId", this.fieldCategory)
+    categoryTypeFieldsToSelect() {
+      const categoryTypeFieldsToSelect = this.categoryTypeFields.map(
+        ({ id, name }) => ({
+          text: name,
+          value: parseInt(id),
+        })
+      );
+
+      categoryTypeFieldsToSelect.unshift({ text: "", value: "" });
+
+      return categoryTypeFieldsToSelect;
+    },
+    categoriesFromCurrentCategoryTypeField() {
+      const categoriesFromCurrentCategoryTypeField = this.$rest(
+        "modulesCategories"
+      )
+        .getters.filterByProperty("fieldId", this.fieldCategory_)
         .map(({ id, title }) => ({ text: title, value: id }));
+
+      categoriesFromCurrentCategoryTypeField.unshift({ text: "", value: "" });
+
+      return categoriesFromCurrentCategoryTypeField;
     },
   },
   methods: {
@@ -184,9 +199,17 @@ export default {
         })
         .then(() => this.$parent.get().then(() => (this.loading = false)));
     },
-    filterItems(value, search, { categoryId }) {
-      return categoryId === search;
+    filterItems(value, search, item) {
+      return item.categoryId == search;
     },
+  },
+  watch: {
+    fieldCategory_() {
+      this.selectedCategory = null;
+    },
+  },
+  mounted() {
+    this.fieldCategory_ = this.fieldCategory;
   },
   components: {
     TemplateDialogAny,
