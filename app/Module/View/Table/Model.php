@@ -32,7 +32,11 @@ class Model
       ::where('id', $id)
       ::send();
 
-    return $q ? $q->fetch_object() : (object) [];
+    if (!$q) {
+      throw new \Exception('Item não encontrado.');
+    }
+
+    return $q->fetch_object();
   }
 
   /**
