@@ -131,7 +131,8 @@ class Model
   {
     $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
 
-    if ($unique) $sql .= " UNIQUE";
+    if ($unique)
+      $sql .= " UNIQUE";
 
     $sql .= ", ADD CONSTRAINT mod_{$moduleKey}_$key
       FOREIGN KEY ($key) REFERENCES categories(id)";
@@ -176,14 +177,14 @@ class Model
     if ($linkModule) {
       $categoryMod = "mod_$linkModule";
     } else {
-      $categoryMod =  'categories';
+      $categoryMod = 'categories';
     }
 
     $q = Conn::table($categoryMod)
       ::select(['id', 'title'])
       ::send();
 
-    $categories  = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    $categories = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
 
     $categories = array_combine(
       array_column($categories, 'id'),
@@ -202,7 +203,7 @@ class Model
   {
     $categories = addslashes($options->categories);
     if ($categories) {
-      $query = $query::and($field['key'], "($categories)", 'IN');
+      $query = $query::and ($field['key'], "($categories)", 'IN');
     }
 
     return $query;
