@@ -21,7 +21,13 @@ const actions = {
 
     const url = createURL(state.group, { id, params });
 
-    const { data } = await http.get(url);
+    const httpResponse = await http.get(url);
+
+    if (!httpResponse) {
+      return null;
+    }
+
+    const { data } = httpResponse;
 
     if (data) {
       if (save && typeof save === "function")

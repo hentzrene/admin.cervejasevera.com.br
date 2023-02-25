@@ -46,6 +46,9 @@ const SimpleAuth = (Vue) => {
         state.on = false;
         window.localStorage.removeItem(`token`);
       }),
+    setStateProp(key, value) {
+      state[key] = value;
+    },
     get on() {
       return state.on;
     },

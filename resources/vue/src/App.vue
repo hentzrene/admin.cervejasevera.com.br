@@ -64,6 +64,7 @@ export default {
           error.response.status === 403 ||
           error.response.status === 401
         ) {
+          this.$auth.setStateProp("on", false);
           this.$router.replace("/entrar");
           return this.$store.dispatch("endRequest", {});
         } else {

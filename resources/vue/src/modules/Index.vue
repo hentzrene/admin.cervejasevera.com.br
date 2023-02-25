@@ -94,12 +94,16 @@ export default {
   },
   watch: {
     async moduleKey() {
+      if (!this.$auth.on) return;
+
       await this.get();
     },
     async sub() {
       await this.get();
     },
     async $route() {
+      if (!this.$auth.on) return;
+
       await this.renderModule();
     },
   },
