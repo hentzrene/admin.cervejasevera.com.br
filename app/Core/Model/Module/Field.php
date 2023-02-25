@@ -12,7 +12,7 @@ class Field
    *
    * @param integer $id
    * @param array $fields
-   * @return void
+   * @return array|null
    */
   public static function get(int $id, ?array $fields = null)
   {
@@ -84,7 +84,8 @@ class Field
     } else {
       $sql = "ALTER TABLE mod_$moduleKey ADD $key $sqlType DEFAULT NULL";
 
-      if ($unique) $sql .= " UNIQUE";
+      if ($unique)
+        $sql .= " UNIQUE";
 
       Conn::query($sql);
     }
@@ -146,7 +147,7 @@ class Field
     $fieldClassFrom = self::getFieldClassOfTypeId($typeId);
 
     $sqlType = FieldType::get($value, ['sql_type'])[0];
-    $moduleKey = Module::getKeyById($moduleId);;
+    $moduleKey = Module::getKeyById($moduleId);
 
     $q1 = null;
     $q2 = null;
@@ -323,16 +324,16 @@ class Field
    *
    * @param integer $moduleId
    * @param string $key
-   * @return void
+   * @return integer|null
    */
   public static function getId(int $moduleId, string $key): ?int
   {
     $key = addslashes($key);
 
-    $q =  Conn::table(Table::MODULES_FIELDS)
+    $q = Conn::table(Table::MODULES_FIELDS)
       ::select(['id'])
       ::where('modules_id', $moduleId)
-      ::and('`key`', "'$key'")
+      ::and ('`key`', "'$key'")
       ::send();
 
     return $q ? $q->fetch_row()[0] : null;
@@ -346,7 +347,7 @@ class Field
    */
   public static function getKey(int $id): ?string
   {
-    $q =  Conn::table(Table::MODULES_FIELDS)
+    $q = Conn::table(Table::MODULES_FIELDS)
       ::select(['`key`'])
       ::where('id', $id)
       ::send();
