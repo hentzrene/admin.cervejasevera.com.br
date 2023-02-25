@@ -3,6 +3,7 @@
 namespace Module\Field\ImageFile;
 
 use Core\Model\Module\Field;
+use Core\Model\Module\Module;
 use Core\Model\Utility\Conn;
 use Enum\Table;
 use Intervention\Image\ImageManager as Img;
@@ -29,7 +30,7 @@ class Model
     $q = Conn::table(Table::IMAGES)
       ::select(['id', 'path', '`order`', 'title'])
       ::where('modules_fields_id', $fieldId)
-      ::and('item_id', $itemId)
+      ::and ('item_id', $itemId)
       ::send();
 
     return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
@@ -199,7 +200,8 @@ class Model
 
     $sql = "ALTER TABLE `mod_$moduleKey` ADD `$key` $sqlType DEFAULT NULL";
 
-    if ($unique) $sql .= " UNIQUE";
+    if ($unique)
+      $sql .= " UNIQUE";
 
     $sql .= ", ADD CONSTRAINT `mod_{$moduleKey}_$key`
     FOREIGN KEY (`$key`)
@@ -237,8 +239,24 @@ class Model
     return $q1 && $q2;
   }
 
+
+
   public static function beforeRemove(string $moduleKey, string $key): bool
   {
+    $moduleId = Module::getIdByKey($moduleKey);
+    $fieldId = Field::getId($moduleId, $key);
+
+    $q = Conn::table(Table::IMAGES)
+      ::select(['id'])
+      ::where('modules_fields_id', $fieldId)
+      ::send();
+
+    $images = $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+
+    foreach ($images as ['id' => $id]) {
+      self::removeItem($id);
+    }
+
     return (bool) Conn::query(
       "ALTER TABLE `mod_$moduleKey`
       DROP FOREIGN KEY `mod_{$moduleKey}_$key`;"
