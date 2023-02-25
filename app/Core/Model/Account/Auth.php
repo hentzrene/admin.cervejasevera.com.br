@@ -2,7 +2,7 @@
 
 namespace Core\Model\Account;
 
-use Core\Model\Utility\Conn;
+use Core\Model\Utility\DB;
 use Enum\Table;
 use Enum\Output;
 use Logger;
@@ -22,8 +22,8 @@ class Auth
     $registered = Account::registeredEmail($email);
     if (!$registered) {
       throw new \Exception(
-        Output::ACCOUNT_LOGIN['NONE_EMAIL']['message'],
-        Output::ACCOUNT_LOGIN['NONE_EMAIL']['code']
+          Output::ACCOUNT_LOGIN['NONE_EMAIL']['message'],
+          Output::ACCOUNT_LOGIN['NONE_EMAIL']['code']
       );
     }
     [$id, $hash_password] = $registered;
@@ -31,8 +31,8 @@ class Auth
     // Verificar se a senha está correta.
     if (!password_verify($password, $hash_password)) {
       throw new \Exception(
-        Output::ACCOUNT_LOGIN['INVALID_PASSWORD']['message'],
-        Output::ACCOUNT_LOGIN['INVALID_PASSWORD']['code']
+          Output::ACCOUNT_LOGIN['INVALID_PASSWORD']['message'],
+          Output::ACCOUNT_LOGIN['INVALID_PASSWORD']['code']
       );
     }
 
@@ -40,24 +40,16 @@ class Auth
     $token = bin2hex(random_bytes(20));
     $email = addslashes($email);
 
-    Conn::table(Table::SESSIONS)
-      ::insert(
-        [
-          'token',
-          'accounts_id',
-          'expireAt'
-        ],
-        [
-          "'$token'",
-          $id,
-          'DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)'
-        ]
-      )
-      ::send();
+    DB::table(Table::SESSIONS)
+      ->insert([
+        'token' => $token,
+        'accounts_id' => $id,
+        'expireAt' => DB::raw('DATE_ADD(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)')
+      ]);
 
     Logger::auth(Logger::AUTH_LOGIN, $id);
 
-    $account =  Account::get($id);
+    $account = Account::get($id);
     $account->token = $token;
 
     return $account;
@@ -70,11 +62,11 @@ class Auth
    */
   public static function logout($token): bool
   {
-    $q = Conn::table(Table::SESSIONS)
-      ::deleteWhere('token', "'$token'")
-      ::send();
+    $rowsDeleteds = DB::table(Table::SESSIONS)
+      ->where('token', $token)
+      ->delete();
 
-    if (!$q) {
+    if ($rowsDeleteds === 0) {
       throw new \Exception(Output::ACCOUNT_LOGOUT);
     }
 
@@ -86,38 +78,34 @@ class Auth
    * Verificar se há sessão ativa com o token especificado.
    *
    * @param string $token
-   * @return int Retornar o id da conta da sessão ativa caso houver, se não null.
+   * @return object Retornar dados da conta da sessão ativa caso houver, se não null.
    */
   public static function checkIn(string $token): ?object
   {
-    $token = addslashes($token);
-    $r = (object) [];
+    $accountId = DB::table(Table::SESSIONS)
+      ->where('token', $token)
+      ->whereRaw('CURRENT_TIMESTAMP() <= expireAt')
+      ->value('accounts_id');
 
-    $q = Conn::table(Table::SESSIONS)
-      ::select('accounts_id')
-      ::where('token', "'$token'")
-      ::and("CURRENT_TIMESTAMP()", "expireAt", "<=")
-      ::send();
-
-    if (!$q) {
+    if (!$accountId) {
       return null;
     }
 
-    $r->accountId = $q->fetch_row()[0];
+    $accountTypeId = DB::table(Table::ACCOUNTS)
+      ->where('id', $accountId)
+      ->value('accounts_types_id');
 
-    $q = Conn::table(Table::ACCOUNTS)
-      ::select('accounts_types_id')
-      ::where('id', $r->accountId)
-      ::send();
-
-    if (!$q) {
+    if (!$accountTypeId) {
       return null;
     }
 
-    $r->accountTypeId = (int) $q->fetch_row()[0];
+    Logger::auth(Logger::AUTH_CHECK_IN, $accountId);
 
+    $accountData = (object) [
+      'accountId' => $accountId,
+      'accountTypeId' => $accountTypeId
+    ];
 
-    Logger::auth(Logger::AUTH_CHECK_IN, $r->accountId);
-    return $r;
+    return $accountData;
   }
 }

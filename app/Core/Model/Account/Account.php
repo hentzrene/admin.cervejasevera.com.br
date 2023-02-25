@@ -3,6 +3,7 @@
 namespace Core\Model\Account;
 
 use Core\Model\Utility\Conn;
+use Core\Model\Utility\DB;
 use Enum\Table;
 use Enum\Output;
 use Logger;
@@ -27,7 +28,8 @@ class Account
 
     $account = $q->fetch_object();
 
-    if ($account->type != 1) $account->permissions = self::getPermissions($id);
+    if ($account->type != 1)
+      $account->permissions = self::getPermissions($id);
 
     return $account;
   }
@@ -39,11 +41,9 @@ class Account
    */
   public static function getAll(): array
   {
-    $q = Conn::table(Table::ACCOUNTS)
-      ::select(['id', 'name', 'email'])
-      ::send();
+    $accounts = DB::table(Table::ACCOUNTS)->select('id', 'name', 'email')->get();
 
-    return $q ? $q->fetch_all(MYSQLI_ASSOC) : [];
+    return $accounts->toArray();
   }
 
   /**
@@ -66,7 +66,8 @@ class Account
 
     // Validar dados.
     foreach ($data as $key => $val) {
-      if (!is_string($val)) continue;
+      if (!is_string($val))
+        continue;
 
       $data->{$key} = addslashes($val);
     }
@@ -135,7 +136,8 @@ class Account
 
     // Validar dados.
     foreach ($data as $key => $val) {
-      if (!is_string($val)) continue;
+      if (!is_string($val))
+        continue;
 
       $data->{$key} = addslashes($val);
     }
@@ -225,7 +227,7 @@ class Account
       $q = Conn::table(Table::ACCOUNTS)
         ::select(['id', 'password'])
         ::where('email', "'$email'")
-        ::and('id', $accountId, "!=")
+        ::and ('id', $accountId, "!=")
         ::send();
     }
 
