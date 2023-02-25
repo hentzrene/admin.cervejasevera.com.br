@@ -3,6 +3,7 @@
 **/dist
 .env
 app/Core/DB.php
+public/upload
 
 # Log files
 app/Logs/**
