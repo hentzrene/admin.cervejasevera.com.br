@@ -247,7 +247,7 @@ export default {
 <style>
 .field-item-inputs {
   display: grid;
-  grid-template-columns: 1fr 1fr max-content max-content;
+  grid-template-columns: repeat(3, calc(33% - (16px / 3)));
   gap: 8px;
 }
 
