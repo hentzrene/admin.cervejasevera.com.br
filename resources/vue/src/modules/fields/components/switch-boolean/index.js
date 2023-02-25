@@ -1,15 +1,15 @@
 import Index from "./Index.vue";
+import TableFilter from "./TableFilter.vue";
+import Display from "./Display.vue";
 
 export default {
   name: "switchbooleanfield",
   component: Index,
+  headerFilterComponent: TableFilter,
   formatForDisplay: ({ value }) => {
-    if (!value) return "";
-
-    if (value == "0") {
-      return "Não";
-    } else {
-      return "Sim";
-    }
+    return {
+      value,
+      component: Display,
+    };
   },
 };

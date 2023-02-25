@@ -16,4 +16,16 @@ class Model
 
     return $list;
   }
+
+  public static function beforeTableFilter(object $query, array $field, object $options): object
+  {
+    if (!isset($options->value)) {
+      return $query;
+    }
+
+    $value = +$options->value;
+    $query = $query::and ($field['key'], $value);
+
+    return $query;
+  }
 }
