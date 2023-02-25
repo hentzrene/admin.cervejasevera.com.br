@@ -274,6 +274,10 @@ export default {
   cursor: pointer;
   position: relative;
 }
+.view-field-item .v-overlay {
+  pointer-events: none;
+}
+
 .view-field-item.active {
   outline: 2px solid cyan;
 }
