@@ -83,7 +83,9 @@ export default {
         /(math\[([^\]]*)\])/,
         (match, p1, p2) => {
           try {
-            return mexp.eval(p2);
+            const evaluated = mexp.eval(p2);
+
+            return `${evaluated}`.replace(".", ",");
           } catch {
             return "";
           }
