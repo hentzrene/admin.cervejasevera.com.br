@@ -1,57 +1,64 @@
 <template>
   <grid-item col-end="span 2" col-end-sm="span 1">
     <v-text-field
-      @beforeinput="formatInput"
-      v-model="value_"
+      v-model="showValue"
+      v-mask="[
+        'R$ #,##',
+        'R$ ##,##',
+        'R$ ###,##',
+        'R$ ####,##',
+        'R$ #####,##',
+        'R$ ######,##',
+        'R$ #######,##',
+        'R$ ########,##',
+        'R$ #########,##',
+        'R$ ##########,##',
+        'R$ ###########,##',
+        'R$ ############,##',
+      ]"
       :label="label"
-      :name="name"
-      :rules="[rules.price]"
-      append-icon="fas fa-dollar-sign"
-      type="number"
-      step=".01"
-      min="0.00"
-      max="9999999999.99"
-      dense="dense"
-      outlined="outlined"
-      dark="dark"
-    ></v-text-field>
+      dense
+      outlined
+      dark
+    />
+    <input :name="name" :value="value_" type="hidden" />
   </grid-item>
 </template>
 
 <script>
 import mixin from "../../mixin";
-import { price } from "@/components/forms/rules";
+import { mask } from "vue-the-mask";
 
 export default {
+  mixins: [mixin],
   data: () => ({
-    rules: {
-      price,
-    },
-    value_: null,
+    showValue: null,
   }),
+  computed: {
+    value_() {
+      return this.toFormValue(this.showValue);
+    },
+  },
   methods: {
-    formatInput(event) {
-      if (event.inputType === "insertFromPaste") {
-        event.preventDefault();
+    toFormValue(val) {
+      if (!val) return "";
 
-        const formatedInput = event.data
-          .replace(/[^0-9,.]/g, "")
-          .replace(/\.([0-9]{1,2})$/, ",$1")
-          .replace(/\./g, "")
-          .replace(/,/, ".");
+      return val.replace("R$ ", "").replace(",", ".");
+    },
+    toShowValue(val) {
+      if (!val) return "";
 
-        this.value_ = formatedInput;
-      }
+      return "R$ " + val.replace(".", ",");
     },
   },
   watch: {
     value(val) {
-      this.value_ = val;
+      this.showValue = this.toShowValue(val);
     },
   },
-  created() {
-    this.value_ = this.value;
+  directives: { mask },
+  mounted() {
+    this.showValue = this.toShowValue(this.value);
   },
-  mixins: [mixin],
 };
 </script>
