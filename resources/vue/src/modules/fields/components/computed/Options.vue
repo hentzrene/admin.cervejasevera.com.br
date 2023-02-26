@@ -5,7 +5,14 @@
     title="Opções"
     max-width="500px"
   >
-    <template #actions></template>
+    <div class="mb-4 text-caption">
+      Para utilizar o valor de outro campo utilize a chave do campo entre
+      colchetes.<br />
+      Ex.: {id}<br /><br />
+
+      Funções:<br />
+      math[expression] currency[str] zerofill[str;num] url[str]<br /><br />
+    </div>
     <div class="d-flex">
       <v-text-field
         class="mr-2"

@@ -83,16 +83,47 @@ export default {
         /(math\[([^\]]*)\])/,
         (match, p1, p2) => {
           try {
-            const evaluated = mexp.eval(p2);
-
-            return `${evaluated}`.replace(".", ",");
+            return mexp.eval(p2);
           } catch {
             return "";
           }
         }
       );
 
-      const replacedURL = replacedMath.replace(
+      const replacePrice = replacedMath.replace(
+        /(currency\[([^\]]*)\])/,
+        (match, p1, p2) => {
+          if (!p2) {
+            return "";
+          }
+
+          try {
+            return new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(parseFloat(p2));
+          } catch {
+            return "";
+          }
+        }
+      );
+
+      const replacedZeroFill = replacePrice.replace(
+        /(zerofill\[([^\]]*);([0-9]+)])/,
+        (match, p1, p2, p3) => {
+          if (!p2 || !p3) {
+            return "";
+          }
+
+          try {
+            return p2.padStart(+p3, "0");
+          } catch {
+            return "";
+          }
+        }
+      );
+
+      const replacedURL = replacedZeroFill.replace(
         /(url\[([^\]]*)\])/,
         (match, p1, p2) => {
           try {
