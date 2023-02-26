@@ -44,7 +44,12 @@ export default {
       }
     },
   },
-  mounted() {
+  watch: {
+    value(val) {
+      this.value_ = val;
+    },
+  },
+  created() {
     this.value_ = this.value;
   },
   mixins: [mixin],
