@@ -31,6 +31,7 @@
 import Options from "./Options";
 import mixin from "../../mixin";
 import { formatToURL } from "../../../../components/utils";
+import Mexp from "math-expression-evaluator";
 
 export default {
   props: {
@@ -69,13 +70,38 @@ export default {
 
       if (!pattern) return;
 
-      const r = pattern.replace(/({([^}]+)})/g, (match, p1, p2) => {
-        const value = this.itemProp(p2);
+      const replacedPattern = pattern.replace(
+        /({([^}]+)})/g,
+        (match, p1, p2) => {
+          return this.itemProp(p2);
+        }
+      );
 
-        return value ? formatToURL(value) : "";
-      });
+      const mexp = new Mexp();
 
-      return r;
+      const replacedMath = replacedPattern.replace(
+        /(math\[([^\]]*)\])/,
+        (match, p1, p2) => {
+          try {
+            return mexp.eval(p2);
+          } catch {
+            return "";
+          }
+        }
+      );
+
+      const replacedURL = replacedMath.replace(
+        /(url\[([^\]]*)\])/,
+        (match, p1, p2) => {
+          try {
+            return formatToURL(p2);
+          } catch {
+            return "";
+          }
+        }
+      );
+
+      return replacedURL;
     },
   },
   mixins: [mixin],

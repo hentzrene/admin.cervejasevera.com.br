@@ -9,7 +9,7 @@ import email from "./components/email";
 import file from "./components/file";
 import hidden from "./components/hidden";
 import imageFile from "./components/image-file";
-import link from "./components/link";
+import computed from "./components/computed";
 import mediumText from "./components/medium-text";
 import number from "./components/number";
 import password from "./components/password";
@@ -35,7 +35,7 @@ const fields = {
   file,
   hidden,
   imageFile,
-  link,
+  computed,
   mediumText,
   number,
   password,
