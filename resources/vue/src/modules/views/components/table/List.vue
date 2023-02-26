@@ -149,10 +149,6 @@ export default {
       const headers = this.listHeaders.map(this.createHeaderFromField);
 
       return [
-        this.createHeader({
-          text: "Id",
-          value: "id",
-        }),
         ...headers,
         this.createHeader({
           text: "",
@@ -294,6 +290,7 @@ export default {
     },
     createHeaderFromField(fieldKey) {
       const systemFields = {
+        id: "Id",
         showFrom: "Começo",
         showUp: "Fim",
       };

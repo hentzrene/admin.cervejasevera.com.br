@@ -33,20 +33,14 @@
         </div>
       </div>
       <v-chip-group v-model="listHeaders" column="column" multiple="multiple">
+        <v-chip value="id" filter outlined>Id</v-chip>
         <template v-for="({ name, key }, i) in fields">
-          <v-chip
-            v-if="name"
-            :value="key"
-            :key="i"
-            filter="filter"
-            outlined="outlined"
-            >{{ name }}</v-chip
-          >
+          <v-chip v-if="name" :value="key" :key="i" filter outlined>{{
+            name
+          }}</v-chip>
         </template>
-        <v-chip value="showFrom" filter="filter" outlined="outlined"
-          >Começo</v-chip
-        >
-        <v-chip value="showUp" filter="filter" outlined="outlined">Fim</v-chip>
+        <v-chip value="showFrom" filter outlined>Começo</v-chip>
+        <v-chip value="showUp" filter outlined>Fim</v-chip>
       </v-chip-group>
       <div
         class="pt-8 text-body-2 text-center font-weight-bold red--text"

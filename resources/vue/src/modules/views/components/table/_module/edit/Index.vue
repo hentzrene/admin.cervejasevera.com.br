@@ -33,6 +33,7 @@
         </div>
       </div>
       <v-chip-group v-model="listHeaders" column="column" multiple="multiple">
+        <v-chip value="id" filter outlined>Id</v-chip>
         <v-chip
           v-for="({ name, key }, i) in data.fields"
           :value="key"
@@ -41,10 +42,8 @@
           outlined="outlined"
           >{{ name }}</v-chip
         >
-        <v-chip value="showFrom" filter="filter" outlined="outlined"
-          >Começo</v-chip
-        >
-        <v-chip value="showUp" filter="filter" outlined="outlined">Fim</v-chip>
+        <v-chip value="showFrom" filter outlined>Começo</v-chip>
+        <v-chip value="showUp" filter outlined>Fim</v-chip>
         <v-btn
           @click="sendListHeaders"
           :loading="sendingListHeaders"
