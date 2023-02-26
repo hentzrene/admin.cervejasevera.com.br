@@ -8,6 +8,10 @@ export default {
       type: String,
       required: true,
     },
+    fieldTypeKey: {
+      type: String,
+      required: true,
+    },
     value: String,
   },
   computed: {
