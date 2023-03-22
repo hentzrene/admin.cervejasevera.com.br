@@ -117,10 +117,10 @@ export default {
   }),
   computed: {
     fields() {
-      return this.data.fields;
+      return this.data.fields || [];
     },
     listHeaders() {
-      return this.data.viewOptions.listHeaders;
+      return this.data.viewOptions.listHeaders || [];
     },
     headers() {
       if (!this.listHeaders || !this.fields) return [];

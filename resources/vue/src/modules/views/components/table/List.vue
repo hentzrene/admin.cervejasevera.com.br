@@ -135,13 +135,13 @@ export default {
   }),
   computed: {
     fields() {
-      return this.data.fields;
+      return this.data.fields || [];
     },
     fieldsMap() {
       return Object.fromEntries(this.fields.map((field) => [field.key, field]));
     },
     listHeaders() {
-      return this.data.viewOptions.listHeaders;
+      return this.data.viewOptions.listHeaders || [];
     },
     headers() {
       if (!this.fields || !this.listHeaders) return [];
@@ -303,6 +303,8 @@ export default {
       }
 
       const field = this.fieldsMap[fieldKey];
+
+      if (!field) return {};
 
       const fieldFilterComponent = fieldsHeaderFilterComponents[field.typeKey];
 
