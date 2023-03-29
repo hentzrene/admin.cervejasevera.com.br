@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <template v-if="!checking">
-      <main-nav
-        v-if="!['/error404', '/entrar', '/setup'].includes($route.path)"
-      ></main-nav>
+      <main-nav v-if="!showHeader"></main-nav>
       <v-main>
         <router-view></router-view>
       </v-main>
@@ -17,12 +15,12 @@
     >
       <loading></loading>
     </v-sheet>
-    <float-alert :value="lastRequestError" color="red"
-      ><span>{{ lastRequestError }}</span></float-alert
-    >
-    <float-alert :value="lastRequestSuccess" color="green"
-      ><span>{{ lastRequestSuccess }}</span></float-alert
-    >
+    <float-alert :value="lastRequestError" color="red">
+      <span>{{ lastRequestError }}</span>
+    </float-alert>
+    <float-alert :value="lastRequestSuccess" color="green">
+      <span>{{ lastRequestSuccess }}</span>
+    </float-alert>
   </v-app>
 </template>
 
@@ -39,6 +37,9 @@ export default {
   }),
   computed: {
     ...mapState(["lastRequestError", "lastRequestSuccess"]),
+    showHeader() {
+      return ["/error404", "/entrar", "/setup"].includes(this.$route.path);
+    },
   },
   beforeCreate() {
     http.interceptors.request.use(
