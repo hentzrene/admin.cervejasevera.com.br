@@ -141,7 +141,11 @@ export default {
       return Object.fromEntries(this.fields.map((field) => [field.key, field]));
     },
     listHeaders() {
-      return this.data.viewOptions.listHeaders || [];
+      if (this.data.viewOptions && this.data.viewOptions.listHeaders) {
+        return this.data.viewOptions.listHeaders;
+      } else {
+        return [];
+      }
     },
     headers() {
       if (!this.fields || !this.listHeaders) return [];
