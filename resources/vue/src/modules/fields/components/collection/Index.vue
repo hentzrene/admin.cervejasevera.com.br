@@ -10,7 +10,7 @@
         class="grey d-flex align-center rounded-lg primary cursor-pointer"
         @click="listDialog = true"
         :aspect-ratio="38 / 9"
-        v-ripple="v - ripple"
+        v-ripple
       >
         <div class="d-flex justify-center align-center">
           <div class="d-flex flex-column">
