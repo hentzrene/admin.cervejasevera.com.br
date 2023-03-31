@@ -62,7 +62,7 @@ export default {
 
         if (!field) return "";
 
-        return field.value_ || "";
+        return field.value_ || field.value || "";
       };
     },
     value_() {
