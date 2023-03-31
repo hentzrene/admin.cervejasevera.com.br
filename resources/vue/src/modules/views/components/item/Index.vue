@@ -85,7 +85,9 @@ export default {
       return this.$rest(this.data.key).item;
     },
     sectionedFields() {
-      return groupBy(this.data.fields, "modules_sections_fields_title");
+      return this.data.fields
+        ? groupBy(this.data.fields, "modules_sections_fields_title")
+        : {};
     },
     moduleId() {
       return this.$rest("modules").item.id;
