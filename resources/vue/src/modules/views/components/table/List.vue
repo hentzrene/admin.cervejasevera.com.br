@@ -141,11 +141,9 @@ export default {
       return Object.fromEntries(this.fields.map((field) => [field.key, field]));
     },
     listHeaders() {
-      if (this.data.viewOptions && this.data.viewOptions.listHeaders) {
-        return this.data.viewOptions.listHeaders;
-      } else {
-        return [];
-      }
+      return this.data.viewOptions && this.data.viewOptions.listHeaders
+        ? this.data.viewOptions.listHeaders
+        : [];
     },
     headers() {
       if (!this.fields || !this.listHeaders) return [];

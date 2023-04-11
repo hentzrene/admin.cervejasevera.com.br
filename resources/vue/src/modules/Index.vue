@@ -1,6 +1,10 @@
 <template>
   <div>
-    <component v-if="!loading" :is="component" :data="module"></component>
+    <component
+      v-if="!loading"
+      :is="moduleComponentName"
+      :data="module"
+    ></component>
     <v-sheet
       class="d-flex justify-center align-center"
       v-else
@@ -20,7 +24,6 @@ import pathToRegexp from "path-to-regexp";
 
 export default {
   data: () => ({
-    component: null,
     loading: false,
     gettedModules: false,
   }),
@@ -31,40 +34,13 @@ export default {
     moduleKey() {
       return this.$route.params.module;
     },
-    module() {
-      return this.modules.find(({ key }) => key === this.moduleKey);
-    },
     sub() {
       return this.$route.params.sub;
     },
-  },
-  methods: {
-    async get() {
-      this.loading = true;
-      if (!this.gettedModules) {
-        await this.$rest("modules").get();
-      }
-
-      return this.renderModule().then(() => (this.loading = false));
+    module() {
+      return this.modules.find(({ key }) => key === this.moduleKey);
     },
-    mountRoutes(routes, module) {
-      return routes.map((r) => {
-        let mountRoute = { ...r };
-
-        mountRoute.name = mountRoute.name.replace("{name}", module.name);
-        mountRoute.path = mountRoute.path.replace("{key}", module.key);
-
-        return mountRoute;
-      });
-    },
-    async renderModule() {
-      if (!this.module) {
-        this.$router.push("/error404");
-        return;
-      } else {
-        await this.$rest("modules").get({ id: this.module.id });
-      }
-
+    moduleViewRoutes() {
       let routes = [];
 
       if (this.module.viewKey === "custom") {
@@ -81,30 +57,51 @@ export default {
         );
       }
 
-      for (let { path, component } of routes) {
+      return routes;
+    },
+    moduleComponentName() {
+      let name = null;
+
+      for (let { path, component } of this.moduleViewRoutes) {
         const regExp = new RegExp(pathToRegexp(path));
+
         if (regExp.test(this.$route.path)) {
-          this.component = component.name;
+          name = component.name;
           break;
         }
       }
 
-      this.gettedModules = true;
+      return name;
+    },
+  },
+  methods: {
+    mountRoutes(routes, module) {
+      return routes.map((r) => {
+        let mountRoute = { ...r };
+
+        mountRoute.name = mountRoute.name.replace("{name}", module.name);
+        mountRoute.path = mountRoute.path.replace("{key}", module.key);
+
+        return mountRoute;
+      });
+    },
+    async get() {
+      if (this.gettedModules) {
+        return;
+      }
+
+      this.loading = true;
+
+      await this.$rest("modules").get();
+
+      this.loading = false;
     },
   },
   watch: {
-    async moduleKey() {
-      if (!this.$auth.on) return;
-
-      await this.get();
-    },
-    async sub() {
-      await this.get();
-    },
     async $route() {
       if (!this.$auth.on) return;
 
-      await this.renderModule();
+      await this.get();
     },
   },
   async created() {

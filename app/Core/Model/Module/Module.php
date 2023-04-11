@@ -124,6 +124,7 @@ class Module
           '`key`',
           'icon',
           'view_options' => 'viewOptions',
+          'view_id' => 'viewId',
           'view_key' => 'viewKey',
           'view_name' => 'viewName',
           'menu_id' => 'menuId',
@@ -153,12 +154,14 @@ class Module
         ::send();
     }
 
-    if (!$q) return [];
+    if (!$q)
+      return [];
 
     $modules = $q->fetch_all(MYSQLI_ASSOC);
 
     foreach ($modules as $i => $module) {
       $modules[$i]['viewOptions'] = json_decode($module['viewOptions']);
+      $modules[$i]['fields'] = Field::getAll($module['key']);
     }
 
     return $modules;
@@ -207,7 +210,8 @@ class Module
    */
   public static function isAllowed(int $id, int $accountId): bool
   {
-    if (ACCOUNT_TYPE === 1) return true;
+    if (ACCOUNT_TYPE === 1)
+      return true;
 
     $permissions = array_values(array_unique(array_map(function ($permission) {
       return $permission['modules_id'];
