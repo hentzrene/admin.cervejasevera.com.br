@@ -15,7 +15,7 @@ export default {
         const files = component.files.replace(component.prefixPath, "");
         const src = files + path + "?resize=1&w=106";
 
-        r.innerHTML = `<img style="height: 60px; width: 106px; object-fit: cover; margin-top: 6px; border-radius: 4px;" src="${src}">`;
+        r.innerHTML = `<img style="height: 60px; width: 106px; object-fit: contain; margin-top: 6px; border-radius: 4px; background: #111; padding: 4px;" src="${src}">`;
       },
     });
 
