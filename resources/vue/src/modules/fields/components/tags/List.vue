@@ -116,11 +116,20 @@ export default {
     selecteds: [],
   }),
   computed: {
-    moduleKey() {
-      return this.$rest("modules").item.key;
+    module() {
+      return this.$rest("modules").list.find(
+        ({ key }) => key === this.moduleKey
+      );
     },
     moduleId() {
-      return this.$rest("modules").item.id;
+      if (!this.module) {
+        return null;
+      }
+
+      return this.module.id;
+    },
+    moduleKey() {
+      return this.$route.params.module;
     },
     itemId() {
       return this.$route.params.sub || 1;

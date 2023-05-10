@@ -61,8 +61,20 @@ export default {
     },
   }),
   computed: {
+    module() {
+      return this.$rest("modules").list.find(
+        ({ key }) => key === this.moduleKey
+      );
+    },
     moduleId() {
-      return this.$rest("modules").item.id;
+      if (!this.module) {
+        return null;
+      }
+
+      return this.module.id;
+    },
+    moduleKey() {
+      return this.$route.params.module;
     },
   },
   methods: {
