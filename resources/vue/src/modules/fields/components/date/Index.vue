@@ -20,7 +20,7 @@ export default {
   mixins: [mixin],
   computed: {
     moduleKey() {
-      return this.$rest("modules").item.key;
+      return this.$route.params.module;
     },
     item() {
       return this.$rest(this.moduleKey).item;

@@ -59,7 +59,7 @@ export default {
       return this.fieldOptions.prefix;
     },
     moduleKey() {
-      return this.$rest("modules").item.key;
+      return this.$route.params.module;
     },
   },
   methods: {

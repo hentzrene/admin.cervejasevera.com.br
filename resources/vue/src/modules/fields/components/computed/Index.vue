@@ -49,7 +49,7 @@ export default {
   }),
   computed: {
     moduleKey() {
-      return this.$rest("modules").item.key;
+      return this.$route.params.module;
     },
     moduleItem() {
       return this.$rest(this.moduleKey).item;

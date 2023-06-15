@@ -103,7 +103,7 @@ export default {
   }),
   computed: {
     moduleKey() {
-      return this.$rest("modules").item.key;
+      return this.$route.params.module;
     },
     itemId() {
       return this.$route.params.sub || 1;
