@@ -95,7 +95,7 @@ export default {
       required: true,
     },
     items: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },
@@ -130,20 +130,18 @@ export default {
       this.items_.push(["", ""]);
     },
     remove() {
-      this.selecteds.map(({ id }) => {
-        this.items_.splice(
-          this.items_.findIndex((v) => v.id == id),
-          1
+      this.selecteds.forEach(({ value }) => {
+        const index = this.items_.findIndex(
+          (item) => item[0] === value[0] && item[1] === value[1]
         );
+
+        this.items_.splice(index, 1);
       });
 
       this.selecteds = [];
     },
     save() {
-      const form = this.$refs.form;
-      if (!form.validate()) return;
-
-      const value = JSON.stringify(Object.fromEntries(this.items_));
+      const value = JSON.stringify(this.items_);
 
       this.loading = true;
 
@@ -157,7 +155,7 @@ export default {
         })
         .then(() => this.$emit("saved"))
         .finally(() => {
-          this.items_ = Object.entries(JSON.parse(value));
+          this.items_ = JSON.parse(value);
           this.selecteds = [];
           this.loading = false;
         });
@@ -165,11 +163,11 @@ export default {
   },
   watch: {
     items() {
-      this.items_ = Object.entries(this.items);
+      this.items_ = this.items;
     },
   },
   mounted() {
-    this.items_ = Object.entries(this.items);
+    this.items_ = this.items;
   },
   components: {
     Loading,
